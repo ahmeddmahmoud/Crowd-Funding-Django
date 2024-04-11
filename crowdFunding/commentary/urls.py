@@ -3,5 +3,5 @@ from commentary.views import add_comment
 
 
 urlpatterns = [
-    path('<int:id>', add_comment, name='projects.comment')
+    path('comment', add_comment, name='projects.comment')
 ]

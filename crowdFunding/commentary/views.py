@@ -16,10 +16,10 @@ def add_comment(request, id) :
             comment.project=project
             comment.user=request.user
             comment.save()
-            return redirect('',id=id)
+            return redirect('hello',id=id)
     else:
         form = CommentForm()
-        return render(request, '', {'form': form})
+        return render(request, 'test.html', {'form': form})
 
 
 
