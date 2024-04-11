@@ -1,2 +1,5 @@
 .venv
 .idea
+crowdFunding/project/migrations/
+crowdFunding/users/migrations/
+crowdFunding/commentary/migrations/
