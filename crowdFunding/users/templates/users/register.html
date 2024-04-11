@@ -1,10 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% load static %}
+{% block content %}
+<style>
+        input{
+            width:fit-content: !important;
+        }
+        body{
+            background-color: lightgray;
+        }
+    </style>
+<h2 class="text-center mt-5">Register</h2>
+
+<form method = "post" enctype="multipart/form-data" class="row w-50 mx-auto mt-5">
+{% csrf_token %}
 {{form}}
-</body>
-</html>
+<input type="submit" value="Submit" class="btn btn-primary mx-auto w-25 mb-3">
+</form>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+<script src="{% static 'users/js/script.js' %}"></script>
+
+{% endblock %}
