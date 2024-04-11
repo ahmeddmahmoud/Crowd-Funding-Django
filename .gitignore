@@ -1,5 +1,9 @@
 .venv
 .idea
 crowdFunding/project/migrations/
+crowdFunding/project/__pycache__/
 crowdFunding/users/migrations/
+crowdFunding/users/__pycache__
 crowdFunding/commentary/migrations/
+crowdFunding/commentary/__pycache__
+crowdFunding/__pycache__
