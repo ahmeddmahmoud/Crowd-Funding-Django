@@ -1,0 +1,115 @@
+<div class="comments-box">
+    <div class="comments-container">
+        <h3>Comments</h3>
+        {% if comments %}
+            <div class="comment-list">
+                {% for comment in comments %}
+                    <div class="comment">
+                        <div class="comment-user">User: {{ comment.user }}</div>
+                        <div class="comment-text">{{ comment.text }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No comments yet.</p>
+        {% endif %}
+
+        <!-- Add Comment Form -->
+        <button id="add-comment-btn">Add Comment</button>
+        <form class="add-comment-form" method="post" action="{% url 'projects.comment' %}" style="display: none;">
+            {% csrf_token %}
+            <textarea name="text" id="comment_text" placeholder="Write your comment here..." required></textarea>
+            <button type="submit" id="submit-comment-btn">Submit</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('add-comment-btn').addEventListener('click', function() {
+            var commentForm = document.querySelector('.add-comment-form');
+            if (commentForm.style.display === 'none' || commentForm.style.display === '') {
+                commentForm.style.display = 'block';
+            } else {
+                commentForm.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+
+<style>
+    .comments-box {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        width:37%;
+        background-color:;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-top: 20px;
+    }
+
+    .comments-container {
+        margin-top: 20px;
+    }
+    
+    .comment-list {
+        margin-bottom: 20px;
+    }
+    
+    .comment {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .comment-user {
+        font-weight: bold;
+        color: blue;
+        margin-bottom: 5px;
+    }
+    
+    .comment-text {
+        font-size: 14px;
+        color: #555;
+    }
+    
+    .add-comment-form {
+        margin-top: 20px;
+    }
+
+    #add-comment-btn,
+    #submit-comment-btn {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    #add-comment-btn:hover,
+    #submit-comment-btn:hover {
+        background-color: #0056b3;
+    }
+    
+    textarea[name="text"] {
+        width: 100%;
+        height: 100px;
+        padding: 10px;
+        font-size: 16px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        resize: vertical; /* Allow vertical resizing */
+    }
+    
+    textarea[name="text"]:focus {
+        border-color: #007bff; /* Change border color on focus */
+        outline: none; /* Remove default focus outline */
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add a shadow on focus */
+    }
+</style>
