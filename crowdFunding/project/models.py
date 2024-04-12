@@ -21,7 +21,6 @@ class Project(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     current_donation = models.FloatField(default=0, null=True)
 
-
     def __str__(self):
         return self.title
 
