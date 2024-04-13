@@ -3,8 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom styles */
+        .project-info {
+            margin-top: 20px;
+        }
+        .project-info p {
+            margin-bottom: 5px;
+        }
+        .project-info .label {
+            font-weight: bold;
+            color: #007bff;
+        }
+    </style>
 </head>
 <body>
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ project.title }}</h5>
+            <div class="project-info">
+                <p><span class="label">Details:</span> {{ project.details }}</p>
+                <p><span class="label">Total Target:</span> {{ project.total_target }}</p>
+                <p><span class="label">Start Date:</span> {{ project.start_date }}</p>
+                <p><span class="label">End Date:</span> {{ project.end_date }}</p>
+                <p><span class="label">Created At:</span> {{ project.created_at }}</p>
+                <p><span class="label">Current Donation:</span> {{ project.current_donation }}</p>
+            </div>
+        </div>
+    </div>
+</div>
 
+<!-- Bootstrap JS (Optional) -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- jQuery (Optional) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </body>
 </html>

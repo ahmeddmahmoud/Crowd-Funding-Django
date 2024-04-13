@@ -29,7 +29,7 @@ class Project(models.Model):
     end_date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     current_donation = models.FloatField(default=0, null=True, blank=True)
-    owner=models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
+    project_owner=models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
     tag = models.ManyToManyField(Tag, blank=True, related_name="projects")
 
     def __str__(self):
@@ -43,7 +43,6 @@ class Project(models.Model):
 class Picture(models.Model):
     image = models.ImageField(upload_to='project/images/', null=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE , related_name='images')
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return f"/media/{self.image}"
