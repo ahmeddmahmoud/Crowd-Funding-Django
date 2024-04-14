@@ -41,6 +41,11 @@ class Project(models.Model):
         return url
     
     @property
+    def delete_url(self):
+        url = reverse('project.cancel', args=[self.id])
+        return url
+    
+    @property
     def rate(self):
         comments = self.comments.all()
         if comments.exists():
