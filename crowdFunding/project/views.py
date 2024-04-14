@@ -17,7 +17,7 @@ def create_project_model_form(request):
             return redirect(project.show_url)
 
     return render(request,'project/forms/createmodel.html',
-                  context={"form": form})
+                context={"form": form})
 
 
 def create_category(request):
@@ -40,11 +40,28 @@ def create_Tag(request):
             tag = form.save()
 
     return render(request, 'project/forms/createTag.html',
-                  context={'form': form})
+                context={'form': form})
 
 def project_show(request,id):
     project = get_object_or_404(Project, pk=id)
     return render(request, "project/crud/show.html",
-                  context={"project":project})
+                context={"project":project})
+
+
+def cancel_project(request,id):
+    project = get_object_or_404(Project, pk=id)
+    total_target = project.total_target
+    donation = project.current_donation
+    if donation < total_target*0.25:
+        project.delete()
+        return redirect('hello')
+    else:
+        return redirect(project.show_url)
+    
+    
+def list_project(request):
+    projects = Project.objects.all()
+    return render(request, 'project/crud/list.html', {'projects': projects})
+
 
 
