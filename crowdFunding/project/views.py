@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect,get_object_or_404,reverse
 from project.models import Project
 from project.forms import ProjectModelForm,CategoryModelForm,TagModelForm
-
+from commentary.forms import CommentForm,ReportForm
+from commentary.models import Comment
 
 def hello(request):
     print(request)
@@ -44,24 +45,26 @@ def create_Tag(request):
 
 def project_show(request,id):
     project = get_object_or_404(Project, pk=id)
+    comments = project.comments.all()
+    reports = project.reports.all()
+    form = CommentForm()
+    form2 = ReportForm()
+
     return render(request, "project/crud/show.html",
-                context={"project":project})
+                  context={"project":project, 'comments': comments, 'reports': reports, 'form': form, 'form2': form2})
 
-
-def cancel_project(request,id):
-    project = get_object_or_404(Project, pk=id)
-    total_target = project.total_target
-    donation = project.current_donation
-    if donation < total_target*0.25:
-        project.delete()
-        return redirect('hello')
-    else:
-        return redirect(project.show_url)
-    
-    
-def list_project(request):
-    projects = Project.objects.all()
-    return render(request, 'project/crud/list.html', {'projects': projects})
-
-
+# def project_show(request,id):
+#     project = get_object_or_404(Project, pk=id)
+#     comments = Comment.objects.filter(project=project)
+#     for comment in comments:
+#         comment.stars = range(int(comment.rate))
+#         comment.empty_stars = range(5 - int(comment.rate))
+#
+#     reports = project.reports.all()
+#     form = CommentForm()
+#     form2 = ReportForm()
+#
+#     return render(request, "project/crud/show.html",
+#                   context={"project":project, 'comments': comments, 'reports': reports, 'form': form, 'form2': form2})
+#
 

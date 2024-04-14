@@ -39,6 +39,19 @@ class Project(models.Model):
     def show_url(self):
         url = reverse('project.show', args=[self.id])
         return url
+    
+    @property
+    def rate(self):
+        comments = self.comments.all()
+        if comments.exists():
+            return round(sum(comment.rate for comment in comments) / len(comments), 1)
+        return 0
+
+    @property
+    def star_ratings(self):
+        rate = self.rate
+        return [1 if i < rate else 0.5 if abs(i - rate) <= 0.5 else 0 for i in range(1, 6)]
+
 
 
 class Picture(models.Model):
