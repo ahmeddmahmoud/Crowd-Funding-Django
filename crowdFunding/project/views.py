@@ -51,7 +51,7 @@ def project_show(request,id):
     form2 = ReportForm()
 
     return render(request, "project/crud/show.html",
-                  context={"project":project, 'comments': comments, 'reports': reports, 'form': form, 'form2': form2})
+                context={"project":project, 'comments': comments, 'reports': reports, 'form': form, 'form2': form2})
 
 # def project_show(request,id):
 #     project = get_object_or_404(Project, pk=id)
@@ -68,3 +68,17 @@ def project_show(request,id):
 #                   context={"project":project, 'comments': comments, 'reports': reports, 'form': form, 'form2': form2})
 #
 
+
+def cancel_project(request,id):
+    project = get_object_or_404(Project, pk=id)
+    total_target = project.total_target
+    donation = project.current_donation
+    if donation < total_target*0.25:
+        project.delete()
+        return redirect('hello')
+    else:
+        return redirect(project.show_url)
+    
+def list_project(request):
+    projects = Project.objects.all()
+    return render(request, 'project/crud/list.html', {'projects': projects})    

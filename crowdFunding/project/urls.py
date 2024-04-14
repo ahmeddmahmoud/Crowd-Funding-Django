@@ -1,5 +1,5 @@
 from project.views import (hello, create_project_model_form, create_category,create_Tag,
-                           project_show)
+    list_project, cancel_project,project_show)
 from commentary.views import add_comment
 from django.urls import path
 
