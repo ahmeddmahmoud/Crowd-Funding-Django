@@ -30,6 +30,7 @@ class Project(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     current_donation = models.FloatField(default=0, null=True, blank=True)
     project_owner=models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
+    category= models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     tag = models.ManyToManyField(Tag, blank=True, related_name="projects")
 
     def __str__(self):
