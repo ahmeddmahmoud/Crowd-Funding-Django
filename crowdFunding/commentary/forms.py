@@ -8,6 +8,7 @@ class CommentForm(forms.ModelForm):
         fields = ['text','rate']
 
 
+
 class ReportForm(forms.ModelForm):
     STATUS_CHOICES = [
         ('Hateful Speech', 'Hateful Speech'),

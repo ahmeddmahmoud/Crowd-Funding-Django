@@ -81,4 +81,6 @@ def cancel_project(request,id):
     
 def list_project(request):
     projects = Project.objects.all()
-    return render(request, 'project/crud/list.html', {'projects': projects})    
+    return render(request, 'project/crud/list.html', {'projects': projects})
+
+

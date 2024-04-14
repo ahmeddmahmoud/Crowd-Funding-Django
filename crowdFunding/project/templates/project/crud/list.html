@@ -1,17 +1,27 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-        <div class="container">
-            {% for project in projects %}
-             <div class="card-body">
-                <h5 class="card-title">Title: {{project.title}}</h5>
-                <p class="card-text">Details: {{project.details}}</p>
-                <p class="card-text">Start Date: {{project.start_date}}</p>
-                <p class="card-text">Total Target: {{project.total_target}}</p>
-                <a href="#" class="btn btn-info">Show</a>
-                <a href="#" class="btn btn-primary">Donate</a>
-            </div>
-            {% endfor %}
-        </div> 
+<div class="container">
+    <div class="row mb-3">
+        <div class="col">
+            <form action="{% url 'projects.search' %}" method="GET" class="d-flex">
+                <input class="form-control me-2" type="search" name="search_query" placeholder="Search Books"
+                       aria-label="Search">
+                <button class="btn btn-outline-primary" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+
+    {% for project in projects %}
+    <div class="card-body">
+        <h5 class="card-title">Title: {{project.title}}</h5>
+        <p class="card-text">Details: {{project.details}}</p>
+        <p class="card-text">Start Date: {{project.start_date}}</p>
+        <p class="card-text">Total Target: {{project.total_target}}</p>
+        <a href="#" class="btn btn-info">Show</a>
+        <a href="#" class="btn btn-primary">Donate</a>
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}
 
