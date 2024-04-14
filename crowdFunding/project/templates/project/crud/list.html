@@ -1,23 +1,17 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    </head>
-    <body>
-        <h1>Projects</h1>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
         <div class="container">
             {% for project in projects %}
              <div class="card-body">
-                <h1>Data</h1>
                 <h5 class="card-title">Title: {{project.title}}</h5>
                 <p class="card-text">Details: {{project.details}}</p>
                 <p class="card-text">Start Date: {{project.start_date}}</p>
                 <p class="card-text">Total Target: {{project.total_target}}</p>
                 <a href="#" class="btn btn-info">Show</a>
-                <a href="#" class="btn btn-primary">Update</a>
-                <a href="#" class="btn btn-warning">Edit</a>
+                <a href="#" class="btn btn-primary">Donate</a>
             </div>
             {% endfor %}
-        </div>    
-    </body>
-</html>
+        </div> 
+{% endblock %}
+
