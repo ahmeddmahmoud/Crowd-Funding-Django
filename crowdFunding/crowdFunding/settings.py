@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'project.apps.ProjectConfig',
     'users.apps.UsersConfig',
-    'commentary.apps.CommentaryConfig'
+    'commentary.apps.CommentaryConfig',
+    'star_ratings',
 ]
 # Auth_USER_MODEL = 'users.CustomUser'
 MIDDLEWARE = [
