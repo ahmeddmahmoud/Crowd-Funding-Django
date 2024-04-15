@@ -1,4 +1,5 @@
-# from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse
+from users.models import User
 # from users.forms import RegistrationForm
 #
 #
@@ -22,5 +23,7 @@
 #
 #     return render(request,'users/register.html',{'form': form})
 #
-# def user_details(request):
-#     return render(request,'users/user_details.html' )
+def user_details(request):
+    # user = request.user
+    first_user = User.objects.first()
+    return render(request,'users/user_details.html',{'user': first_user} )
