@@ -32,6 +32,8 @@ class CustomUserManager(BaseUserManager):
 
     def create_superuser(self, email, password, first_name, last_name, phone ,birth_date, **extra_fields):
         extra_fields.setdefault('is_superuser',True)
+        extra_fields.setdefault('is_staff',True)
+        extra_fields.setdefault('is_active',True)
         return self._create_user(email, password, first_name, last_name, phone, birth_date, **extra_fields)
 
 
@@ -43,7 +45,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     email = models.EmailField(db_index=True, unique=True, max_length=254)
     first_name = models.CharField(max_length=240)
     last_name = models.CharField(max_length=255)
-    phone = models.CharField(max_length=50, validators=[RegexValidator('^01[012]\d{8}$')])
+    phone = models.CharField(max_length=50, validators=[RegexValidator(r'^01[0-2,5]{1}[0-9]{8}$')])
     address = models.CharField( max_length=250)
     photo = models.ImageField(upload_to='users/images',blank=True)
     birth_date = models.DateField(null=True, blank=True)
