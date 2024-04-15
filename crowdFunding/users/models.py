@@ -1,31 +1,70 @@
 from django.db import models
-from django.contrib.auth.models import User, AbstractUser
-from django.core.validators import RegexValidator
+from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin,BaseUserManager
+from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
+from datetime import date
+from django.core.exceptions import ValidationError
+
+from django.forms import TimeField
 
 
-class CustomUser(User):
-# class CustomUser(AbstractUser):
+class CustomUserManager(BaseUserManager):
+    def _create_user(self, email, password, first_name, last_name, phone, birth_date, **extra_fields):
+        if not email:
+            raise ValueError("Email must be provided")
+        if not password:
+            raise ValueError('Password is not provided')
+        user = self.model(
+            email=self.normalize_email(email),
+            first_name = first_name,
+            last_name = last_name,
+            phone = phone,
+            birth_date = birth_date,
+            # photo = photo
+            **extra_fields
+        )
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
 
-#     first_name = models.CharField(max_length=100)
-#     last_name = models.CharField(max_length=100)
-#     username = models.CharField(max_length=100)
-#     email = models.EmailField(max_length=100)
+    def create_user(self, email, password, first_name, last_name, phone, birth_date, **extra_fields):
+        extra_fields.setdefault('is_superuser',False)
+        return self._create_user(email, password, first_name, last_name, phone, birth_date, **extra_fields)
 
-    # mobile_regex = RegexValidator(regex=r'^20(10|11|12|15)\d{8}$', message="Enter a valid Egyptian phone number")
-    # mobile_phone = models.CharField(validators=[mobile_regex], max_length=11)
-    profile_picture = models.ImageField(upload_to="users/images/",null=True,blank=True)
-    birth_date = models.DateField(null=True,blank=True)
-    facebook_profile = models.URLField(null=True,blank=True)
-    country = models.CharField(max_length=100,null=True,blank=True)
+    def create_superuser(self, email, password, first_name, last_name, phone ,birth_date, **extra_fields):
+        extra_fields.setdefault('is_superuser',True)
+        return self._create_user(email, password, first_name, last_name, phone, birth_date, **extra_fields)
 
 
+AUTH_PROVIDERS = {'facebook': 'facebook', 'email': 'email'}
 
-    def __str__(self):
-        return self.username
-    @property
-    def profile_picture_url(self):
-        return f"/media/{self.profile_picture}"
 
-    # password = models.CharField(max_length=100)
-    # created_at = models.DateTimeField(auto_now_add=True)
-    # updated_at = models.DateTimeField(auto_now=True)
+class User(AbstractBaseUser,PermissionsMixin):
+
+    email = models.EmailField(db_index=True, unique=True, max_length=254)
+    first_name = models.CharField(max_length=240)
+    last_name = models.CharField(max_length=255)
+    phone = models.CharField(max_length=50, validators=[RegexValidator('^01[012]\d{8}$')])
+    address = models.CharField( max_length=250)
+    photo = models.ImageField(upload_to='users/images',blank=True)
+    birth_date = models.DateField(null=True, blank=True)
+    is_superuser = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
+    country = models.CharField(max_length=225)
+    facebook = models.URLField(null=True, blank=True)
+    auth_provider = models.CharField(
+        max_length=255, blank=False,
+        null=False, default=AUTH_PROVIDERS.get('email'))
+
+    objects = CustomUserManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ["first_name", "last_name", "phone","birth_date","photo"]
+
+    class Meta:
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
+
+
+
+
+
