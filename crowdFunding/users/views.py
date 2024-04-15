@@ -38,5 +38,7 @@ def register(request):
 @login_required
 def user_details(request,id):
     user = get_object_or_404(User, pk=id)
+    if request.user != user:
+        return render(request, 'users/unauthorized.html')
     return render(request,'users/user_details.html',{'user': user} )
 
