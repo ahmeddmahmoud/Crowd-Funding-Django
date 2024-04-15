@@ -1,24 +1,18 @@
-# from django import forms
-# from django.contrib.auth.forms import UserCreationForm,UserChangeForm
-# from django.contrib.auth.models import User
-# from users.models import CustomUser
-#
-#
-# # from django.core.exceptions import ValidationError
-# # from django.contrib.auth import get_user_model
-# # from .models import Profile
-# # from django.contrib.auth.forms import AuthenticationForm
-#
-#
-# class RegistrationForm(UserCreationForm):
-#     class Meta:
-#         model = CustomUser
-#         fields = ["username", "profile_picture"]
-#         # fields
-# # , "mobile_phone", "email", "password1", "password2", "mobile_phone", "first_name", "last_name",
-#
-#
-# # class CustomUserChangeForm(UserChangeForm):
-# #     class Meta:
-# #         model = CustomUser
-# #         fields = ["username", "profile_picture"]
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from .models import User
+
+
+class UserRegistrationForm(UserCreationForm):
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
+
+    class Meta(UserCreationForm.Meta):
+        model = User
+        fields = ['first_name', 'last_name', 'email', 'password1', 'password2', 'phone', 'photo']
+
+    def clean_phone(self):
+        phone = self.cleaned_data['phone']
+        if not phone.startswith('01'):
+            raise forms.ValidationError('Mobile phone must start with 01')
+        return phone
