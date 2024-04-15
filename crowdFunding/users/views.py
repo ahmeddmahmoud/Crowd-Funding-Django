@@ -1,15 +1,17 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from .forms import UserRegistrationForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
+from users.models import User
+from django.contrib.auth.decorators import login_required
 
 
 def index(request):
-    return render(request,'users/index.html')
+    return render(request, 'users/index.html')
 
 
 def login_form(request):
-    form=AuthenticationForm()
+    form = AuthenticationForm()
     if request.method == 'POST':
         form = AuthenticationForm(request, request.POST)
         if form.is_valid():
@@ -18,9 +20,10 @@ def login_form(request):
             user = authenticate(request, email=email, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('index')
+                url = reverse('user.details', args=[user.id])
+                return redirect(url)
 
-    return render(request,'users/login.html',{'form':form})
+    return render(request, 'users/login.html', {'form': form})
 
 
 def register(request):
@@ -34,9 +37,9 @@ def register(request):
     return render(request, 'users/register.html', {'form': form})
 
 
-#
-def user_details(request):
-    # user = request.user
-    first_user = User.objects.first()
-    return render(request,'users/user_details.html',{'user': first_user} )
-
+@login_required
+def user_details(request, id):
+    user = get_object_or_404(User, pk=id)
+    if request.user != user:
+        return render(request, 'users/unauthorized.html')
+    return render(request, 'users/user_details.html', {'user': user})
