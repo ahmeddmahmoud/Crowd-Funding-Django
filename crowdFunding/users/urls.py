@@ -4,6 +4,5 @@ urlpatterns = [
     path('register/', register, name="user.register"),
     path('', index, name="index"),
     path('login/', login_form, name="user.login"),
-    path('details',user_details , name="user.details")
-
+    path('details/<int:id>',user_details , name="user.details")
 ]
