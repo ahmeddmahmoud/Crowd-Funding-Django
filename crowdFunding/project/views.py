@@ -80,6 +80,7 @@ def cancel_project(request,id):
         return redirect(project.show_url)
     
 def list_project(request):
+    projects = Project.objects.all()
     return render(request, 'project/crud/list.html', {'projects': projects})
 
     

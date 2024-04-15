@@ -1,7 +1,16 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <div class="container">
+<div class="container">
+    <div class="row mb-3">
+        <div class="col">
+            <form action="{% url 'projects.search' %}" method="GET" class="d-flex">
+                <input class="form-control me-2" type="search" name="search_query" placeholder="Search Books"
+                       aria-label="Search">
+                <button class="btn btn-outline-primary" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
         <div class="row">
             {% for project in projects %}
                 <div class="col-md-4 mb-4">
@@ -20,16 +29,7 @@
             {% endfor %}
         </div>
     </div>
-<div class="container">
-    <div class="row mb-3">
-        <div class="col">
-            <form action="{% url 'projects.search' %}" method="GET" class="d-flex">
-                <input class="form-control me-2" type="search" name="search_query" placeholder="Search Books"
-                       aria-label="Search">
-                <button class="btn btn-outline-primary" type="submit">Search</button>
-            </form>
-        </div>
-    </div>
+
 
   
 {% endblock %}
