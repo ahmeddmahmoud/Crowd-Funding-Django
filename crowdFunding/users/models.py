@@ -49,6 +49,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     birth_date = models.DateField(null=True, blank=True)
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
     country = models.CharField(max_length=225)
     facebook = models.URLField(null=True, blank=True)
     auth_provider = models.CharField(
@@ -63,8 +64,3 @@ class User(AbstractBaseUser,PermissionsMixin):
     class Meta:
         verbose_name = 'User'
         verbose_name_plural = 'Users'
-
-
-
-
-
