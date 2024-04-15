@@ -32,3 +32,11 @@ def register(request):
             login_url = reverse("index")
             return redirect(login_url)
     return render(request, 'users/register.html', {'form': form})
+
+
+#
+def user_details(request):
+    # user = request.user
+    first_user = User.objects.first()
+    return render(request,'users/user_details.html',{'user': first_user} )
+
