@@ -40,9 +40,10 @@ INSTALLED_APPS = [
     'project.apps.ProjectConfig',
     'users.apps.UsersConfig',
     'commentary.apps.CommentaryConfig',
+    'homepage.apps.HomepageConfig',
     'star_ratings',
 ]
-# Auth_USER_MODEL = 'users.CustomUser'
+AUTH_USER_MODEL = 'users.User'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

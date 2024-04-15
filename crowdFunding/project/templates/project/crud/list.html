@@ -1,23 +1,35 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    </head>
-    <body>
-        <h1>Projects</h1>
-        <div class="container">
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <div class="row mb-3">
+        <div class="col">
+            <form action="{% url 'projects.search' %}" method="GET" class="d-flex">
+                <input class="form-control me-2" type="search" name="search_query" placeholder="Search Books"
+                       aria-label="Search">
+                <button class="btn btn-outline-primary" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+        <div class="row">
             {% for project in projects %}
-             <div class="card-body">
-                <h1>Data</h1>
-                <h5 class="card-title">Title: {{project.title}}</h5>
-                <p class="card-text">Details: {{project.details}}</p>
-                <p class="card-text">Start Date: {{project.start_date}}</p>
-                <p class="card-text">Total Target: {{project.total_target}}</p>
-                <a href="#" class="btn btn-info">Show</a>
-                <a href="#" class="btn btn-primary">Update</a>
-                <a href="#" class="btn btn-warning">Edit</a>
-            </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Title: {{ project.title }}</h5>
+                            <p class="card-text">Details: {{ project.details }}</p>
+                            <p class="card-text">Start Date: {{ project.start_date }}</p>
+                            <p class="card-text">Total Target: {{ project.total_target }}</p>
+                            <a href="{{ project.delete_url }}" class="btn btn-danger">Delete</a>
+                            <a href="{{ project.show_url }}" class="btn btn-info">Show</a>
+                            <a href="#" class="btn btn-success">Donate</a>
+                        </div>
+                    </div>
+                </div>
             {% endfor %}
-        </div>    
-    </body>
-</html>
+        </div>
+    </div>
+
+
+  
+{% endblock %}

@@ -1,7 +1,7 @@
 from django.db import models
 from django.shortcuts import get_object_or_404 , reverse
 from django.utils import timezone
-from users.models import CustomUser
+# from users.models import User
 
 
 # Create your models here.
@@ -29,7 +29,9 @@ class Project(models.Model):
     end_date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     current_donation = models.FloatField(default=0, null=True, blank=True)
-    project_owner=models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
+    # project_owner=models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    is_featured = models.BooleanField(default=False)
+    featured_at = models.DateTimeField(default=None, null=True)
     category= models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     tag = models.ManyToManyField(Tag, blank=True, related_name="projects")
 
@@ -38,6 +40,11 @@ class Project(models.Model):
     @property
     def show_url(self):
         url = reverse('project.show', args=[self.id])
+        return url
+    
+    @property
+    def delete_url(self):
+        url = reverse('project.cancel', args=[self.id])
         return url
     
     @property
@@ -64,7 +71,7 @@ class Picture(models.Model):
 class Donation(models.Model):
     donation=models.FloatField()
     project=models.ForeignKey(Project, on_delete=models.CASCADE, related_name='donations')
-    user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
+    # user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.donation
