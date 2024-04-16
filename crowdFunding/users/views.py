@@ -43,3 +43,10 @@ def user_details(request, id):
     if request.user != user:
         return render(request, 'users/unauthorized.html')
     return render(request, 'users/user_details.html', {'user': user})
+
+@login_required
+def user_delete(request, id):
+    user = get_object_or_404(User, pk=id)
+    user.delete()
+    url = reverse("user.login")
+    return redirect(url)
