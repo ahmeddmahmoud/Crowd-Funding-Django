@@ -7,3 +7,5 @@ crowdFunding/users/__pycache__
 crowdFunding/commentary/migrations/
 crowdFunding/commentary/__pycache__
 crowdFunding/crowdFunding/__pycache__
+crowdFunding/homepage/migrations/
+crowdFunding/homepage/__pycache__
