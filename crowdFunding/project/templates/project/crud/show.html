@@ -100,13 +100,61 @@
         <form class="add-comment-form" method="post" action="{% url 'project.comment' project.id %}" style="display: none;">
             {% csrf_token %}
              {{ form.as_p }}
+<div class="rating">
+  <input type="radio" id="star5" name="star_rating" value="5">
+  <label for="star5">&#9733;</label>
+  <input type="radio" id="star4" name="star_rating" value="4">
+  <label for="star4">&#9733;</label>
+  <input type="radio" id="star3" name="star_rating" value="3">
+  <label for="star3">&#9733;</label>
+  <input type="radio" id="star2" name="star_rating" value="2">
+  <label for="star2">&#9733;</label>
+  <input type="radio" id="star1" name="star_rating" value="1">
+  <label for="star1">&#9733;</label>
+</div>
+<input type="hidden" id="rate" name="rate">
+
+
+
+
 <!--            <textarea name="text" id="comment_text" placeholder="Write your comment here..." required></textarea>-->
             <button type="submit" id="submit-comment-btn">Submit</button>
         </form>
     </div>
 </div>
+<style>
+   /* Reset default radio button styles */
+.rating input[type="radio"] {
+  display: none;
+}
 
+/* Style star labels */
+.rating label {
+  font-size: 30px;
+  color: #ccc;
+  cursor: pointer;
+}
+
+/* Style star labels when checked */
+.rating input[type="radio"]:checked ~ label {
+  color: #ffcc00;
+}
+
+
+</style>
 <script>
+<!-- js for star styling   -->
+    document.addEventListener('DOMContentLoaded', function () {
+  const stars = document.querySelectorAll('.rating input[type="radio"]');
+  const rateInput = document.getElementById('id_rate');
+  rateInput.style.display = 'none';
+  stars.forEach(star => {
+    star.addEventListener('change', function () {
+      rateInput.value = this.value;
+    });
+  });
+});
+
     document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('add-comment-btn').addEventListener('click', function() {
             var commentForm = document.querySelector('.add-comment-form');
