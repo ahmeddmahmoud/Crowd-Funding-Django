@@ -16,7 +16,7 @@ class projectSearchView(generic.ListView):
     def get_queryset(self):
         search_query = self.request.GET.get('search_query')
         projects = Project.objects.filter(
-            Q(title__icontains=search_query)
+            Q(title__icontains=search_query) | Q(tag__name__icontains=search_query)
         )
         print(projects)
         self.extra_context = {'search_query': search_query}
