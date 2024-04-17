@@ -1,5 +1,5 @@
 from django import forms
-from project.models import Project,Tag,Category
+from project.models import Project,Tag,Category,Donation
 
 class ProjectModelForm(forms.ModelForm):
     class Meta:
@@ -15,3 +15,8 @@ class TagModelForm(forms.ModelForm):
     class Meta:
         model = Tag
         fields = '__all__'
+
+class DonationModelForm(forms.ModelForm):
+    class Meta:
+        model = Donation
+        fields = ('donation',)
