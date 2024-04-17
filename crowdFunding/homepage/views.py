@@ -16,7 +16,7 @@ class projectSearchView(generic.ListView):
     def get_queryset(self):
         search_query = self.request.GET.get('search_query')
         projects = Project.objects.filter(
-            Q(title__icontains=search_query)
+            Q(title__icontains=search_query) | Q(tag__name__icontains=search_query)
         )
         print(projects)
         self.extra_context = {'search_query': search_query}
@@ -26,6 +26,7 @@ class projectSearchView(generic.ListView):
 def products_index(request):
     projects=Project.objects.all()
     latest_books = projects.order_by('-created_at')[:4]
+    latest_featured_projects = Project.objects.filter(is_featured=True).order_by('-featured_at')[:5]
 
     sorted_products = sorted(projects, key=lambda p: p.rate, reverse=True)
 
@@ -36,5 +37,5 @@ def products_index(request):
         print(f"Product: {product.title}, Rate: {product.rate}")
     return render(request , 'homepage/home.html' ,
                   context={"projects" : projects,"latest_books":latest_books,
-                           "top_five_products": top_five_products
+                           "top_five_products": top_five_products, "latest_featured_projects":latest_featured_projects
                            })

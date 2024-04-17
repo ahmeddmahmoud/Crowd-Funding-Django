@@ -1,26 +1,32 @@
 from django.shortcuts import render, redirect, get_object_or_404
-
-from .models import Project, Comment
 from .forms import CommentForm, ReportForm
-
-# Create your views here.
-
-
-
-def add_comment(request, id) :
+from .models import Project, Comment
+def add_comment(request, id):
     project = get_object_or_404(Project, pk=id)
     if request.method == 'POST':
-        form=CommentForm(request.POST)
+        form = CommentForm(request.POST)
         if form.is_valid():
-            comment=form.save(commit=False)
-            comment.project=project
-            comment.user=request.user
+            comment = form.save(commit=False)
+            comment.project = project
+            comment.user = request.user
             comment.save()
-            return redirect('project/crud/show.html',id=id)
+
+            # Handle stars rating data
+            star_rating = request.POST.get('star_rating')
+            print("Star Rating:", star_rating)  # Debugging statement
+            if star_rating:
+                comment.star_rating = int(star_rating)
+                comment.save()
+            print("Comment:", comment)
+            return redirect('project.show', id=id)
+        else:
+            print("Form Errors:", form.errors)
+            return render(request, 'project/crud/show.html', {'form': form})
     else:
         form = CommentForm()
-        return render(request, 'project/crud/show.html', {'form': form})
+    return render(request, 'project/crud/show.html', {'form': form})
 
+# Create your views here.
 
 
 

@@ -53,7 +53,7 @@ def project_show(request,id):
     form2 = ReportForm()
 
     return render(request, "project/crud/show.html",
-                context={"project":project, 'comments': comments, 'reports': reports, 'form': form, 'form2': form2})
+                context={"project": project, 'comments': comments, 'reports': reports, 'form': form, 'form2': form2})
 
 # def project_show(request,id):
 #     project = get_object_or_404(Project, pk=id)

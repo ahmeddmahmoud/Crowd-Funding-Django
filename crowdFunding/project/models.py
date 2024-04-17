@@ -31,7 +31,7 @@ class Project(models.Model):
     current_donation = models.FloatField(default=0, null=True, blank=True)
     project_owner=models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     is_featured = models.BooleanField(default=False)
-    featured_at = models.DateTimeField(default=None, null=True)
+    featured_at = models.DateTimeField(default=None, null=True, blank=True)
     category= models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     tag = models.ManyToManyField(Tag, blank=True, related_name="projects")
 
@@ -63,6 +63,17 @@ class Project(models.Model):
         url = reverse('project.donate', args=[self.id])
         return url
 
+    def featured_project(self):
+        if not self.is_featured:
+            self.is_featured=True
+            self.featured_at=timezone.now()
+            self.save()
+
+    def not_featured_project(self):
+        if self.is_featured:
+            self.is_featured=False
+            self.featured_at=None
+            self.save()
 
 
 class Picture(models.Model):

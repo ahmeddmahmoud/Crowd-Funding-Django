@@ -99,3 +99,52 @@
 {% endif %}
 
 
+
+
+
+
+<h3>latest 5 featured projects</h3>
+
+    {% if latest_featured_projects %}
+<div class="join my-5">
+  <!--  highest five rated running projects -->
+
+  <div id="featured" class="carousel carousel-dark slide">
+    <div class="carousel-indicators">
+      {% for project in latest_featured_projects %}
+      <button type="button" data-bs-target="#featured" data-bs-slide-to="{{ forloop.counter0 }}"
+        {% if forloop.first %}class="active"{% endif %} aria-label="Slide {{ forloop.counter }}"></button>
+      {% endfor %}
+    </div>
+    <div class="carousel-inner">
+      {% for project in top_five_products %}
+      <div class="carousel-item{% if forloop.first %} active{% endif %}" data-bs-interval="10000">
+        <img src="{{ project.image_url }}" style="max-height: 400px; max-width: 50%;" class="d-block w-100 mx-auto"
+          alt="{{ project.title }}">
+        <div class="carousel-caption rounded" style="background-color: rgba(255, 255, 255, 0.75);">
+          <h3>{{ project.title }}</h3>
+          <p>{{ project.author }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#featured" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#featured" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</div>
+  {% for project in latest_featured_projects %}
+            <tr>
+                <td>{{ project.title }}</td>
+                <td>{{ project.is_featured }}</td>
+            </tr>
+            {% endfor %}
+{% endif %}
+
+
