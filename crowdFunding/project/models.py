@@ -29,7 +29,7 @@ class Project(models.Model):
     end_date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     current_donation = models.FloatField(default=0, null=True, blank=True)
-    # project_owner=models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    project_owner=models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     is_featured = models.BooleanField(default=False)
     featured_at = models.DateTimeField(default=None, null=True, blank=True)
     category= models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
@@ -92,14 +92,4 @@ class Donation(models.Model):
         return self.donation
 
 
-class FeaturedProject(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='featured_project')
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        verbose_name = 'Featured Project'
-        verbose_name_plural = 'Featured Projects'
-
-    def __str__(self):
-        return self.project.title
 
