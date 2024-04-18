@@ -1,0 +1,36 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <title>Categories</title>
+
+    <table class="table table-stripped">
+    <tr>
+<!--        <td> ID</td>-->
+        <td> Name</td>
+<!--        <td> Description</td>-->
+
+        <td> Show</td>
+        <td> Delete</td>
+        <td> Edit</td>
+
+    </tr>
+    {% for category in categories %}
+    <tr>
+<!--        <td>{{category.id }}</td>-->
+        <td> {{category.name}}</td>
+<!--        <td> {{category.description}}</td>-->
+
+       <td>
+            <a class="btn btn-info" href="{{category.show_url}}"> Show</a>
+        </td>
+        <td>
+            <a class="btn btn-warning" href="{{category.edit_url}}"> Edit</a>
+        </td>
+
+        <td>
+            <a class="btn btn-danger" href="{{category.delete_url}}"> Delete</a>
+        </td>
+
+    </tr>
+    {% endfor %}
+
+</table>

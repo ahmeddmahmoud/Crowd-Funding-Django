@@ -14,6 +14,24 @@ class Category(models.Model):
     def __str__(self):
         return f"{self.name}"
 
+    @classmethod
+    def get_category_by_id(cls, id):
+        return get_object_or_404(cls,pk=id)
+
+    @property
+    def delete_url(self):
+        url=reverse ("category.delete",args=[self.id])
+        return url
+
+    @property
+    def show_url(self):
+        url=reverse("category.show",args=[self.id])
+        return url
+
+    @property
+    def edit_url(self):
+        return reverse("category.edit",args=[self.id])
+
 class Tag(models.Model):
     name = models.CharField(max_length=100, null=True)
 

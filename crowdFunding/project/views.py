@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect,get_object_or_404,reverse
-from project.models import Project
+from project.models import Project, Category
 from project.forms import ProjectModelForm,CategoryModelForm,TagModelForm
 from commentary.forms import CommentForm,ReportForm, ReplyForm
 from project.models import Project , Donation
@@ -41,8 +41,38 @@ def create_category(request):
 
     return render(request, 'project/forms/createCategory.html', {'form': form})
 
+
+def index_category(request):
+    categories=Category.objects.all()
+    return render(request,'category/crud/index.html', context={"categories":categories})
+
+
+def show_category(request, id):
+    category = Category.get_category_by_id(id)
+    return render(request,'category/crud/show.html', context={"category": category})
+
+
+def edit_category(request, id):
+    category = Category.get_category_by_id(id)
+    form = CategoryModelForm(instance=category)
+    if request.method == "POST":
+        form = CategoryModelForm(request.POST, request.FILES, instance=category)
+        if form.is_valid():
+            category = form.save()
+            return redirect(category.show_url)
+
+    return render(request,'category/crud/edit.html', context={"form": form})
+
+
+def delete_category(request, id):
+    category = get_object_or_404(Category, pk=id)
+    category.delete()
+    url=reverse("category.index")
+    return redirect(url)
+
+
 def create_Tag(request):
-    form= TagModelForm()
+    form = TagModelForm()
     if request.method == 'POST':
         form = TagModelForm(request.POST)
         if form.is_valid():
@@ -50,6 +80,7 @@ def create_Tag(request):
 
     return render(request, 'project/forms/createTag.html',
                 context={'form': form})
+
 
 def project_show(request,id):
     project = get_object_or_404(Project, pk=id)
