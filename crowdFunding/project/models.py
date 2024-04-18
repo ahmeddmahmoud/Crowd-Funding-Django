@@ -58,6 +58,10 @@ class Project(models.Model):
     def star_ratings(self):
         rate = self.rate
         return [1 if i < rate else 0.5 if abs(i - rate) <= 0.5 else 0 for i in range(1, 6)]
+    @property
+    def donate_url(self):
+        url = reverse('project.donate', args=[self.id])
+        return url
 
     def featured_project(self):
         if not self.is_featured:
@@ -82,10 +86,20 @@ class Picture(models.Model):
 class Donation(models.Model):
     donation=models.FloatField()
     project=models.ForeignKey(Project, on_delete=models.CASCADE, related_name='donations')
-    # user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.donation
 
 
+class FeaturedProject(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='featured_project')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Featured Project'
+        verbose_name_plural = 'Featured Projects'
+
+    def __str__(self):
+        return self.project.title
 
