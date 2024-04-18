@@ -12,6 +12,8 @@ from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from typing import Protocol
 from .tokens import account_activation_token
+from project.models import Project, FeaturedProject
+
 
 
 def index(request):
@@ -29,30 +31,36 @@ def login_form(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, f"Hello {user.first_name}! You have been logged in")
-                url = reverse('user.details', args=[user.id])
-                return redirect(url)
+                if user.is_superuser:
+                    return redirect('index')
+                else:
+                    url = reverse('user.details', args=[user.id])
+                    return redirect(url)
 
     return render(request, 'users/login.html', {'form': form})
 
 
 def activate(request, uidb64, token):
     User = get_user_model()
+
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
-    except:
-        user = None
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        # Handle decoding errors or user not found
+        messages.error(request, "Invalid activation link.")
+        return redirect('index')
 
-    if user is not None and account_activation_token.check_token(user, token):
+    if account_activation_token.check_token(user, token):
+        # Activate the user account
         user.is_active = True
         user.save()
-
-        messages.success(request, "Thank you for your email confirmation. Now you can login your account.")
+        messages.success(request, "Your account has been activated successfully. You can now log in.")
         return redirect('user.login')
     else:
-        messages.error(request, "Activation link is invalid!")
-
-    return redirect('index')
+        # Invalid token
+        messages.error(request, "Invalid activation link.")
+        return redirect('index')
 
 
 def activate_email(request, user, to_email):
@@ -67,7 +75,8 @@ def activate_email(request, user, to_email):
     email = EmailMessage(mail_subject, message, to=[to_email])
     if email.send():
         messages.success(request, f'Dear {user.first_name}!, please go to you email {to_email}! inbox and click on \
-                  received activation link to confirm and complete the registration. Note!: Check your spam folder.')
+                               received activation link to confirm and complete the registration. Note!: Check your spam folder.')
+
     else:
         messages.error(request, f'Problem sending email to {to_email}, check if you typed it correctly.')
 
@@ -91,9 +100,25 @@ def user_details(request, id):
         return render(request, 'users/unauthorized.html')
     return render(request, 'users/user_details.html', {'user': user})
 
+
 @login_required
 def user_delete(request, id):
     user = get_object_or_404(User, pk=id)
     user.delete()
     url = reverse("user.login")
     return redirect(url)
+
+
+def featured_projects(request):
+    data = Project.objects.all()
+    return render(request, 'admin/featured_projects.html', {'data': data})
+
+
+# def add_to_featured(request, id):
+#     project = get_object_or_404(Project, pk=id)
+#     # Check if the project is already featured
+#     if not FeaturedProject.objects.filter(project=project).exists():
+#         # If not featured, create a FeaturedProject instance
+#         FeaturedProject.objects.create(project=project)
+#         # Redirect to a success URL or back to the project list page
+#     return redirect('featured')
