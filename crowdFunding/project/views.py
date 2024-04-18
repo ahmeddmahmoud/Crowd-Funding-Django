@@ -1,4 +1,7 @@
 from django.shortcuts import render, redirect,get_object_or_404,reverse
+from project.models import Project
+from project.forms import ProjectModelForm,CategoryModelForm,TagModelForm
+from commentary.forms import CommentForm,ReportForm, ReplyForm
 from project.models import Project , Donation
 from project.forms import ProjectModelForm,CategoryModelForm,TagModelForm,DonationModelForm
 from commentary.forms import CommentForm,ReportForm
@@ -49,11 +52,13 @@ def project_show(request,id):
     project = get_object_or_404(Project, pk=id)
     comments = project.comments.all()
     reports = project.reports.all()
+    reviews_reply = project.comments.prefetch_related('replies')
     form = CommentForm()
     form2 = ReportForm()
-
+    reply_form = ReplyForm()
     return render(request, "project/crud/show.html",
-                context={"project": project, 'comments': comments, 'reports': reports, 'form': form, 'form2': form2})
+                context={"project": project, 'comments': comments, 'reports': reports,
+                         'form': form, 'form2': form2, "reply_form":reply_form, "reviews_reply":reviews_reply})
 
 # def project_show(request,id):
 #     project = get_object_or_404(Project, pk=id)

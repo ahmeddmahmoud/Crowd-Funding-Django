@@ -24,3 +24,11 @@ class Report(models.Model):
 
     def __str__(self):
         return self.reason
+
+
+class Reply(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE, related_name='replies')
+    comment = models.ForeignKey(Comment,on_delete=models.CASCADE, related_name='replies')
+    product = models.ForeignKey(Project,on_delete=models.CASCADE, related_name='replies', null=True, blank=True)
+    content = models.CharField(max_length=500)
+    created_at = models.DateTimeField(auto_now_add=True)
