@@ -1,19 +1,19 @@
-    <title>Title</title>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        /* Custom styles */
-        .project-info {
-            margin-top: 20px;
-        }
-        .project-info p {
-            margin-bottom: 5px;
-        }
-        .project-info .label {
-            font-weight: bold;
-            color: #007bff;
-        }
-    </style>
+<title>Title</title>
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+    /* Custom styles */
+    .project-info {
+        margin-top: 20px;
+    }
+    .project-info p {
+        margin-bottom: 5px;
+    }
+    .project-info .label {
+        font-weight: bold;
+        color: #007bff;
+    }
+</style>
 <div class="container">
     <div class="card">
         <div class="card-body">
@@ -26,29 +26,31 @@
                 <p><span class="label">Created At:</span> {{ project.created_at }}</p>
                 <p><span class="label">Current Donation:</span> {{ project.current_donation }}</p>
 
-                
-<!-- Include Font Awesome CSS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-QzlcmlSdIbDtiRJInF4VaNmDTuK25I7RQ1SfJM/f1iDn2JN84iXT2AKI5ffj5wdsW0RnW7fuyBdVFlk2l4OfCw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+                <!-- Include Font Awesome CSS -->
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+                      integrity="sha512-QzlcmlSdIbDtiRJInF4VaNmDTuK25I7RQ1SfJM/f1iDn2JN84iXT2AKI5ffj5wdsW0RnW7fuyBdVFlk2l4OfCw=="
+                      crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
                 <!-- Display stars -->
                 <div class="rate">
                     {% for star in project.star_ratings %}
-                        {% if star == 0.5 %}
-                            <i class="fas fa-star-half-alt" style="color: orange;"></i>
-                        {% elif star == 0 %}
-                            <i class="far fa-star" style="color: black;"></i>
-                        {% else %}
-                            <i class="fas fa-star" style="color: orange;"></i>
-                        {% endif %}
+                    {% if star == 0.5 %}
+                    <i class="fas fa-star-half-alt" style="color: orange;"></i>
+                    {% elif star == 0 %}
+                    <i class="far fa-star" style="color: black;"></i>
+                    {% else %}
+                    <i class="fas fa-star" style="color: orange;"></i>
+                    {% endif %}
                     {% endfor %}
                 </div>
-               {% if project.id %}
-    <a href="{% url 'projects.report_project' project.id %}" class="btn btn-primary report-button">
-        <i class="fas fa-flag"> Report</i>
-    </a>
-{% endif %}
+                {% if project.id %}
+                <a href="{% url 'projects.report_project' project.id %}" class="btn btn-primary report-button">
+                    <i class="fas fa-flag"> Report</i>
+                </a>
+                {% endif %}
 
-                
+
             </div>
         </div>
     </div>
@@ -60,117 +62,134 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 
-
-
-
-
-
 <div class="comments-box">
     <div class="comments-container">
-<!--        <h3>Comments</h3>-->
+        <!--        <h3>Comments</h3>-->
         {% if comments %}
-            <div class="comment-list">
-                {% for comment in comments %}
-                    <div class="comment">
-                       <div class="comment-user"> {{ comment.user }}</div>
+        <div class="comment-list">
+            {% for comment in comments %}
+            <div class="comment">
+                <div class="comment-user"> {{ comment.user }}</div>
 
-                        <div class="comment-user">User: {{ comment.user }}</div>
-                        <div class="comment-text">{{ comment.text }}</div>
+                <div class="comment-user">User: {{ comment.user }}</div>
+                <div class="comment-text">{{ comment.text }}</div>
 
-                        {% if not comment.reported %}
-                        <form method="post" action="{% url 'projects.report_comment' id=project.id comment_id=comment.id %}">
-                            {% csrf_token %}
-                            {% comment %} <button type="submit" class="report-button btn btn-primary">Report</button> {% endcomment %}
-                            <button type="submit" class="report-button btn btn-primary">
-                                <i class="fas fa-flag"></i> 
-                            </button>
-                            
-                        
-                        </form>
-                       {% else %}
-                        <span class="reported">Reported</span>
-                       {% endif %}
-                    </div>
+                {% if not comment.reported %}
+                <form method="post" action="{% url 'projects.report_comment' id=project.id comment_id=comment.id %}">
+                    {% csrf_token %}
+                    {% comment %}
+                    <button type="submit" class="report-button btn btn-primary">Report</button>
+                    {% endcomment %}
+                    <button type="submit" class="report-button btn btn-primary">
+                        <i class="fas fa-flag"></i>
+                    </button>
+
+
+                </form>
+                {% else %}
+                <span class="reported">Reported</span>
+                {% endif %}
+
+                {% for reply in comment.replies.all %}
+                <div class="reply">
+                    <div class="reply-user">User: {{ reply.user }}</div>
+                    <div class="reply-content">{{ reply.content }}</div>
+                    <div class="reply-time">{{ reply.created_at }}</div>
+                </div>
                 {% endfor %}
+
+                <!-- Reply form -->
+                <form method="post" action="{% url 'projects.reply' project_id=project.id comment_id=comment.id %}">
+                    {% csrf_token %}
+                    {{ reply_form.as_p }}
+                    <button type="submit">Reply</button>
+                </form>
+
+
             </div>
+            {% endfor %}
+        </div>
         {% else %}
-            <p>No comments yet.</p>
+        <p>No comments yet.</p>
         {% endif %}
 
         <!-- Add Comment Form -->
         <button id="add-comment-btn">Add Comment</button>
-<!--        <p>Project ID: {{ project.id }}</p>-->
-<form class="add-comment-form" method="post" action="{% url 'project.comment' project.id %}" style="display: none;">
+        <!--        <p>Project ID: {{ project.id }}</p>-->
+        <form class="add-comment-form" method="post" action="{% url 'project.comment' project.id %}"
+              style="display: none;">
             {% csrf_token %}
-             {{ form.as_p }}
+            {{ form.as_p }}
 
-<div class="rating">
-  <input type="radio" id="star5" name="star_rating" value="5">
-  <label for="star5">&#9733;</label>
-  <input type="radio" id="star4" name="star_rating" value="4">
-  <label for="star4">&#9733;</label>
-  <input type="radio" id="star3" name="star_rating" value="3">
-  <label for="star3">&#9733;</label>
-  <input type="radio" id="star2" name="star_rating" value="2">
-  <label for="star2">&#9733;</label>
-  <input type="radio" id="star1" name="star_rating" value="1">
-  <label for="star1">&#9733;</label>
-</div>
-<input type="hidden" id="id_rate" name="star_rating">
+            <div class="rating" direction="rtl">
+                <input type="radio" id="star1" name="star_rating" value="5">
+                <label for="star1">&#9733;</label>
+
+                <input type="radio" id="star2" name="star_rating" value="4">
+                <label for="star2">&#9733;</label>
+
+                <input type="radio" id="star3" name="star_rating" value="3">
+                <label for="star3">&#9733;</label>
+
+                <input type="radio" id="star4" name="star_rating" value="2">
+                <label for="star4">&#9733;</label>
+
+                <input type="radio" id="star5" name="star_rating" value="1">
+                <label for="star5">&#9733;</label>
+            </div>
+            <input type="hidden" id="id_rate" name="star_rating">
 
 
-
-
-<!--            <textarea name="text" id="comment_text" placeholder="Write your comment here..." required></textarea>-->
+            <!--            <textarea name="text" id="comment_text" placeholder="Write your comment here..." required></textarea>-->
             <button type="submit" id="submit-comment-btn">Submit</button>
         </form>
     </div>
 </div>
 <style>
-   /* Reset default radio button styles */
-.rating input[type="radio"] {
-  display: none;
-}
+    /* Reset default radio button styles */
+ .rating input[type="radio"] {
+   display: none;
+ }
 
-/* Style star labels */
-.rating label {
-  font-size: 30px;
-  color: #ccc;
-  cursor: pointer;
-}
+ /* Style star labels */
+ .rating label {
+   font-size: 30px;
+   color: #ccc;
+   cursor: pointer;
+ }
 
-/* Style star labels when checked */
-.rating input[type="radio"]:checked ~ label {
-  color: #ffcc00;
-}
+ /* Style star labels when checked */
+ .rating input[type="radio"]:checked ~ label {
+   color: #ffcc00;
+ }
 
 
 </style>
 <script>
-<!-- js for star styling   -->
-    document.addEventListener('DOMContentLoaded', function () {
-  const stars = document.querySelectorAll('.rating input[type="radio"]');
-  const rateInput = document.getElementById('id_rate'); // Target the input field generated by form.as_p
-  stars.forEach(star => {
-    star.addEventListener('change', function () {
-      rateInput.value = this.value;
-      console.log("Selected rating:", this.value); // Debug statement
-      console.log("Rate input value:", rateInput.value); // Debug statement
-    });
-  });
-});
-
-
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('add-comment-btn').addEventListener('click', function() {
-            var commentForm = document.querySelector('.add-comment-form');
-            if (commentForm.style.display === 'none' || commentForm.style.display === '') {
-                commentForm.style.display = 'block';
-            } else {
-                commentForm.style.display = 'none';
-            }
+    <!-- js for star styling   -->
+        document.addEventListener('DOMContentLoaded', function () {
+      const stars = document.querySelectorAll('.rating input[type="radio"]');
+      const rateInput = document.getElementById('id_rate'); // Target the input field generated by form.as_p
+      stars.forEach(star => {
+        star.addEventListener('change', function () {
+          rateInput.value = this.value;
+          console.log("Selected rating:", this.value); // Debug statement
+          console.log("Rate input value:", rateInput.value); // Debug statement
         });
+      });
     });
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('add-comment-btn').addEventListener('click', function() {
+                var commentForm = document.querySelector('.add-comment-form');
+                if (commentForm.style.display === 'none' || commentForm.style.display === '') {
+                    commentForm.style.display = 'block';
+                } else {
+                    commentForm.style.display = 'none';
+                }
+            });
+        });
 </script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 

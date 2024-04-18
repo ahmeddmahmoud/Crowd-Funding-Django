@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import CommentForm, ReportForm
-from .models import Project, Comment
+from .forms import CommentForm, ReportForm, ReplyForm
+from .models import Project, Comment, Reply
 def add_comment(request, id):
     project = get_object_or_404(Project, pk=id)
     if request.method == 'POST':
@@ -56,3 +56,23 @@ def add_report(request, id, comment_id=None):
 
     return render(request, 'commentary/report_form.html', {'form': form})
 
+
+
+
+def create_reply(request, comment_id,project_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    project=get_object_or_404(Project, id=project_id)
+    if request.method == 'POST':
+        form = ReplyForm(request.POST)
+        if form.is_valid():
+            reply = form.save(commit=False)
+            reply.comment = comment
+            reply.user = request.user
+            reply.save()
+            print(project_id )
+            return redirect('project.show', id=project_id)
+    else:
+        form = ReplyForm()
+
+    # return redirect('products.show', id=comment.product.id)  # Redirect even for GET request
+    return render(request, 'projects/crud/show.html', {'form': form})

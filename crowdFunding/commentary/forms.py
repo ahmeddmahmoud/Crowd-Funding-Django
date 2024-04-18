@@ -1,5 +1,5 @@
 from django import forms
-from commentary.models import Comment, Report
+from commentary.models import Comment, Report, Reply
 
 class CommentForm(forms.ModelForm):
     rate = forms.IntegerField(label='Rating', min_value=1, max_value=5, initial=0)  # Add a rating field
@@ -23,3 +23,10 @@ class ReportForm(forms.ModelForm):
     class Meta:
         model = Report
         fields = ['reason', 'status']
+
+
+
+class ReplyForm(forms.ModelForm):
+    class Meta:
+        model = Reply
+        fields = ['content']
