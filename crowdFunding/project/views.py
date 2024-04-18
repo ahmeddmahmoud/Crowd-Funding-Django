@@ -6,6 +6,7 @@ from project.models import Project , Donation
 from project.forms import ProjectModelForm,CategoryModelForm,TagModelForm,DonationModelForm
 from commentary.forms import CommentForm,ReportForm
 from commentary.models import Comment
+from django.db.models import F
 
 from django.http import HttpResponse
 
@@ -19,7 +20,9 @@ def create_project_model_form(request):
     if request.method == 'POST':
         form = ProjectModelForm(request.POST, request.FILES)
         if form.is_valid():
-            project=form.save()
+            project = form.save(commit=False)  # Don't save to database yet
+            project.project_owner = request.user  # Set the project owner to the current user
+            project.save() 
             return redirect(project.show_url)
 
     return render(request,'project/forms/createmodel.html',
@@ -82,13 +85,15 @@ def cancel_project(request,id):
     donation = project.current_donation
     if donation < total_target*0.25:
         project.delete()
-        return redirect('hello')
+        # return redirect('hello')
     else:
         return redirect(project.show_url)
     
 def list_project(request):
     projects = Project.objects.all()
     return render(request, 'project/crud/list.html', {'projects': projects})
+
+from django.db.models import F
 
 def donate_project(request, id):
     project = get_object_or_404(Project, pk=id)
@@ -97,14 +102,21 @@ def donate_project(request, id):
         form = DonationModelForm(request.POST)
         if form.is_valid():
             donation = form.save(commit=False)
-            donation.project = project  # Assign project to the donation
-            donation.user = request.user  # Assuming you have user authentication in place
+            donation.project = project
+            donation.user = request.user
             donation.save()
-            #return redirect('project_show', id=id)  # Redirect to project details page
+            
+            # Increase the current donation for the project
+            Project.objects.filter(pk=project.pk).update(current_donation=F('current_donation') + donation.donation)
+
+            # Redirect to project details page or any other desired page
+            return redirect(project.show_url, id=id)  
+
     else:
         form = DonationModelForm()
 
     return render(request, 'project/crud/donate.html', {'form': form, 'project': project})
+
 
 # def donate_project(request, id):
 #     if request.method == 'POST':
