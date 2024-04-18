@@ -34,17 +34,16 @@
           else %} not added yet {% endif %}
         </li>
         <li class="list-group-item">
-          <strong>BirthDate:</strong> {% if user.birth_date %} {{user.birth_date
-          }} {% else %} not added yet {% endif %}
+          <strong>BirthDate:</strong> {% if user.birth_date %}
+          {{user.birth_date}} {% else %} not added yet {% endif %}
         </li>
         <li class="list-group-item">
-          <strong>FaceBook Page:</strong> {% if user.facebook %} {{
-          user.facebook }} {% else %} not added yet {% endif %}
+          <strong>FaceBook Page:</strong> {% if user.facebook %} {{user.facebook }} {% else %} not added yet {% endif %}
         </li>
       </ul>
 
       <div class="mt-3">
-        <a href="#" class="btn btn-primary mx-3">Edit</a>
+        <a href="{% url 'user.edit' user.id %}" class="btn btn-primary mx-3">Edit</a>
         <button onclick="confirmDelete()" class="btn btn-danger">Delete</button>
       </div>
     </div>
