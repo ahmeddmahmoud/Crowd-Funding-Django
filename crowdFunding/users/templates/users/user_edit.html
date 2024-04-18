@@ -1,0 +1,8 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %} 
+  {{ form }}
+  <button type="submit" class="btn btn-success">Edit</button>
+</form>
+<script src="{% static 'js/script2.js'%}"></script> 
+{% endblock %}

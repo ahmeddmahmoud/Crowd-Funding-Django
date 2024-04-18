@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, reverse, get_object_or_404
-from .forms import UserRegistrationForm
+from .forms import UserRegistrationForm,UserEditForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout,get_user_model
 from users.models import User
@@ -107,6 +107,20 @@ def user_delete(request, id):
     user.delete()
     url = reverse("user.login")
     return redirect(url)
+
+@login_required
+def user_edit(request, id):
+    user = get_object_or_404(User, id=id)
+    if request.method == 'POST':
+        form = UserEditForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            url = reverse("user.details",args=[user.id])
+            return redirect(url)
+    else:
+        form = UserEditForm(instance=user)
+    
+    return render(request, 'users/user_edit.html', {'form': form})
 
 
 def featured_projects(request):
