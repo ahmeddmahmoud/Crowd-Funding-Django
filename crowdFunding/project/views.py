@@ -122,3 +122,16 @@ def donate_project(request, id):
 
 #     else:
 #         return HttpResponse("Invalid request method")
+
+
+def edit_project(request, id):
+    project=Project.get_project_by_id(id)
+    form=ProjectModelForm(instance=project)
+    if request.method == "POST":
+        form=ProjectModelForm(request.POST, request.FILES, instance=project)
+        if form.is_valid():
+            project=form.save()
+            return redirect(project.show_url)
+
+    return render (request,'project/crud/edit.html', context={"form":form})
+

@@ -41,6 +41,17 @@ class Project(models.Model):
     def show_url(self):
         url = reverse('project.show', args=[self.id])
         return url
+
+    @property
+    def edit_url(self):
+        url = reverse('project.edit', args=[self.id])
+        return url
+
+    @classmethod
+
+    def get_project_by_id(cls,id):
+        return get_object_or_404(cls, pk=id)
+
     
     @property
     def delete_url(self):
