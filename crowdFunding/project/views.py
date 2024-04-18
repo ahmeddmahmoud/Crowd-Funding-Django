@@ -77,7 +77,7 @@ def cancel_project(request,id):
     donation = project.current_donation
     if donation < total_target*0.25:
         project.delete()
-        return redirect('hello')
+        # return redirect('hello')
     else:
         return redirect(project.show_url)
     
