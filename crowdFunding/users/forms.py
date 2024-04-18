@@ -16,3 +16,8 @@ class UserRegistrationForm(UserCreationForm):
         if not phone.startswith('01'):
             raise forms.ValidationError('Mobile phone must start with 01')
         return phone
+
+class UserEditForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email', 'phone', 'address', 'birth_date', 'country', 'facebook', 'photo']
