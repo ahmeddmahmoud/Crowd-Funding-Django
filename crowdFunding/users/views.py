@@ -12,7 +12,7 @@ from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from typing import Protocol
 from .tokens import account_activation_token
-from project.models import Project, FeaturedProject
+from project.models import Project
 
 
 
