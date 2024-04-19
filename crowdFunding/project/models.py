@@ -69,6 +69,7 @@ class Project(models.Model):
     def list_url(self):
         url = reverse('project.list')
         return url
+    
 
     @classmethod
 
