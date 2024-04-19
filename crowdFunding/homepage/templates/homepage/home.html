@@ -1,144 +1,190 @@
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
 
 <div class="row mb-3">
-  <div class="col">
-    <form action="{% url 'projects.search' %}" method="GET" class="d-flex">
-      <input class="form-control me-2" type="search" name="search_query" placeholder="Search Books" aria-label="Search">
-      <button class="btn btn-outline-primary" type="submit">Search</button>
-    </form>
-  </div>
+    <div class="col d-flex justify-content-center">
+        <div class="search-container">
+            <form action="{% url 'projects.search' %}" method="GET" class="d-flex">
+                <input class="form-control me-2 search-input" type="search" name="search_query"
+                       placeholder="Search Books" aria-label="Search">
+                <button class="btn btn-primary search-button" type="submit">
+                    <i class="bi bi-search">search</i> <!-- Search icon -->
+                </button>
+            </form>
+        </div>
+    </div>
 </div>
 
 
+<div class="col text-center">
+    <h3 class="section-title">Most 5 Rated Projects</h3>
+</div>
+=
 
-<h3>most 5 rated projects</h3>
-
-    {% if top_five_products %}
+{% if top_five_products %}
 <div class="join my-5">
-  <!--  highest five rated running projects -->
+    <!--  highest five rated running projects -->
 
-  <div id="carouselExampleDark" class="carousel carousel-dark slide">
-    <div class="carousel-indicators">
-      {% for project in top_five_products %}
-      <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="{{ forloop.counter0 }}"
-        {% if forloop.first %}class="active"{% endif %} aria-label="Slide {{ forloop.counter }}"></button>
-      {% endfor %}
-    </div>
-    <div class="carousel-inner">
-      {% for project in top_five_products %}
-      <div class="carousel-item{% if forloop.first %} active{% endif %}" data-bs-interval="10000">
-       {% if project.image_urls %}
-    <img src="{{ project.image_urls.0 }}" style="max-height: 400px; max-width: 50%;" class="d-block w-100 mx-auto" alt="{{ project.title }}">
-    {% endif %}
-        <div class="carousel-caption rounded" style="background-color: rgba(255, 255, 255, 0.75);">
-          <h3>{{ project.title }}</h3>
-          <p>{{ project.author }}</p>
+    <div id="carouselExampleDark" class="carousel carousel-dark slide">
+        <div class="carousel-indicators">
+            {% for project in top_five_products %}
+            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="{{ forloop.counter0 }}"
+                    {% if forloop.first %}class="active" {% endif %} aria-label="Slide {{ forloop.counter }}"></button>
+            {% endfor %}
         </div>
-      </div>
-      {% endfor %}
-    </div>
+        <div class="carousel-inner">
+            {% for project in top_five_products %}
+            <div class="carousel-item{% if forloop.first %} active{% endif %}" data-bs-interval="10000">
+                {% if project.image_urls %}
+                <img src="{{ project.image_urls.0 }}" style="max-height: 400px; max-width: 50%;"
+                     class="d-block w-100 mx-auto" alt="{{ project.title }}">
+                {% endif %}
+                <div class="carousel-caption rounded" style="background-color: rgba(255, 255, 255, 0.75);">
+                    <h3>{{ project.title }}</h3>
+                    <p>{{ project.author }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
 
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
-  </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
 </div>
 {% endif %}
 
 
-
-<h3>latest 5 projects</h3>
+<div class="col text-center">
+    <h3 class="section-title">latest Five Projects</h3>
+</div>
 {% if latest_books %}
 <div class="join my-5">
-  <div class="row row-cols-1 row-cols-md-3 g-4">
-    {% for project in latest_books %}
-    <div class="col">
-      <div class="card h-100 project-card">
-        <div class="card-body">
-          {% if project.image_urls %}
-          <div class="project-image-container">
-            <img src="{{ project.image_urls.0 }}" class="card-img-top img-fluid project-img" alt="{{ project.title }}">
-            <div class="project-details">
-              <h6>{{ project.title }}</h6>
-              <p>{{ project.details }}</p>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for project in latest_books %}
+        <div class="col">
+            <div class="card project-card">
+                <div class="card-body">
+                    {% if project.image_urls %}
+                    <div class="project-image-container">
+                        <img src="{{ project.image_urls.0 }}" class="card-img-top img-fluid project-img"
+                             alt="{{ project.title }}">
+                        <div class="project-details">
+                            <h6>{{ project.title }}</h6>
+                            <p>{{ project.details }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <!--          <h5 class="card-title">{{ project.title }}</h5>-->
+                    <!--          <p class="card-text">{{ project.details }}</p>-->
+                    <a href="{{ project.show_url }}" class="btn btn-primary btn-view-project">View Project</a>
+                    <!-- Modified button style -->
+
+                   
             </div>
-          </div>
-          {% endif %}
-          <h5 class="card-title">{{ project.title }}</h5>
-<!--          <p class="card-text">{{ project.details }}</p>-->
-          <a href="{{ project.show_url }}" class="btn btn-primary">View Project</a>
         </div>
-      </div>
     </div>
     {% endfor %}
-  </div>
+</div>
 </div>
 {% endif %}
-
-
-
-
-
-
-
-
-
-
 
 
 <h3>latest 5 featured projects</h3>
 
-    {% if latest_featured_projects %}
+{% if latest_featured_projects %}
 <div class="join my-5">
-  <!--  highest five rated running projects -->
+    <!--  highest five rated running projects -->
 
-  <div id="featured" class="carousel carousel-dark slide">
-    <div class="carousel-indicators">
-      {% for project in latest_featured_projects %}
-      <button type="button" data-bs-target="#featured" data-bs-slide-to="{{ forloop.counter0 }}"
-        {% if forloop.first %}class="active"{% endif %} aria-label="Slide {{ forloop.counter }}"></button>
-      {% endfor %}
-    </div>
-    <div class="carousel-inner">
-      {% for project in top_five_products %}
-      <div class="carousel-item{% if forloop.first %} active{% endif %}" data-bs-interval="10000">
-        <img src="{{ project.image_url }}" style="max-height: 400px; max-width: 50%;" class="d-block w-100 mx-auto"
-          alt="{{ project.title }}">
-        <div class="carousel-caption rounded" style="background-color: rgba(255, 255, 255, 0.75);">
-          <h3>{{ project.title }}</h3>
-          <p>{{ project.author }}</p>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-
-    <button class="carousel-control-prev" type="button" data-bs-target="#featured" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#featured" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
-  </div>
-</div>
-  {% for project in latest_featured_projects %}
-            <tr>
-                <td>{{ project.title }}</td>
-                <td>{{ project.is_featured }}</td>
-            </tr>
+    <div id="featured" class="carousel carousel-dark slide">
+        <div class="carousel-indicators">
+            {% for project in latest_featured_projects %}
+            <button type="button" data-bs-target="#featured" data-bs-slide-to="{{ forloop.counter0 }}"
+                    {% if forloop.first %}class="active" {% endif %} aria-label="Slide {{ forloop.counter }}"></button>
             {% endfor %}
+        </div>
+        <div class="carousel-inner">
+            {% for project in top_five_products %}
+            <div class="carousel-item{% if forloop.first %} active{% endif %}" data-bs-interval="10000">
+                <img src="{{ project.image_url }}" style="max-height: 400px; max-width: 50%;"
+                     class="d-block w-100 mx-auto"
+                     alt="{{ project.title }}">
+                <div class="carousel-caption rounded" style="background-color: rgba(255, 255, 255, 0.75);">
+                    <h3>{{ project.title }}</h3>
+                    <p>{{ project.author }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#featured" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#featured" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+{% for project in latest_featured_projects %}
+<tr>
+    <td>{{ project.title }}</td>
+    <td>{{ project.is_featured }}</td>
+</tr>
+{% endfor %}
 {% endif %}
 
 
 <style>
+    .btn-view-project{
+   margin-top : 5px;
+  }
+<!--  search style-->
+.search-form {
+  width: 100%;
+}
+
+.search-input {
+  border: 2px solid #d2d2d2;
+  border-radius: 30px;
+  padding: 12px 60px;
+  font-size: 16px;
+  text-align: left;
+}
+
+.search-button {
+  border: none;
+  border-radius: 30px;
+  padding: 10px 25px;
+  background-color: #009fe3;
+  color: #fff;
+}
+
+.search-button:hover {
+  background-color: #0085c4;
+}
+
+.search-button i {
+  font-size: 1.2rem;
+}
+
+
+
+<!--  image style-->
   .project-image-container {
   position: relative;
   overflow: hidden;
@@ -147,11 +193,13 @@
 
 .project-img {
   width: 100%;
-  height: 100%;
+  height: 400px;
   object-fit: cover;
   transition: transform 0.3s ease;
 }
 
+
+<!--card style-->
 .project-details {
   position: absolute;
   bottom: -100%;
@@ -171,7 +219,8 @@
 }
 
 .project-card {
-  position: relative;
+<!--  position: relative;-->
+  height:100px;
 }
 
 .project-image-container {
@@ -193,12 +242,9 @@
   transition: bottom 0.3s ease;
 }
 
-.project-card:hover .project-img {
-  transform: translateY(-10px);
-}
-
-.project-card:hover .project-details {
-  bottom: 0;
-}
+<!--view button style  -->
 
 </style>
+
+
+{% endblock %}
