@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect,get_object_or_404,reverse
-from project.models import Project, Category
+from project.models import Project, Category,Picture
 from project.forms import ProjectModelForm,CategoryModelForm,TagModelForm
 from commentary.forms import CommentForm,ReportForm, ReplyForm
 from project.models import Project , Donation
