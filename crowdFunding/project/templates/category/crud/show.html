@@ -1,0 +1,59 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-Nv3lKrxVfQQM0rSwV7Bt3dzHw5Ws1gHAkumz0KvEDBo5QqgLOHvZ1JERzyfoC+JX" crossorigin="anonymous"></script>
+
+    <title>Category</title>
+
+    <style>
+    .card {
+        border-radius: 15px;
+        overflow: hidden;
+        transition: transform 0.3s;
+    }
+
+    .card:hover {
+        transform: translateY(-10px);
+    }
+
+    .card-img-top {
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+    }
+
+    .card-body {
+        background-color: #f8f9fa;
+        padding: 20px;
+    }
+
+    .card-title {
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .card-text {
+        font-size: 16px;
+        color: #555;
+        margin-bottom: 5px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+    </style>
+   <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-lg">
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ category.name }}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
