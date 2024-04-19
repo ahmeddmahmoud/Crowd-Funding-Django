@@ -65,6 +65,10 @@ class Project(models.Model):
     def edit_url(self):
         url = reverse('project.edit', args=[self.id])
         return url
+    @property
+    def list_url(self):
+        url = reverse('project.list')
+        return url
 
     @classmethod
 

@@ -7,6 +7,7 @@ from project.forms import ProjectModelForm,CategoryModelForm,TagModelForm,Donati
 from commentary.forms import CommentForm,ReportForm
 from commentary.models import Comment
 from django.db.models import F
+from django.http import HttpResponseForbidden
 
 from django.http import HttpResponse
 
@@ -15,7 +16,6 @@ def hello(request):
     return render(request, 'test.html', {'name': 'Hello'})
 
 
-from .forms import ProjectModelForm, PictureModelForm
 
 def create_project_model_form(request):
     if request.method == 'POST':
@@ -122,15 +122,22 @@ def project_show(request,id):
 #
 
 
-def cancel_project(request,id):
+def cancel_project(request, id):
     project = get_object_or_404(Project, pk=id)
-    total_target = project.total_target
-    donation = project.current_donation
-    if donation < total_target*0.25:
-        project.delete()
-        # return redirect('hello')
+    
+    # Check if the current user is the owner of the project
+    if request.user == project.project_owner:
+        total_target = project.total_target
+        donation = project.current_donation
+        if donation < total_target * 0.25:
+            project.delete()
+            return redirect(project.list_url)
+        else:
+            return HttpResponseForbidden("the donation is greter than 25%")
     else:
-        return redirect(project.show_url)
+        # If the current user is not the owner, handle unauthorized access
+        # For example, you can return a 403 Forbidden response or redirect to a different page
+        return HttpResponseForbidden("You are not authorized to perform this action.")
     
 def list_project(request):
     projects = Project.objects.all()
@@ -161,22 +168,6 @@ def donate_project(request, id):
     return render(request, 'project/crud/donate.html', {'form': form, 'project': project})
 
 
-# def donate_project(request, id):
-#     if request.method == 'POST':
-#         project = get_object_or_404(Project, pk=id)
-#         donation_amount = float(request.POST.get('donation_amount'))
-        
-#         # Create a new Donation object
-#         donation = Donation.objects.create(donation=donation_amount, project=project, user=request.user)
-        
-#         # Update the current_donation field of the Project
-#         project.current_donation += donation_amount
-#         project.save()
-
-#         return HttpResponse("Donation successful!")  # You can customize this response as needed
-
-#     else:
-#         return HttpResponse("Invalid request method")
 
 
 def edit_project(request, id):
