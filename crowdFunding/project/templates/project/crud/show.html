@@ -25,6 +25,10 @@
                 <p><span class="label">End Date:</span> {{ project.end_date }}</p>
                 <p><span class="label">Created At:</span> {{ project.created_at }}</p>
                 <p><span class="label">Current Donation:</span> {{ project.current_donation }}</p>
+                {% for tag in project.tag.all %}
+                <p><span class="label">Tags</span> {{  tag.name  }}</p>
+                {% endfor %}
+
 
             
 
