@@ -25,6 +25,12 @@
                 <p><span class="label">End Date:</span> {{ project.end_date }}</p>
                 <p><span class="label">Created At:</span> {{ project.created_at }}</p>
                 <p><span class="label">Current Donation:</span> {{ project.current_donation }}</p>
+                {% for tag in project.tag.all %}
+                <p><span class="label">Tags</span> {{  tag.name  }}</p>
+                {% endfor %}
+
+
+            
 
 
                 <!-- Include Font Awesome CSS -->
@@ -171,6 +177,32 @@
         </form>
     </div>
 </div>
+
+{% comment %} project with similar tags {% endcomment %}
+<div class="container">
+    <h4 class="text-center mt-4">See Also :: Projects with Same Tags</h4>
+    <div class="row text-center">
+        {% for tag in project.tag.all %}
+            <div class="col-md-4">
+                <h5 class="mt-3">Tag Name: {{ tag.name }}</h5>
+                <div class="card mx-auto text-center">
+                    <div class="card-body">
+                        {% for related_project in tag.projects.all %}
+                            {% if forloop.counter <= 4 %}
+                                <p class="card-text">
+                                    <a href="{{ related_project.show_url }}">{{ related_project.title }}</a>
+                                </p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+
 <style>
     /* star style */
  .rating input[type="radio"] {
