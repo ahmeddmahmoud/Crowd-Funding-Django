@@ -65,6 +65,10 @@ class Project(models.Model):
     def edit_url(self):
         url = reverse('project.edit', args=[self.id])
         return url
+    @property
+    def list_url(self):
+        url = reverse('project.list')
+        return url
 
     @classmethod
 
@@ -117,6 +121,7 @@ class Donation(models.Model):
     donation=models.FloatField()
     project=models.ForeignKey(Project, on_delete=models.CASCADE, related_name='donations')
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.donation

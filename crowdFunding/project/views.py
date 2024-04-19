@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect,get_object_or_404,reverse
-from project.models import Project, Category
+from project.models import Project, Category,Picture
 from project.forms import ProjectModelForm,CategoryModelForm,TagModelForm
 from commentary.forms import CommentForm,ReportForm, ReplyForm
 from project.models import Project , Donation
-from project.forms import ProjectModelForm,CategoryModelForm,TagModelForm,DonationModelForm
+from project.forms import ProjectModelForm,CategoryModelForm,TagModelForm,DonationModelForm,PictureModelForm
 from commentary.forms import CommentForm,ReportForm
 from commentary.models import Comment
 from django.db.models import F
+from django.http import HttpResponseForbidden
 
 from django.http import HttpResponse
 
@@ -15,18 +16,33 @@ def hello(request):
     return render(request, 'test.html', {'name': 'Hello'})
 
 
-def create_project_model_form(request):
-    form = ProjectModelForm()
-    if request.method == 'POST':
-        form = ProjectModelForm(request.POST, request.FILES)
-        if form.is_valid():
-            project = form.save(commit=False)  # Don't save to database yet
-            project.project_owner = request.user  # Set the project owner to the current user
-            project.save() 
-            return redirect(project.show_url)
 
-    return render(request,'project/forms/createmodel.html',
-                context={"form": form})
+def create_project_model_form(request):
+    if request.method == 'POST':
+        form = ProjectModelForm(request.POST)        
+        if form.is_valid():
+            project = form.save(commit=False)
+            project.project_owner = request.user
+            project.save()
+
+            # Save tags associated with the project
+            form.save_m2m()
+
+            # Save form_pic instances, associate them with the project
+            for img in request.FILES.getlist('pic'):
+                picture_instance = Picture(image=img, project=project)
+                picture_instance.save()
+
+            return redirect(project.show_url)  # Assuming there's a show_url method in your Project model
+    else:
+        form = ProjectModelForm()
+        
+
+    return render(request, 'project/forms/createmodel.html', {'form': form})
+
+
+
+
 
 
 def create_category(request):
@@ -110,21 +126,28 @@ def project_show(request,id):
 #
 
 
-def cancel_project(request,id):
+def cancel_project(request, id):
     project = get_object_or_404(Project, pk=id)
-    total_target = project.total_target
-    donation = project.current_donation
-    if donation < total_target*0.25:
-        project.delete()
-        # return redirect('hello')
+    
+    # Check if the current user is the owner of the project
+    if request.user == project.project_owner:
+        total_target = project.total_target
+        donation = project.current_donation
+        if donation < total_target * 0.25:
+            project.delete()
+            return redirect(project.list_url)
+        else:
+            return HttpResponseForbidden("the donation is greter than 25%")
     else:
-        return redirect(project.show_url)
+        # If the current user is not the owner, handle unauthorized access
+        # For example, you can return a 403 Forbidden response or redirect to a different page
+        return HttpResponseForbidden("You are not authorized to perform this action.")
     
 def list_project(request):
     projects = Project.objects.all()
     return render(request, 'project/crud/list.html', {'projects': projects})
 
-from django.db.models import F
+
 
 def donate_project(request, id):
     project = get_object_or_404(Project, pk=id)
@@ -149,22 +172,6 @@ def donate_project(request, id):
     return render(request, 'project/crud/donate.html', {'form': form, 'project': project})
 
 
-# def donate_project(request, id):
-#     if request.method == 'POST':
-#         project = get_object_or_404(Project, pk=id)
-#         donation_amount = float(request.POST.get('donation_amount'))
-        
-#         # Create a new Donation object
-#         donation = Donation.objects.create(donation=donation_amount, project=project, user=request.user)
-        
-#         # Update the current_donation field of the Project
-#         project.current_donation += donation_amount
-#         project.save()
-
-#         return HttpResponse("Donation successful!")  # You can customize this response as needed
-
-#     else:
-#         return HttpResponse("Invalid request method")
 
 
 def edit_project(request, id):
