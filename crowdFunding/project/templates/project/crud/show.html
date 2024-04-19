@@ -121,22 +121,35 @@
         <form class="add-comment-form" method="post" action="{% url 'project.comment' project.id %}"
               style="display: none;">
             {% csrf_token %}
+
+<!--             {% if form.errors %}-->
+<!--                <ul class="errorlist">-->
+<!--                    {% for field, errors in form.errors.items %}-->
+<!--                    {% for error in errors %}-->
+<!--                    print (error)-->
+<!--                    <li>{{ error }}</li>-->
+<!--                    {% endfor %}-->
+<!--                    {% endfor %}-->
+<!--                </ul>-->
+<!--                {% endif %}-->
+
+
             {{ form.as_p }}
 
             <div class="rating" >
-                <input type="radio" id="star5" name="star_rating" value="1">
+                <input type="radio" id="star5" name="star_rating" value="5">
                 <label for="star5">&#9733;</label>
 
-                <input type="radio" id="star4" name="star_rating" value="2">
+                <input type="radio" id="star4" name="star_rating" value="4">
                 <label for="star4">&#9733;</label>
 
                 <input type="radio" id="star3" name="star_rating" value="3">
                 <label for="star3">&#9733;</label>
 
-                <input type="radio" id="star2" name="star_rating" value="4">
+                <input type="radio" id="star2" name="star_rating" value="2">
                 <label for="star2">&#9733;</label>
 
-                <input type="radio" id="star1" name="star_rating" value="5">
+                <input type="radio" id="star1" name="star_rating" value="1">
                 <label for="star1">&#9733;</label>
             </div>
             <input type="hidden" id="id_rate" name="star_rating">

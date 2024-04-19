@@ -2,6 +2,32 @@
 {% load static %}
 
 
-{% block body %}
-        <h1>HI</h1>
+{% block content %}
+
+<div class="container">
+        <h1>Donation Summary for {{ user.first_name }} {{ user.last_name }}</h1>
+        <p>Total donations: ${{ total_donation_user }}</p>
+    
+        <div class="accordion" id="donations">
+            {% for donation in project_donations %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading{{ donation.project_id }}">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ donation.project_id }}" aria-expanded="true" aria-controls="collapse{{ donation.project_id }}">
+                            Project title: {{ donation.project__title }}, Total Donation: ${{ donation.total_donation_project }}
+                        </button>
+                    </h2>
+                    <div id="collapse{{ donation.project_id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ donation.project_id }}" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <ul>
+                                {% for user_donation in donation.user_donations %}
+                                    <li>Donation Amount: ${{ user_donation.donation }}, Time: {{ user_donation.created_at }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
 {% endblock %}
