@@ -4,7 +4,7 @@ from users.models import User
 
 
 class Comment(models.Model):
-    text=models.TextField()
+    text=models.TextField(blank=True, null=True)
     rate= models.IntegerField(default=0)
     project = models.ForeignKey(Project,on_delete=models.CASCADE,related_name='comments')
     user =models.ForeignKey(User,on_delete=models.CASCADE,related_name='comments')

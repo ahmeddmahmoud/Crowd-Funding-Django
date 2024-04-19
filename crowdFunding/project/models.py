@@ -109,6 +109,8 @@ class Project(models.Model):
             self.featured_at=None
             self.save()
 
+    def image_urls(self):
+        return [image.image.url for image in self.images.all()]
 
 class Picture(models.Model):
     image = models.ImageField(upload_to='project/images/', null=True)
@@ -116,6 +118,8 @@ class Picture(models.Model):
 
     def __str__(self):
         return f"/media/{self.image}"
+
+
 
 class Donation(models.Model):
     donation=models.FloatField()

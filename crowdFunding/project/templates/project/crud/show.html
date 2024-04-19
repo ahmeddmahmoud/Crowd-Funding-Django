@@ -120,6 +120,19 @@
               style="display: none;">
             {% csrf_token %}
 
+<!--           {% if form.errors %}-->
+<!--    <div class="form-errors">-->
+<!--        {% for field, errors in form.errors.items %}-->
+<!--            {% for error in errors %}-->
+<!--                <span class="text-danger">{{ error }}</span>-->
+<!--        print({{ error }})-->
+<!--        console.log({{ error }})-->
+<!--            {% endfor %}-->
+<!--        {% endfor %}-->
+<!--    </div>-->
+<!--{% endif %}-->
+
+   {{ form.errors }}
 <!--             {% if form.errors %}-->
 <!--                <ul class="errorlist">-->
 <!--                    {% for field, errors in form.errors.items %}-->
