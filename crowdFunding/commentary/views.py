@@ -21,7 +21,7 @@ def add_comment(request, id):
             return redirect('project.show', id=id)
         else:
             print("Form Errors:", form.errors)
-            return render(request, 'project/crud/show.html', {'form': form})
+            return redirect('project.show',id=id)
     else:
         form = CommentForm()
     return render(request, 'project/crud/show.html', {'form': form})
@@ -75,4 +75,4 @@ def create_reply(request, comment_id,project_id):
         form = ReplyForm()
 
     # return redirect('products.show', id=comment.product.id)  # Redirect even for GET request
-    return render(request, 'projects/crud/show.html', {'form': form})
+    return render(request, 'project/crud/show.html', {'form': form})
