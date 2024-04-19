@@ -1,5 +1,5 @@
 from django import forms
-from project.models import Project,Tag,Category,Donation
+from project.models import Project,Tag,Category,Donation,Picture
 
 
 class ProjectModelForm(forms.ModelForm):
@@ -24,5 +24,10 @@ class DonationModelForm(forms.ModelForm):
     class Meta:
         model = Donation
         fields = ('donation',)
-
+        
+class PictureModelForm(forms.ModelForm):
+    class Meta:
+        model = Picture
+        fields = ('image',)
+    
 

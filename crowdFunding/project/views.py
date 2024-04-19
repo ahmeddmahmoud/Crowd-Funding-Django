@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect,get_object_or_404,reverse
-from project.models import Project
+from project.models import Project,Picture
 from project.forms import ProjectModelForm,CategoryModelForm,TagModelForm
 from commentary.forms import CommentForm,ReportForm, ReplyForm
 from project.models import Project , Donation
-from project.forms import ProjectModelForm,CategoryModelForm,TagModelForm,DonationModelForm
+from project.forms import ProjectModelForm,CategoryModelForm,TagModelForm,DonationModelForm,PictureModelForm
 from commentary.forms import CommentForm,ReportForm
 from commentary.models import Comment
 from django.db.models import F
@@ -15,18 +15,30 @@ def hello(request):
     return render(request, 'test.html', {'name': 'Hello'})
 
 
-def create_project_model_form(request):
-    form = ProjectModelForm()
-    if request.method == 'POST':
-        form = ProjectModelForm(request.POST, request.FILES)
-        if form.is_valid():
-            project = form.save(commit=False)  # Don't save to database yet
-            project.project_owner = request.user  # Set the project owner to the current user
-            project.save() 
-            return redirect(project.show_url)
+from .forms import ProjectModelForm, PictureModelForm
 
-    return render(request,'project/forms/createmodel.html',
-                context={"form": form})
+def create_project_model_form(request):
+    if request.method == 'POST':
+        form = ProjectModelForm(request.POST)        
+        if form.is_valid():
+            project = form.save(commit=False)
+            project.project_owner = request.user
+            project.save()
+
+            # Save form_pic instances, associate them with the project
+            for img in request.FILES.getlist('pic'):
+                picture_instance = Picture(image=img, project=project)
+                picture_instance.save()
+
+            return redirect(project.show_url)  # Assuming there's a show_url method in your Project model
+    else:
+        form = ProjectModelForm()
+        
+
+    return render(request, 'project/forms/createmodel.html', {'form': form})
+
+
+
 
 
 def create_category(request):
@@ -93,7 +105,7 @@ def list_project(request):
     projects = Project.objects.all()
     return render(request, 'project/crud/list.html', {'projects': projects})
 
-from django.db.models import F
+
 
 def donate_project(request, id):
     project = get_object_or_404(Project, pk=id)
@@ -134,3 +146,16 @@ def donate_project(request, id):
 
 #     else:
 #         return HttpResponse("Invalid request method")
+
+def upload_images(request):
+    formP = PictureModelForm()
+    if request.method == 'POST':
+        formP = PictureModelForm(request.POST, request.FILES)
+        if formP.is_valid():
+            formP.save()
+    return render(request, 'project/forms/createmodel.html',
+                context={'form': formP})        
+            
+
+
+
