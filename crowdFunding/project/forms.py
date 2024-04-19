@@ -3,7 +3,7 @@ from project.models import Project,Tag,Category,Donation,Picture
 
 
 class ProjectModelForm(forms.ModelForm):
-    tag = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(), required=False)
+    
     class Meta:
         model = Project
         fields = ('title', 'details', 'total_target', 'start_date', 'end_date','category', 'tag')

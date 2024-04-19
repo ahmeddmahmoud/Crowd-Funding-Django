@@ -25,6 +25,9 @@ def create_project_model_form(request):
             project.project_owner = request.user
             project.save()
 
+            # Save tags associated with the project
+            form.save_m2m()
+
             # Save form_pic instances, associate them with the project
             for img in request.FILES.getlist('pic'):
                 picture_instance = Picture(image=img, project=project)
@@ -36,6 +39,7 @@ def create_project_model_form(request):
         
 
     return render(request, 'project/forms/createmodel.html', {'form': form})
+
 
 
 
