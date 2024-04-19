@@ -9,17 +9,17 @@ class CommentForm(forms.ModelForm):
         model = Comment
         fields = ['text','rate']
 
-    def clean_rate(self):
-        rate=self.cleaned_data['rate']
-        if rate < 0 or rate > 5:
-            raise ValidationError("Rate must be between 0 and 5")
-        return rate
-
     def clean_text(self):
-        text = self.cleaned_data.get('text')
-        if text is None or len(text) < 3:
-            raise forms.ValidationError('text must be provided and have a length greater than 3 characters')
+        text = self.cleaned_data['text']
+        if not text or len(text) < 3:
+            raise forms.ValidationError('Text must be provided and have a length greater than 3 characters.')
         return text
+
+    def clean_rate(self):
+        rate = self.cleaned_data.get('rate')
+        if rate is None or rate < 1 or rate > 5:
+            raise forms.ValidationError('Rate must be a number between 1 and 5.')
+        return rate
 
 
 

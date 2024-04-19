@@ -13,53 +13,6 @@
 
 
 
-{% if latest_books %}
-<div class="join my-5">
-  <!--  highest five rated running projects -->
-
-  <div id="carouselExample" class="carousel carousel-dark slide">
-<!--    <div class="text-center position-absolute text-light m-3 p-3 rounded-pill"-->
-<!--      style="z-index: 5; background-color: rgba(0, 0, 0, 0.35);">-->
-<!--      <h2> Our Latest Projects </h2>-->
-<!--    </div>-->
-
-    <div class="carousel-indicators">
-      {% for project in latest_books %}
-      <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="{{ forloop.counter0 }}"
-        {% if forloop.first %}class="active"{% endif %} aria-label="Slide {{ forloop.counter }}"></button>
-      {% endfor %}
-    </div>
-    <div class="carousel-inner">
-      {% for project in latest_books %}
-      <div class="carousel-item{% if forloop.first %} active{% endif %}" data-bs-interval="10000">
-        <img src="{{ project.image_url }}" style="max-height: 400px; max-width: 50%;" class="d-block w-100 mx-auto"
-          alt="{{ project.title }}">
-        <div class="carousel-caption rounded" style="background-color: rgba(255, 255, 255, 0.75);">
-          <h3>{{ project.title }}</h3>
-          <p>{{ project.details }}</p>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
-  </div>
-
-</div>
-{% endif %}
-
-
-
-
-
-
 <h3>most 5 rated projects</h3>
 
     {% if top_five_products %}
@@ -76,8 +29,9 @@
     <div class="carousel-inner">
       {% for project in top_five_products %}
       <div class="carousel-item{% if forloop.first %} active{% endif %}" data-bs-interval="10000">
-        <img src="{{ project.image_url }}" style="max-height: 400px; max-width: 50%;" class="d-block w-100 mx-auto"
-          alt="{{ project.title }}">
+       {% if project.image_urls %}
+    <img src="{{ project.image_urls.0 }}" style="max-height: 400px; max-width: 50%;" class="d-block w-100 mx-auto" alt="{{ project.title }}">
+    {% endif %}
         <div class="carousel-caption rounded" style="background-color: rgba(255, 255, 255, 0.75);">
           <h3>{{ project.title }}</h3>
           <p>{{ project.author }}</p>
@@ -97,6 +51,35 @@
   </div>
 </div>
 {% endif %}
+
+
+
+<h3>latest 5 projects</h3>
+{% if latest_books %}
+<div class="join my-5">
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for project in latest_books %}
+    <div class="col">
+      <div class="card h-100">
+        <div class="card-body">
+          {% if project.image_urls %}
+          <img src="{{ project.image_urls.0 }}" class="card-img-top img-fluid" style="height: 200px; width: 100%;" alt="{{ project.title }}">
+          {% endif %}
+          <h5 class="card-title">{{ project.title }}</h5>
+          <p class="card-text">{{ project.details }}</p>
+          <a href="{{ project.show_url }}" class="btn btn-primary">View Project</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+
+
+
+
 
 
 
