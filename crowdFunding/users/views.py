@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, reverse, get_object_or_404
-from .forms import UserRegistrationForm,UserEditForm
+from .forms import UserRegistrationForm,UserEditForm,UserAddFormByAdmin,UserEditFormByAdmin
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout,get_user_model
 from users.models import User
@@ -12,8 +12,8 @@ from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from typing import Protocol
 from .tokens import account_activation_token
-from project.models import Project
-
+from project.models import Project, Category, Tag
+from project.forms import CategoryModelForm, TagModelForm
 
 
 def index(request):
@@ -136,3 +136,125 @@ def featured_projects(request):
 #         FeaturedProject.objects.create(project=project)
 #         # Redirect to a success URL or back to the project list page
 #     return redirect('featured')
+
+
+def admin_dashborad(request):
+    return render(request, 'admin/admin_dashborad.html')
+
+
+def add_category(request):
+    form = CategoryModelForm()
+
+    if request.method == 'POST':
+        form = CategoryModelForm(request.POST)  # Bind POST data to the form
+        if form.is_valid():
+            category = form.save()
+            return redirect('category.index')
+
+    return render(request, 'admin/add_category.html', {'form': form})
+
+
+def category_index(request):
+    categories=Category.objects.all()
+    return render(request,'admin/category_index.html', context={"categories":categories})
+
+
+def edit_category(request, id):
+    category = Category.get_category_by_id(id)
+    form = CategoryModelForm(instance=category)
+    if request.method == "POST":
+        form = CategoryModelForm(request.POST, request.FILES, instance=category)
+        if form.is_valid():
+            category = form.save()
+            return redirect("category.index")
+
+    return render(request,'admin/edit_category.html', context={"form": form})
+
+
+def delete_category(request, id):
+    category = get_object_or_404(Category, pk=id)
+    category.delete()
+    return redirect("category.index")
+
+
+def tag_index(request):
+    tags=Tag.objects.all()
+    return render(request,'admin/tag_index.html', context={"tags":tags})
+
+
+def add_tag(request):
+    form = TagModelForm()
+    if request.method == 'POST':
+        form = TagModelForm(request.POST)
+        if form.is_valid():
+            tag = form.save()
+            return redirect('tag.index')
+    return render(request, 'admin/add_tag.html',context={'form': form})
+
+
+def edit_tag(request, id):
+    tag = Tag.get_tag_by_id(id)
+    form = TagModelForm(instance=tag)
+    if request.method == "POST":
+        form = TagModelForm(request.POST, instance=tag)
+        if form.is_valid():
+            category = form.save()
+            return redirect("tag.index")
+
+    return render(request,'admin/edit_tag.html', context={"form": form})
+
+
+def delete_tag(request, id):
+    tag = get_object_or_404(Tag, pk=id)
+    tag.delete()
+    return redirect("tag.index")
+
+
+def user_index(request):
+    users = User.objects.all()
+    return render(request, 'admin/user_index.html', context={"users": users})
+
+
+def delete_user_by_admin(request, id):
+    user = get_object_or_404(User, pk=id)
+    user.delete()
+    return redirect("user.index")
+
+
+def add_user_by_admin(request):
+    form = UserAddFormByAdmin()
+    if request.method == 'POST':
+        form = UserAddFormByAdmin(request.POST, request.FILES)
+        if form.is_valid():
+            user = form.save()
+            if not user.is_active:
+                activate_email(request, user, form.cleaned_data.get('email'))
+            return redirect("user.index")
+    return render(request, 'admin/add_user_by_admin.html', {'form': form})
+
+
+def edit_user_by_admin(request, id):
+    user = get_object_or_404(User, id=id)
+    if request.method == 'POST':
+        form = UserEditFormByAdmin(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            # Save the form without committing to get the user object
+            user = form.save(commit=False)
+
+            # Check if password fields are provided
+            password1 = form.cleaned_data.get('password1')
+            password2 = form.cleaned_data.get('password2')
+            if password1 and password2 and password1 == password2:
+                # Set the password only if both passwords match
+                user.set_password(password1)
+
+            # Save the user object with updated password
+            user.save()
+
+            return redirect("user.index")
+    else:
+        form = UserEditFormByAdmin(instance=user)
+
+    return render(request, 'admin/edit_user_by_admin.html', {'form': form})
+
+
