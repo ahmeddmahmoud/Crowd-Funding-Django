@@ -287,3 +287,22 @@ def user_donations(request,id) :
         'total_donation_user': total_donation_user,
         'project_donations': project_donations
     })
+
+@login_required
+def user_projects(request, id):
+
+    user_exists = User.objects.filter(id=id).exists()
+    if not user_exists:
+        return render(request, 'users/unauthorized.html')
+
+    user = User.objects.get(id=id)
+
+    if request.user != user:
+        return render(request, 'users/unauthorized.html')
+
+    projects = Project.objects.filter(project_owner_id=id)
+
+    return render(request, 'users/user_projects.html', {
+        'user': user,
+        'projects': projects,
+    })
