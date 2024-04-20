@@ -16,6 +16,8 @@ from project.models import Project, Category, Tag
 from project.forms import CategoryModelForm, TagModelForm
 from project.models import Project,Donation
 from django.db.models import Sum
+from django.utils import timezone
+
 
 
 
@@ -127,22 +129,25 @@ def user_edit(request, id):
 
 
 def featured_projects(request):
-    data = Project.objects.all()
-    return render(request, 'admin/featured_projects.html', {'data': data})
+    projects = Project.objects.all()
+    return render(request, 'admin/featured_projects.html', {'projects': projects})
 
 
-# def add_to_featured(request, id):
-#     project = get_object_or_404(Project, pk=id)
-#     # Check if the project is already featured
-#     if not FeaturedProject.objects.filter(project=project).exists():
-#         # If not featured, create a FeaturedProject instance
-#         FeaturedProject.objects.create(project=project)
-#         # Redirect to a success URL or back to the project list page
-#     return redirect('featured')
+def add_to_featured(request, id):
+    project = get_object_or_404(Project, pk=id)
+
+    # Toggle is_featured value
+    project.is_featured = not project.is_featured
+    if project.is_featured:
+        project.featured_at = timezone.now()
+    else:
+        project.featured_at = None
+    project.save()
+    return redirect('featured')
 
 
-def admin_dashborad(request):
-    return render(request, 'admin/admin_dashborad.html')
+def admin_dashboard(request):
+    return render(request, 'admin/admin_dashboard.html')
 
 
 def add_category(request):

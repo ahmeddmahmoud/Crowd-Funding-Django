@@ -1,5 +1,5 @@
 from django.urls import path,include
-from users.views import user_details,login_form,register,index, user_delete,activate,featured_projects,user_edit,admin_dashborad,category_index,delete_category,edit_category,add_category,tag_index,add_tag,edit_tag,delete_tag,user_index,delete_user_by_admin,add_user_by_admin,edit_user_by_admin,user_donations
+from users.views import user_details,login_form,register,index, user_delete,activate,featured_projects,add_to_featured,user_edit,admin_dashboard,category_index,delete_category,edit_category,add_category,tag_index,add_tag,edit_tag,delete_tag,user_index,delete_user_by_admin,add_user_by_admin,edit_user_by_admin,user_donations
 
 urlpatterns = [
     path('register/', register, name="user.register"),
@@ -9,9 +9,7 @@ urlpatterns = [
     path('details/<int:id>',user_details , name="user.details"),
     path('delete/<int:id>',user_delete , name="user.delete"),
     path('activate/<uidb64>/<token>', activate, name='activate'),
-
-    # path('add_to_featured/<int:id>',add_to_featured , name="add.to.featured"),
-    path('admin/', admin_dashborad , name="admin.dashboard"),
+    path('admin/', admin_dashboard , name="admin.dashboard"),
     path('admin/category/', category_index , name="category.index"),
     path('admin/category/<int:id>/delete', delete_category, name='category.delete'),
     path('admin/category/<int:id>/edit', edit_category, name='category.edit'),
@@ -26,7 +24,7 @@ urlpatterns = [
     path('admin/user/add/', add_user_by_admin, name='add.user.by.admin'),
     path('admin/user/<int:id>/edit', edit_user_by_admin, name='edit.user.by.admin'),
     path('featured/', featured_projects , name="featured"),
-    # path('add_to_featured/<int:id>',add_to_featured , name="add_to_featured"),
+    path('add_to_featured/<int:id>', add_to_featured, name="add.to.featured"),
     path('donations/<int:id>', user_donations , name="user.donations"),
 
 ]
