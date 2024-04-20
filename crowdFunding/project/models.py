@@ -32,11 +32,30 @@ class Category(models.Model):
     def edit_url(self):
         return reverse("category.edit",args=[self.id])
 
+
 class Tag(models.Model):
     name = models.CharField(max_length=100, null=True)
 
     def __str__(self):
         return self.name
+
+    @classmethod
+    def get_tag_by_id(cls, id):
+        return get_object_or_404(cls, pk=id)
+
+    @property
+    def delete_url(self):
+        url = reverse("tag.delete", args=[self.id])
+        return url
+
+    # @property
+    # def show_url(self):
+    #     url = reverse("tag.show", args=[self.id])
+    #     return url
+
+    @property
+    def edit_url(self):
+        return reverse("tag.edit", args=[self.id])
 
 
 
