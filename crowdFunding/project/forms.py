@@ -7,6 +7,17 @@ class ProjectModelForm(forms.ModelForm):
     class Meta:
         model = Project
         fields = ('title', 'details', 'total_target', 'start_date', 'end_date','category', 'tag')
+        
+    def clean(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get('start_date')
+        end_date = cleaned_data.get('end_date')
+
+        if start_date and end_date:
+            if end_date <= start_date:
+                raise forms.ValidationError('End date must be greater than start date')
+
+        return end_date
 
 
 class CategoryModelForm(forms.ModelForm):
