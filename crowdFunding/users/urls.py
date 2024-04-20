@@ -1,5 +1,6 @@
 from django.urls import path,include
-from users.views import user_details,login_form,register,index, user_delete,activate,featured_projects,user_edit,admin_dashborad,category_index,delete_category,edit_category,add_category,tag_index,add_tag,edit_tag,delete_tag,user_index,delete_user_by_admin,add_user_by_admin,edit_user_by_admin
+from users.views import user_details,login_form,register,index, user_delete,activate,featured_projects,user_edit,admin_dashborad,category_index,delete_category,edit_category,add_category,tag_index,add_tag,edit_tag,delete_tag,user_index,delete_user_by_admin,add_user_by_admin,edit_user_by_admin,user_donations
+
 urlpatterns = [
     path('register/', register, name="user.register"),
     path('edit/<int:id>', user_edit, name="user.edit"),
@@ -24,6 +25,8 @@ urlpatterns = [
     path('admin/user/<int:id>/delete', delete_user_by_admin, name='user.delete.by.admin'),
     path('admin/user/add/', add_user_by_admin, name='add.user.by.admin'),
     path('admin/user/<int:id>/edit', edit_user_by_admin, name='edit.user.by.admin'),
-
+    path('featured/', featured_projects , name="featured"),
+    # path('add_to_featured/<int:id>',add_to_featured , name="add_to_featured"),
+    path('donations/<int:id>', user_donations , name="user.donations"),
 
 ]

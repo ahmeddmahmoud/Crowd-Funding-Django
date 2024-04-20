@@ -25,6 +25,12 @@
                 <p><span class="label">End Date:</span> {{ project.end_date }}</p>
                 <p><span class="label">Created At:</span> {{ project.created_at }}</p>
                 <p><span class="label">Current Donation:</span> {{ project.current_donation }}</p>
+                {% for tag in project.tag.all %}
+                <p><span class="label">Tags</span> {{  tag.name  }}</p>
+                {% endfor %}
+
+
+            
 
 
                 <!-- Include Font Awesome CSS -->
@@ -119,22 +125,48 @@
         <form class="add-comment-form" method="post" action="{% url 'project.comment' project.id %}"
               style="display: none;">
             {% csrf_token %}
+
+<!--           {% if form.errors %}-->
+<!--    <div class="form-errors">-->
+<!--        {% for field, errors in form.errors.items %}-->
+<!--            {% for error in errors %}-->
+<!--                <span class="text-danger">{{ error }}</span>-->
+<!--        print({{ error }})-->
+<!--        console.log({{ error }})-->
+<!--            {% endfor %}-->
+<!--        {% endfor %}-->
+<!--    </div>-->
+<!--{% endif %}-->
+
+   {{ form.errors }}
+<!--             {% if form.errors %}-->
+<!--                <ul class="errorlist">-->
+<!--                    {% for field, errors in form.errors.items %}-->
+<!--                    {% for error in errors %}-->
+<!--                    print (error)-->
+<!--                    <li>{{ error }}</li>-->
+<!--                    {% endfor %}-->
+<!--                    {% endfor %}-->
+<!--                </ul>-->
+<!--                {% endif %}-->
+
+
             {{ form.as_p }}
 
             <div class="rating" >
-                <input type="radio" id="star5" name="star_rating" value="1">
+                <input type="radio" id="star5" name="star_rating" value="5">
                 <label for="star5">&#9733;</label>
 
-                <input type="radio" id="star4" name="star_rating" value="2">
+                <input type="radio" id="star4" name="star_rating" value="4">
                 <label for="star4">&#9733;</label>
 
                 <input type="radio" id="star3" name="star_rating" value="3">
                 <label for="star3">&#9733;</label>
 
-                <input type="radio" id="star2" name="star_rating" value="4">
+                <input type="radio" id="star2" name="star_rating" value="2">
                 <label for="star2">&#9733;</label>
 
-                <input type="radio" id="star1" name="star_rating" value="5">
+                <input type="radio" id="star1" name="star_rating" value="1">
                 <label for="star1">&#9733;</label>
             </div>
             <input type="hidden" id="id_rate" name="star_rating">
@@ -145,6 +177,32 @@
         </form>
     </div>
 </div>
+
+{% comment %} project with similar tags {% endcomment %}
+<div class="container">
+    <h4 class="text-center mt-4">See Also :: Projects with Same Tags</h4>
+    <div class="row text-center">
+        {% for tag in project.tag.all %}
+            <div class="col-md-4">
+                <h5 class="mt-3">Tag Name: {{ tag.name }}</h5>
+                <div class="card mx-auto text-center">
+                    <div class="card-body">
+                        {% for related_project in tag.projects.all %}
+                            {% if forloop.counter <= 4 %}
+                                <p class="card-text">
+                                    <a href="{{ related_project.show_url }}">{{ related_project.title }}</a>
+                                </p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+
 <style>
     /* star style */
  .rating input[type="radio"] {

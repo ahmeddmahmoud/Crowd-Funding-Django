@@ -14,6 +14,9 @@ from typing import Protocol
 from .tokens import account_activation_token
 from project.models import Project, Category, Tag
 from project.forms import CategoryModelForm, TagModelForm
+from project.models import Project,Donation
+from django.db.models import Sum
+
 
 
 def index(request):
@@ -258,3 +261,24 @@ def edit_user_by_admin(request, id):
     return render(request, 'admin/edit_user_by_admin.html', {'form': form})
 
 
+@login_required
+def user_donations(request,id) :
+    user = User.objects.get(id=id)
+
+    if request.user != user:
+        return render(request, 'users/unauthorized.html')
+
+    total_donation_user = Donation.objects.filter(user=user).aggregate(total_donation_user=Sum('donation'))['total_donation_user']
+    if total_donation_user is None:
+        total_donation_user = 0.0
+
+    project_donations = Donation.objects.filter(user=user).values('project_id', 'project__title').annotate(total_donation_project=Sum('donation'))
+
+    for donation in project_donations:
+        donation['user_donations'] = Donation.objects.filter(user=user, project_id=donation['project_id']).order_by('-created_at')
+
+    return render(request, 'users/user_donations.html', {
+        'user': user,
+        'total_donation_user': total_donation_user,
+        'project_donations': project_donations
+    })
