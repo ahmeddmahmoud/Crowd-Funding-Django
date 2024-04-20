@@ -4,6 +4,18 @@ Featured Projects
 {% endblock %}
 {% block content %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<style>
+  .toggleButton[disabled] {
+    background-color: #6c757d;
+    color: #fff;
+    cursor: not-allowed;
+  }
+
+  .toggleButton.featured {
+    background-color: #28a745;
+    color: #fff;
+  }
+</style>
 <div class="container">
      <div class="d-flex mx-2 mt-3">
     <p class="fs-3 fw-bold">Featured Projects</p>
@@ -12,24 +24,64 @@ Featured Projects
     <tr>
          <td class="text-center"> ID</td>
          <td class="text-center"> Title </td>
-<!--         <td> Created By</td>-->
          <td class="text-center"> Add to Featured Projects</td>
     </tr>
     <!-- Table header and other rows -->
-    {% for proj in data %}
+    {% for proj in projects %}
     <tr>
         <td class="text-center">{{ proj.id }}</td>
         <td class="text-center">{{ proj.title }}</td>
-        <!-- Add other project fields as needed -->
 
         <td class="text-center">
-            <form action="" method="post">
+            <form id="form_{{ proj.id }}" action="{% url 'add.to.featured' proj.id %}" method="post">
                 {% csrf_token %}
-                <button class="btn btn-primary" type="submit">Add</button>
+                <button class="btn btn-primary toggleButton{% if proj.is_featured %} featured{% endif %} rounded-5 px-4" type="submit">
+                    {% if proj.is_featured %}
+                        Featured
+                    {% else %}
+                        Add
+                    {% endif %}
+                </button>
             </form>
         </td>
     </tr>
     {% endfor %}
 </table>
 </div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const buttons = document.querySelectorAll('.toggleButton');
+
+    function updateButtonState() {
+      const featuredButtons = document.querySelectorAll('.toggleButton.featured');
+      const featuredButtonsCount = featuredButtons.length;
+
+      buttons.forEach(btn => {
+        if (!btn.classList.contains('featured')) {
+          btn.disabled = featuredButtonsCount >= 5;
+        }
+      });
+    }
+
+    // Update button state when the page loads
+    updateButtonState();
+
+    // Add click event listener to buttons
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        if (button.textContent === 'Add') {
+          button.textContent = 'Featured';
+          button.classList.add('featured');
+        } else {
+          button.textContent = 'Add';
+          button.classList.remove('featured');
+        }
+
+        // Update button state after each click
+        updateButtonState();
+      });
+    });
+  });
+</script>
+
 {% endblock %}
