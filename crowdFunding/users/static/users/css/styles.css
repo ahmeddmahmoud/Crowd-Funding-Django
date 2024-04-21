@@ -1,0 +1,24 @@
+.accordion-body ul {
+    list-style: none; 
+    padding-left: 0;
+    margin: 0; 
+}
+.accordion-body li {
+    padding: 10px 15px; 
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    cursor: pointer; 
+}
+.accordion-body li:last-child {
+    border-bottom: none; 
+}
+.accordion-body li:hover {
+    background-color: #e2e6ea; 
+}
+.accordion-body a {
+    color: #007bff; 
+    text-decoration: none; 
+}
+.accordion-body a:hover {
+    text-decoration: underline; 
+}
