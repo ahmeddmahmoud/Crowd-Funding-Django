@@ -30,12 +30,20 @@
           <strong>Phone:</strong> {{ user.phone }}
         </li>
         <li class="list-group-item">
-          <strong>Country:</strong> {% if user.country %} {{ user.country }} {%
-          else %} not added yet {% endif %}
+          <strong>Country:</strong>
+          {% if user.country %}
+          {{ user.country }}
+          {%else %} 
+          not added yet
+          {% endif %}
         </li>
         <li class="list-group-item">
-          <strong>BirthDate:</strong> {% if user.birth_date %}
-          {{user.birth_date}} {% else %} not added yet {% endif %}
+          <strong>BirthDate:</strong> 
+          {% if user.birth_date %}
+          {{user.birth_date}} 
+          {% else %} 
+          not added yet 
+          {% endif %}
         </li>
         <li class="list-group-item">
           <strong>FaceBook Page:</strong> {% if user.facebook %} {{user.facebook }} {% else %} not added yet {% endif %}

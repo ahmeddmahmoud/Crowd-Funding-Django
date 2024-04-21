@@ -1,12 +1,5 @@
-{% extends 'base.html' %} 
-{% load static %}
+{% extends 'landing_page.html' %} 
 
-
-{% block content %}
-{%include 'users/includes/messaging.html'%}
-
-    <div class="container">
-        <h1>This is Home Page</h1>
-    </div>
-
+{% block message %} 
+{% include 'users/includes/messaging.html'%}
 {% endblock %}

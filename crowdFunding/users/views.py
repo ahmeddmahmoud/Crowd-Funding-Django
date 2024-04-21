@@ -21,8 +21,26 @@ from django.utils import timezone
 
 
 
+
 def index(request):
-    return render(request, 'users/index.html')
+    projects=Project.objects.all()
+    latest_books = projects.order_by('-created_at')[:5]
+    latest_featured_projects = Project.objects.filter(is_featured=True).order_by('-featured_at')[:5]
+    for project in latest_books:
+        project.progress_donation=(project.current_donation / project.total_target) * 100
+
+    sorted_products = sorted(projects, key=lambda p: p.rate, reverse=True)
+
+    # Get the top five products
+    top_five_products = sorted_products[:5]
+    print("Top Five Product Rates:")
+    for product in top_five_products:
+        print(f"Product: {product.title}, Rate: {product.rate}")
+    return render(request , 'users/index.html' ,
+                  context={"projects" : projects,"latest_books":latest_books,
+                           "top_five_products": top_five_products, "latest_featured_projects":latest_featured_projects
+                           })
+
 
 
 def login_form(request):
@@ -100,6 +118,9 @@ def register(request):
 
 @login_required
 def user_details(request, id):
+    user_exists = User.objects.filter(id=id).exists()
+    if not user_exists:
+        return render(request, 'users/unauthorized.html')
     user = get_object_or_404(User, pk=id)
     if request.user != user:
         return render(request, 'users/unauthorized.html')
@@ -268,6 +289,11 @@ def edit_user_by_admin(request, id):
 
 @login_required
 def user_donations(request,id) :
+
+    user_exists = User.objects.filter(id=id).exists()
+    if not user_exists:
+        return render(request, 'users/unauthorized.html')
+    
     user = User.objects.get(id=id)
 
     if request.user != user:
@@ -310,7 +336,13 @@ def user_projects(request, id):
 @login_required
 def categories_project(request):
     categories = Category.objects.all().prefetch_related('project_set')
-    context = {
-        'categories': categories,
-    }
-    return render(request, 'users/categories_projects.html', context)
+    return render(request, 'users/categories_projects.html', {
+        'categories': categories
+    })
+
+@login_required
+def user_logout(request):
+    logout(request)
+    # messages.info(request, "You have been successfully logged out.")
+    url = reverse("home_page")
+    return redirect(url)
