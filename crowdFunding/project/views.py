@@ -8,7 +8,7 @@ from commentary.forms import CommentForm,ReportForm
 from commentary.models import Comment
 from django.db.models import F
 from django.http import HttpResponseForbidden
-
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 
 def hello(request):
@@ -61,7 +61,7 @@ def project_show(request,id):
     reply_form = ReplyForm()
     return render(request, "project/crud/show.html",
                 context={"project": project,'images': images, 'comments': comments, 'reports': reports,
-                         'form': form, 'form2': form2, "reply_form":reply_form, "reviews_reply":reviews_reply})
+                        'form': form, 'form2': form2, "reply_form":reply_form, "reviews_reply":reviews_reply})
 
 # def project_show(request,id):
 #     project = get_object_or_404(Project, pk=id)

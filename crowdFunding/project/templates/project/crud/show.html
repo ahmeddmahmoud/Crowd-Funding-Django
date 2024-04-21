@@ -46,9 +46,6 @@
 </div>
 
 
-
-
-
     <div class="card">
       
         <div class="card-body">
@@ -63,6 +60,11 @@
                 <p><span class="label">Current Donation:</span> {{ project.current_donation }}</p>
                 {% for tag in project.tag.all %}
                 <p><span class="label">Tags</span> {{  tag.name  }}</p>
+                
+                {% endfor %}
+
+                {% for project in projects %}
+                <a href="{{ project.delete_url }}" class="btn btn-danger">Delete</a>
                 {% endfor %}
 
 

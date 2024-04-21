@@ -23,9 +23,9 @@
                 {% endif %}
                         <div class="card-body">
                             <h5 class="card-title">Title: {{ project.title }}</h5>
-                            <p class="card-text">Details: {{ project.details }}</p>
-                            <p class="card-text">Start Date: {{ project.start_date }}</p>
+                            <p class="card-text">End Date: {{ project.end_date }}</p>
                             <p class="card-text">Total Target: {{ project.total_target }}</p>
+                            <p class="card-text">Current Donation: {{ project.current_donation }}</p>
                             <a href="{{ project.delete_url }}" class="btn btn-danger">Delete</a>
                             <a href="{{ project.show_url }}" class="btn btn-info">Show</a>
                             <a href="{{ project.edit_url }}" class="btn btn-primary">Edit</a>
