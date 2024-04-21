@@ -306,3 +306,11 @@ def user_projects(request, id):
         'user': user,
         'projects': projects,
     })
+
+@login_required
+def categories_project(request):
+    categories = Category.objects.all().prefetch_related('project_set')
+    context = {
+        'categories': categories,
+    }
+    return render(request, 'users/categories_projects.html', context)
