@@ -32,11 +32,30 @@ class Category(models.Model):
     def edit_url(self):
         return reverse("category.edit",args=[self.id])
 
+
 class Tag(models.Model):
     name = models.CharField(max_length=100, null=True)
 
     def __str__(self):
         return self.name
+
+    @classmethod
+    def get_tag_by_id(cls, id):
+        return get_object_or_404(cls, pk=id)
+
+    @property
+    def delete_url(self):
+        url = reverse("tag.delete", args=[self.id])
+        return url
+
+    # @property
+    # def show_url(self):
+    #     url = reverse("tag.show", args=[self.id])
+    #     return url
+
+    @property
+    def edit_url(self):
+        return reverse("tag.edit", args=[self.id])
 
 
 
@@ -53,6 +72,7 @@ class Project(models.Model):
     featured_at = models.DateTimeField(default=None, null=True, blank=True)
     category= models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     tag = models.ManyToManyField(Tag, blank=True, related_name="projects")
+    is_run = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title
@@ -112,6 +132,12 @@ class Project(models.Model):
 
     def image_urls(self):
         return [image.image.url for image in self.images.all()]
+    
+    def is_run_project(self):
+        if self.end_date < timezone.now().date():
+            self.is_run = False
+            self.save(update_fields=['is_run'])
+        return self.is_run
 
 class Picture(models.Model):
     image = models.ImageField(upload_to='project/images/', null=True)
@@ -127,9 +153,12 @@ class Donation(models.Model):
     project=models.ForeignKey(Project, on_delete=models.CASCADE, related_name='donations')
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    
 
     def __str__(self):
         return self.donation
-
+    
+    
 
 

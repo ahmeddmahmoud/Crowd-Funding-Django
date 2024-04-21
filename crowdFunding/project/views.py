@@ -45,61 +45,14 @@ def create_project_model_form(request):
 
 
 
-def create_category(request):
-    form = CategoryModelForm()
-
-    if request.method == 'POST':
-        form = CategoryModelForm(request.POST)  # Bind POST data to the form
-        if form.is_valid():
-            category = form.save()
-            #return redirect('category_detail', pk=category.pk)  # Redirect to category detail view
-        # If form is not valid, it will render the form again with validation errors
-
-    return render(request, 'project/forms/createCategory.html', {'form': form})
-
-
-def index_category(request):
-    categories=Category.objects.all()
-    return render(request,'category/crud/index.html', context={"categories":categories})
-
-
 def show_category(request, id):
     category = Category.get_category_by_id(id)
     return render(request,'category/crud/show.html', context={"category": category})
 
 
-def edit_category(request, id):
-    category = Category.get_category_by_id(id)
-    form = CategoryModelForm(instance=category)
-    if request.method == "POST":
-        form = CategoryModelForm(request.POST, request.FILES, instance=category)
-        if form.is_valid():
-            category = form.save()
-            return redirect(category.show_url)
-
-    return render(request,'category/crud/edit.html', context={"form": form})
-
-
-def delete_category(request, id):
-    category = get_object_or_404(Category, pk=id)
-    category.delete()
-    url=reverse("category.index")
-    return redirect(url)
-
-
-def create_Tag(request):
-    form = TagModelForm()
-    if request.method == 'POST':
-        form = TagModelForm(request.POST)
-        if form.is_valid():
-            tag = form.save()
-
-    return render(request, 'project/forms/createTag.html',
-                context={'form': form})
-
-
 def project_show(request,id):
     project = get_object_or_404(Project, pk=id)
+    images = project.images.all()
     comments = project.comments.all()
     reports = project.reports.all()
     reviews_reply = project.comments.prefetch_related('replies')
@@ -107,7 +60,7 @@ def project_show(request,id):
     form2 = ReportForm()
     reply_form = ReplyForm()
     return render(request, "project/crud/show.html",
-                context={"project": project, 'comments': comments, 'reports': reports,
+                context={"project": project,'images': images, 'comments': comments, 'reports': reports,
                          'form': form, 'form2': form2, "reply_form":reply_form, "reviews_reply":reviews_reply})
 
 # def project_show(request,id):
@@ -151,6 +104,9 @@ def list_project(request):
 
 def donate_project(request, id):
     project = get_object_or_404(Project, pk=id)
+    if project.is_run_project() == False:
+        return HttpResponseForbidden("the project is not run")
+    
     
     if request.method == 'POST':
         form = DonationModelForm(request.POST)
@@ -161,8 +117,8 @@ def donate_project(request, id):
             donation.save()
             
             # Increase the current donation for the project
-            Project.objects.filter(pk=project.pk).update(current_donation=F('current_donation') + donation.donation)
-
+            project.current_donation += donation.donation
+            project.save()
             # Redirect to project details page or any other desired page
             return redirect(project.show_url, id=id)  
 

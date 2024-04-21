@@ -1,6 +1,9 @@
 <title>Project Details</title>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js" integrity="sha512-AkTRX81q0DXii1alvMYq8F8TmDLn9/8GzuFtH/FuHeEMwSapVSZU8TpC0uY6PGhBmToXGZZqHQ3lvg5GkDF7ow==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <style>
     /* Custom styles */
     .project-info {
@@ -14,9 +17,42 @@
         color: #007bff;
     }
 </style>
+
 <div class="container">
+<h1>{{ images }}</h1>
+<div id="carouselExampleIndicators" class="carousel slide">
+  <div class="carousel-indicators">
+    {% for image in images %}
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></button>
+    {% endfor %}
+  </div> 
+  <div class="carousel-inner">
+    {% for image in images %}
+      <div class="carousel-item {% if forloop.first %}active{% endif %}">
+        <h1>{{image}}</h1>
+        <img src="{{ image.image.url }}" class="d-block w-100" alt="Image {{ forloop.counter }}">
+        
+      </div>
+    {% endfor %}
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+
+
+
+
     <div class="card">
+      
         <div class="card-body">
+          
             <h5 class="card-title">Title: {{ project.title }}</h5>
             <div class="project-info">
                 <p><span class="label">Details:</span> {{ project.details }}</p>
@@ -62,10 +98,12 @@
     </div>
 </div>
 
-<!-- Bootstrap JS (Optional) -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <!-- jQuery (Optional) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js" integrity="sha512-AkTRX81q0DXii1alvMYq8F8TmDLn9/8GzuFtH/FuHeEMwSapVSZU8TpC0uY6PGhBmToXGZZqHQ3lvg5GkDF7ow==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 
 
 <div class="comments-box">
@@ -257,6 +295,14 @@
                 }
             });
         });
+        
+    var myCarousel = document.getElementById('carouselExampleCaptions');
+    var carousel = new bootstrap.Carousel(myCarousel, {
+        interval: 2000, // Adjust as needed
+        // Other options...
+    });
+
+
 </script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 

@@ -29,7 +29,13 @@
                             <a href="{{ project.delete_url }}" class="btn btn-danger">Delete</a>
                             <a href="{{ project.show_url }}" class="btn btn-info">Show</a>
                             <a href="{{ project.edit_url }}" class="btn btn-primary">Edit</a>
+                            {% if not project.is_run_project %}
+                            <div class="alert alert-danger mt-2" role="alert">
+                                This project is not runnable. Please choose another project to donate.
+                            </div>
+                        {% else %}
                             <a href="{{project.donate_url}}" class="btn btn-success">Donate</a>
+                        {% endif %}
                         </div>
                     </div>
                 </div>
