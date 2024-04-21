@@ -18,10 +18,11 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import projectSearchView, products_index
+from .views import projectSearchView, products_index,about_page
 
 urlpatterns = [
     path('', products_index, name='home_page'),
+    path('about', about_page, name='about_page'),
     path('search', projectSearchView.as_view(), name='projects.search'),
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),

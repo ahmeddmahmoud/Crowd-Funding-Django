@@ -37,3 +37,5 @@ def products_index(request):
                            "top_five_products": top_five_products, "latest_featured_projects":latest_featured_projects
                            })
 
+def about_page(request):
+    return render(request , 'about_page.html')
