@@ -100,6 +100,9 @@ def register(request):
 
 @login_required
 def user_details(request, id):
+    user_exists = User.objects.filter(id=id).exists()
+    if not user_exists:
+        return render(request, 'users/unauthorized.html')
     user = get_object_or_404(User, pk=id)
     if request.user != user:
         return render(request, 'users/unauthorized.html')
@@ -268,6 +271,11 @@ def edit_user_by_admin(request, id):
 
 @login_required
 def user_donations(request,id) :
+
+    user_exists = User.objects.filter(id=id).exists()
+    if not user_exists:
+        return render(request, 'users/unauthorized.html')
+    
     user = User.objects.get(id=id)
 
     if request.user != user:
@@ -310,7 +318,6 @@ def user_projects(request, id):
 @login_required
 def categories_project(request):
     categories = Category.objects.all().prefetch_related('project_set')
-    context = {
-        'categories': categories,
-    }
-    return render(request, 'users/categories_projects.html', context)
+    return render(request, 'users/categories_projects.html', {
+        'categories': categories
+    })
