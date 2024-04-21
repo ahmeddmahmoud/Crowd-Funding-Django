@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 from .views import projectSearchView, products_index
 
 urlpatterns = [
-    path('', products_index, name='landing_page'),
+    path('', products_index, name='home_page'),
     path('search', projectSearchView.as_view(), name='projects.search'),
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
