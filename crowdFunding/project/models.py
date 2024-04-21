@@ -134,6 +134,7 @@ class Project(models.Model):
         return [image.image.url for image in self.images.all()]
     
     def is_run_project(self):
+        
         if self.end_date < timezone.now().date():
             self.is_run = False
             self.save(update_fields=['is_run'])
