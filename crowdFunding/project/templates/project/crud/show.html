@@ -105,8 +105,15 @@
                 {% endfor %}
 
                 <!-- Reply form -->
-                <form method="post" action="{% url 'projects.reply' project_id=project.id comment_id=comment.id %}">
+                <form method="post" action="{% url 'projects.reply' project.id comment.id %}">
                     {% csrf_token %}
+                    {% if messages %}
+            <ul class="messages alert alert-success text-center list-unstyled">
+                {% for message in messages %}
+                    <li class="nav-item ">{{ message }}</li>
+                {% endfor %}
+            </ul>
+                  {% endif %}
                     {{ reply_form.as_p }}
                     <button type="submit">Reply</button>
                 </form>
@@ -124,6 +131,7 @@
         <!--        <p>Project ID: {{ project.id }}</p>-->
         <form class="add-comment-form" method="post" action="{% url 'project.comment' project.id %}"
               style="display: none;">
+
             {% csrf_token %}
 
 <!--           {% if form.errors %}-->
