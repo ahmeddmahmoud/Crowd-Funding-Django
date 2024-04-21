@@ -1,5 +1,5 @@
 from django.urls import path,include
-from users.views import user_details,login_form,register,index, user_delete,activate,featured_projects,add_to_featured,user_edit,admin_dashboard,category_index,delete_category,edit_category,add_category,tag_index,add_tag,edit_tag,delete_tag,user_index,delete_user_by_admin,add_user_by_admin,edit_user_by_admin,user_donations,user_projects
+from users.views import user_details,login_form,register,index, user_delete,activate,featured_projects,add_to_featured,user_edit,admin_dashboard,category_index,delete_category,edit_category,add_category,tag_index,add_tag,edit_tag,delete_tag,user_index,delete_user_by_admin,add_user_by_admin,edit_user_by_admin,user_donations,user_projects,categories_project
 
 urlpatterns = [
     path('register/', register, name="user.register"),
@@ -27,5 +27,6 @@ urlpatterns = [
     path('add_to_featured/<int:id>', add_to_featured, name="add.to.featured"),
     path('donations/<int:id>', user_donations , name="user.donations"),
     path('projects/<int:id>', user_projects , name="user.projects"),
+    path('categories', categories_project , name="categories.projects"),
 
 ]

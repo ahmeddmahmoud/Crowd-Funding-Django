@@ -32,5 +32,5 @@ class Reply(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE, related_name='replies')
     comment = models.ForeignKey(Comment,on_delete=models.CASCADE, related_name='replies')
     product = models.ForeignKey(Project,on_delete=models.CASCADE, related_name='replies', null=True, blank=True)
-    content = models.CharField(max_length=500, blank=True)
+    content = models.CharField(max_length=500, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)

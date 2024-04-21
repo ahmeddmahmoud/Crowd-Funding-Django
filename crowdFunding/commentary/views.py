@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import CommentForm, ReportForm, ReplyForm
 from .models import Project, Comment, Reply
+from django.contrib import messages
 def add_comment(request, id):
     project = get_object_or_404(Project, pk=id)
     if request.method == 'POST':
@@ -20,7 +21,7 @@ def add_comment(request, id):
             print("Comment:", comment)
             return redirect('project.show', id=id)
         else:
-            print("Form Errors:", form.errors)
+            messages.error(request,"comment can't be empty")
             return redirect('project.show',id=id)
     else:
         form = CommentForm()
@@ -59,7 +60,7 @@ def add_report(request, id, comment_id=None):
 
 
 
-def create_reply(request, comment_id,project_id):
+def create_reply(request,project_id,comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
     project=get_object_or_404(Project, id=project_id)
     if request.method == 'POST':
@@ -71,6 +72,10 @@ def create_reply(request, comment_id,project_id):
             reply.save()
             print(project_id )
             return redirect('project.show', id=project_id)
+        else:
+            messages.error(request,"reply can't be empty")
+            return redirect('project.show', id=project_id)
+
     else:
         form = ReplyForm()
 

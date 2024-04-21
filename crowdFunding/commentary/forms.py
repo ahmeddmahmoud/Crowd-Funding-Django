@@ -51,7 +51,8 @@ class ReplyForm(forms.ModelForm):
         fields = ['content']
 
     def clean_content(self):
-        content = self.cleaned_data.get('content')
+        content=self.cleaned_data.get('content')        # price = self.cleaned_data['price']
+
         if not content:
             raise forms.ValidationError('Content must be provided.')
         elif len(content) < 3:
