@@ -104,6 +104,9 @@ def list_project(request):
 
 def donate_project(request, id):
     project = get_object_or_404(Project, pk=id)
+    if project.is_run_project() == False:
+        return HttpResponseForbidden("the project is not run")
+    
     
     if request.method == 'POST':
         form = DonationModelForm(request.POST)
@@ -114,8 +117,8 @@ def donate_project(request, id):
             donation.save()
             
             # Increase the current donation for the project
-            Project.objects.filter(pk=project.pk).update(current_donation=F('current_donation') + donation.donation)
-
+            project.current_donation += donation.donation
+            project.save()
             # Redirect to project details page or any other desired page
             return redirect(project.show_url, id=id)  
 
