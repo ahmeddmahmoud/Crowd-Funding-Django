@@ -63,9 +63,8 @@
                 
                 {% endfor %}
 
-                {% for project in projects %}
-                <a href="{{ project.delete_url }}" class="btn btn-danger">Delete</a>
-                {% endfor %}
+                
+                
 
 
             
@@ -99,6 +98,16 @@
         </div>
     </div>
 </div>
+
+<div class="container my-2">
+    <h3>Delete project for project Creator only!</h3>
+    {% if request.user == project.project_owner %}
+    <a href="{{ project.delete_url }}" id="delete-project-btn" class="btn btn-danger">Delete Project</a>
+    <div id="error-message" class="text-danger" style="display: none;"></div> <!-- Placeholder for error message -->
+</div>
+{% endif %}
+
+
 
 
 <!-- jQuery (Optional) -->
@@ -286,17 +295,35 @@
       });
     });
 
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('delete-project-btn').addEventListener('click', function(event) {
+        // Prevent the default action by default
+        event.preventDefault();
 
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('add-comment-btn').addEventListener('click', function() {
-                var commentForm = document.querySelector('.add-comment-form');
-                if (commentForm.style.display === 'none' || commentForm.style.display === '') {
-                    commentForm.style.display = 'block';
+        // Fetch the data from the provided URL
+        fetch(this.href)
+            .then(response => response.json())
+            .then(data => {
+                // Check if there's an error message in the response
+                if (data.error) {
+                    // Update the error message placeholder with the received error message
+                    var errorMessageElement = document.getElementById('error-message');
+                    errorMessageElement.textContent = data.error;
+                    errorMessageElement.style.display = 'block'; // Show the error message
                 } else {
-                    commentForm.style.display = 'none';
+                    // If no error message, allow the default action (redirecting to list.html)
+                    window.location.href = ''http://127.0.0.1:8000/project/'';
                 }
-            });
-        });
+            })
+            .catch(error => console.error('Error:', error));
+    });
+});
+
+
+
+    
+
+
         
     var myCarousel = document.getElementById('carouselExampleCaptions');
     var carousel = new bootstrap.Carousel(myCarousel, {
