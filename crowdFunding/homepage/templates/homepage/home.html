@@ -161,18 +161,7 @@
                                 <!--                            <p class="card-text">Total Target: {{ project.total_target }}</p>-->
                         </a>
                     </div>
-=======
-        <div class="carousel-inner">
-            {% for project in top_five_products %}
-            <div class="carousel-item{% if forloop.first %} active{% endif %}" data-bs-interval="10000">
-                {% if project.image_urls %}
-                <img src="{{ project.image_urls.0 }}" style="max-height: 400px; max-width: 50%;"
-                    class="d-block w-100 mx-auto" alt="{{ project.title }}">
-                {% endif %}
-                <div class="carousel-caption rounded" style="background-color: rgba(255, 255, 255, 0.75);">
-                    <h3>{{ project.title }}</h3>
-                    <p>{{ project.author }}</p>
->>>>>>> 0424e4fa170dd0d77aef9e789dc7f0ef44e462d1
+
                 </div>
             </div>
         </div>
