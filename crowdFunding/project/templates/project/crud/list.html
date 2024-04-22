@@ -19,7 +19,7 @@
                     <img src="{{ project.images.first.image.url }}" class="card-img-top" alt="{{ project.title }}">
                 {% else %}
                     <!-- Placeholder image if project has no images -->
-                    <img src="{% static 'placeholder.jpg' %}" class="card-img-top" alt="Placeholder">
+                    <img src="/media/project/images/3.jpg" class="card-img-top" alt="{{ project.title }}">
                 {% endif %}
                         <div class="card-body">
                             <h5 class="card-title">Title: {{ project.title }}</h5>

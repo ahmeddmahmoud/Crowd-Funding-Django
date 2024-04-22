@@ -11,43 +11,16 @@ from django.http import HttpResponseForbidden
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.http import JsonResponse
+from django.core.files import File
+from django.conf import settings
+import os
+from pathlib import Path
+from django.forms import formset_factory
+
 
 def hello(request):
     print(request)
     return render(request, 'test.html', {'name': 'Hello'})
-
-
-
-from .forms import ProjectModelForm, PictureModelForm  # Import the PictureModelForm
-
-# def create_project_model_form(request):
-#     if request.method == 'POST':
-#         form = ProjectModelForm(request.POST)
-#         form2 = PictureModelForm(request.POST, request.FILES)  # Initialize PictureModelForm with request.FILES
-#         if form.is_valid() and form2.is_valid():  # Check both forms for validity
-#             project = form.save(commit=False)
-#             project.project_owner = request.user
-#             project.save()
-
-#             # Save tags associated with the project
-#             form.save()
-
-#             # Save pictures associated with the project
-#             picture_instances = form2.save(commit=False)
-#             for picture_instance in picture_instances:
-#                 picture_instance.project = project
-#                 picture_instance.save()
-
-#             return redirect(project.show_url)  # Assuming there's a show_url method in your Project model
-#     else:
-#         form = ProjectModelForm()
-#         form2 = PictureModelForm()  # Initialize an empty PictureModelForm for GET requests
-
-#     return render(request, 'project/forms/createmodel.html', {'form': form, 'form2': form2})
-
-
-
-from django.http import JsonResponse
 
 def create_project_model_form(request):
     if request.method == 'POST':
@@ -55,25 +28,40 @@ def create_project_model_form(request):
         if form.is_valid():
             project = form.save(commit=False)
             project.project_owner = request.user
-
-            # Save tags associated with the project
-
-            # Save form_pic instances, associate them with the project
-            for img in request.FILES.getlist('pic'):
-                if img.content_type in ['image/png', 'image/jpeg', 'image/jpg']:
-                    project.save()
-                    form.save_m2m()
-                    picture_instance = Picture(image=img, project=project)
-                    picture_instance.save()
-                else:
-                    return JsonResponse({'error': 'Invalid file type only png and jpeg and jpg are allowed'})
-
-            # Return JSON response with success message and project ID
-            return JsonResponse({'success': 'Project created successfully', 'project_id': project.id})
+            project.save()
+            
+            return redirect(project.show_url)
     else:
         form = ProjectModelForm()
         
     return render(request, 'project/forms/createmodel.html', {'form': form})
+
+# def create_project_model_form(request):
+#     if request.method == 'POST':
+#         form = ProjectModelForm(request.POST, request.FILES)        
+#         if form.is_valid():
+#             project = form.save(commit=False)
+#             project.project_owner = request.user
+
+#             # Save tags associated with the project
+
+#             # Save form_pic instances, associate them with the project
+#             for img in request.FILES.getlist('pic'):
+#                 if img.content_type in ['image/png', 'image/jpeg', 'image/jpg']:
+#                     project.save()
+#                     form.save_m2m()
+#                     picture_instance = Picture(image=img, project=project)
+#                     picture_instance.save()
+#                 else:
+#                     return JsonResponse({'error': 'Invalid file type only png and jpeg and jpg are allowed', 'x': 0})
+
+#             # Return JSON response with success message and project ID
+            
+#             return JsonResponse({'success': 'Project created successfully', 'project_id': project.id, 'x': 1})
+#     else:
+#         form = ProjectModelForm()
+        
+#     return render(request, 'project/forms/createmodel.html', {'form': form, 'x': 0})
 
 
 
@@ -177,3 +165,22 @@ def edit_project(request, id):
 
     return render (request,'project/crud/edit.html', context={"form":form})
 
+def add_images(request, id):
+    project = get_object_or_404(Project, pk=id)
+    if request.method == 'POST':
+        form = PictureModelForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Get the list of image files from the request
+            image_files = request.FILES.getlist('image')
+
+            # Iterate over each image file
+            for image_file in image_files:
+                # Create a new Picture instance
+                picture = Picture(image=image_file, project=project)
+                picture.save()
+
+            # Redirect or render a success page
+            return redirect(project.show_url)
+    else:
+        form = PictureModelForm()
+    return render(request, 'project/forms/add_image.html', {'form': form})
