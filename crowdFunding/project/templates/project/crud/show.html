@@ -19,7 +19,7 @@
 </style>
 
 <div class="container">
-<h1>{{ images }}</h1>
+<!--<h1>{{ images }}</h1>-->
 <div id="carouselExampleIndicators" class="carousel slide">
   <div class="carousel-indicators">
     {% for image in images %}
@@ -29,9 +29,8 @@
   <div class="carousel-inner">
     {% for image in images %}
       <div class="carousel-item {% if forloop.first %}active{% endif %}">
-        <h1>{{image}}</h1>
+<!--        <h1>{{image}}</h1>-->
         <img src="{{ image.image.url }}" class="d-block w-100" alt="Image {{ forloop.counter }}">
-        
       </div>
     {% endfor %}
   </div>
@@ -44,6 +43,8 @@
     <span class="visually-hidden">Next</span>
   </button>
 </div>
+
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
 
     <div class="card">
@@ -481,3 +482,4 @@ textarea[name="text"]:focus {
 }
 
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js" integrity="sha512-Ry4FzxO9+ri4OkYyLgSaxRuWcsM2b9hjNKeJAd6D8/5xtHqjAW90DXv+XHtgr7pZCHZjy9t5A5pt0YKgKx2/7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
