@@ -3,8 +3,7 @@ from project.models import Project,Tag,Category,Donation,Picture
 from datetime import datetime
 from django.utils import timezone
 
-class ProjectModelForm(forms.ModelForm):
-    
+class ProjectModelForm(forms.ModelForm):    
     class Meta:
         model = Project
         fields = ('title', 'details', 'total_target', 'start_date', 'end_date','category', 'tag')

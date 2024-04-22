@@ -18,27 +18,61 @@ def hello(request):
 
 
 
+from .forms import ProjectModelForm, PictureModelForm  # Import the PictureModelForm
+
+# def create_project_model_form(request):
+#     if request.method == 'POST':
+#         form = ProjectModelForm(request.POST)
+#         form2 = PictureModelForm(request.POST, request.FILES)  # Initialize PictureModelForm with request.FILES
+#         if form.is_valid() and form2.is_valid():  # Check both forms for validity
+#             project = form.save(commit=False)
+#             project.project_owner = request.user
+#             project.save()
+
+#             # Save tags associated with the project
+#             form.save()
+
+#             # Save pictures associated with the project
+#             picture_instances = form2.save(commit=False)
+#             for picture_instance in picture_instances:
+#                 picture_instance.project = project
+#                 picture_instance.save()
+
+#             return redirect(project.show_url)  # Assuming there's a show_url method in your Project model
+#     else:
+#         form = ProjectModelForm()
+#         form2 = PictureModelForm()  # Initialize an empty PictureModelForm for GET requests
+
+#     return render(request, 'project/forms/createmodel.html', {'form': form, 'form2': form2})
+
+
+
+from django.http import JsonResponse
+
 def create_project_model_form(request):
     if request.method == 'POST':
-        form = ProjectModelForm(request.POST)        
+        form = ProjectModelForm(request.POST, request.FILES)        
         if form.is_valid():
             project = form.save(commit=False)
             project.project_owner = request.user
-            project.save()
 
             # Save tags associated with the project
-            form.save_m2m()
 
             # Save form_pic instances, associate them with the project
             for img in request.FILES.getlist('pic'):
-                picture_instance = Picture(image=img, project=project)
-                picture_instance.save()
+                if img.content_type in ['image/png', 'image/jpeg', 'image/jpg']:
+                    project.save()
+                    form.save_m2m()
+                    picture_instance = Picture(image=img, project=project)
+                    picture_instance.save()
+                else:
+                    return JsonResponse({'error': 'Invalid file type only png and jpeg and jpg are allowed'})
 
-            return redirect(project.show_url)  # Assuming there's a show_url method in your Project model
+            # Return JSON response with success message and project ID
+            return JsonResponse({'success': 'Project created successfully', 'project_id': project.id})
     else:
         form = ProjectModelForm()
         
-
     return render(request, 'project/forms/createmodel.html', {'form': form})
 
 
