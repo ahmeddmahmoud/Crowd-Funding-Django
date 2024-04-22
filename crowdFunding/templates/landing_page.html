@@ -2,7 +2,7 @@
 
 {% load static %}
 
-   {% block 'css' %}
+   {% block css %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     {% endblock %}
 
@@ -176,7 +176,7 @@
 
 </div>
 {% endif %}
-<style>
+{% comment %} <style>
 .container {
     max-width: 1160px;
     margin: 20px auto;
@@ -226,5 +226,5 @@
   transition: transform 0.3s ease;
 }
 
-</style>
+</style> {% endcomment %}
 {% endblock %}
