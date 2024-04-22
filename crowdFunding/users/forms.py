@@ -11,11 +11,68 @@ class UserRegistrationForm(UserCreationForm):
         model = User
         fields = ['first_name', 'last_name', 'email', 'password1', 'password2', 'phone', 'photo']
 
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError('Email already exists')
+        if not email:
+            raise forms.ValidationError('Email is required')
+        return email
+
+    def clean_first_name(self):
+        first_name = self.cleaned_data['first_name']
+        if not first_name:
+            raise forms.ValidationError('First name is required')
+        if not first_name.isalpha():
+            raise forms.ValidationError('First name must be alphabetic')
+        if len(first_name) < 3:
+            raise forms.ValidationError('First name must be at least 3 characters long')
+        return first_name
+
+    def clean_last_name(self):
+        last_name = self.cleaned_data['last_name']
+        if not last_name:
+            raise forms.ValidationError('Last name is required')
+        if not last_name.isalpha():
+            raise forms.ValidationError('Last name must be alphabetic')
+        if len(last_name) < 3:
+            raise forms.ValidationError('Last name must be at least 3 characters long')
+        return last_name
+
     def clean_phone(self):
         phone = self.cleaned_data['phone']
+        if not phone:
+            raise forms.ValidationError('Mobile phone is required')
         if not phone.startswith('01'):
             raise forms.ValidationError('Mobile phone must start with 01')
+        if not phone.isdigit():
+            raise forms.ValidationError('Mobile phone must be digits')
         return phone
+
+    def clean_photo(self):
+        photo = self.cleaned_data['photo']
+        if not photo:
+            raise forms.ValidationError('Photo is required')
+        if not (photo.content_type.endswith('png') or photo.content_type.endswith('jpg') or photo.content_type.endswith('jpeg')):
+            raise forms.ValidationError('Invalid file type. Only png, jpg and jpeg files are allowed')
+        return photo
+
+    def clean_password1(self):
+        password1 = self.cleaned_data['password1']
+        if not password1:
+            raise forms.ValidationError('Password is required')
+
+        return password1
+
+    def clean_password2(self):
+        password1 = self.cleaned_data['password1']
+        password2 = self.cleaned_data['password2']
+        if not password2:
+            raise forms.ValidationError('Password is required')
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError('Passwords do not match')
+
+        return password2
 
 
 class UserEditForm(forms.ModelForm):
@@ -32,6 +89,67 @@ class UserAddFormByAdmin(UserCreationForm):
         model = User
         fields = ['first_name', 'last_name', 'email', 'password1','password2', 'phone', 'photo', 'is_superuser', 'is_staff', 'is_active']
 
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).exclude(id=self.instance.id).exists():
+            raise forms.ValidationError('Email already exists')
+        if not email:
+            raise forms.ValidationError('Email is required')
+        return email
+
+    def clean_first_name(self):
+        first_name = self.cleaned_data['first_name']
+        if not first_name:
+            raise forms.ValidationError('First name is required')
+        if not first_name.isalpha():
+            raise forms.ValidationError('First name must be alphabetic')
+        if len(first_name) < 3:
+            raise forms.ValidationError('First name must be at least 3 characters long')
+        return first_name
+
+    def clean_last_name(self):
+        last_name = self.cleaned_data['last_name']
+        if not last_name:
+            raise forms.ValidationError('Last name is required')
+        if not last_name.isalpha():
+            raise forms.ValidationError('Last name must be alphabetic')
+        if len(last_name) < 3:
+            raise forms.ValidationError('Last name must be at least 3 characters long')
+        return last_name
+
+    def clean_phone(self):
+        phone = self.cleaned_data['phone']
+        if not phone:
+            raise forms.ValidationError('Mobile phone is required')
+        if not phone.startswith('01'):
+            raise forms.ValidationError('Mobile phone must start with 01')
+        if not phone.isdigit():
+            raise forms.ValidationError('Mobile phone must be digits')
+        return phone
+
+    def clean_photo(self):
+        photo = self.cleaned_data['photo']
+        if not photo:
+            raise forms.ValidationError('Photo is required')
+        return photo
+
+    def clean_password1(self):
+        password1 = self.cleaned_data['password1']
+        if not password1:
+            raise forms.ValidationError('Password is required')
+
+        return password1
+
+    def clean_password2(self):
+        password1 = self.cleaned_data['password1']
+        password2 = self.cleaned_data['password2']
+        if not password2:
+            raise forms.ValidationError('Password is required')
+        if password1 != password2:
+            raise forms.ValidationError('Passwords do not match')
+
+        return password2
+
 
 class UserEditFormByAdmin(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput, required=False)
@@ -40,8 +158,6 @@ class UserEditFormByAdmin(forms.ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email', 'password1','password2', 'phone', 'photo', 'is_superuser', 'is_staff', 'is_active']
-
-
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")

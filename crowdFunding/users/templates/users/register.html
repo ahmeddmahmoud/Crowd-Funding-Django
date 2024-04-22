@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+
 {% load static %}
 {% block content %}
 <style>
@@ -13,10 +15,14 @@
 <form method = "post" enctype="multipart/form-data" class="row w-50 mx-auto mt-5">
 {% csrf_token %}
 {{form}}
-<input type="submit" value="Submit" class="btn btn-primary mx-auto w-25 mb-3">
+<input type="submit" value="Submit" class="btn btn-primary mx-auto w-25 my-3">
 </form>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
-<script src="{% static 'users/js/script.js' %}"></script>
+<!--<style>-->
+<!--    input[type="file"]{-->
+<!--    margin-top:20px-->
+<!--    }-->
+<!--</style>-->
+<script src="{% static 'users/js/formStyles.js' %}"></script>
 
 {% endblock %}

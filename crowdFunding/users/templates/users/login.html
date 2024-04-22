@@ -1,20 +1,42 @@
+{% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<h2>Login</h2>
+    <h2 class="text-center">Login</h2>
 
-<form method = "post" enctype="multipart/form-data">
+<form method = "post" enctype="multipart/form-data" class="mx-auto w-50 row">
     {% csrf_token %}
+
     {{form}}
-    <input type="submit" class="btn btn-success">
+    <input type="submit" class="btn btn-primary mx-auto justify-content-center w-25 mt-5">
+
 </form>
 
 <style>
-    input[type="password"],input[type="text"]{
-        width: 50%;
+<!--    input[type="password"],input[type="text"]{-->
+<!--        width: 50%;-->
+<!--        margin:auto;-->
+<!--    }-->
+    .form-group{
+<!--        width: 50%;-->
+        margin: auto;
+<!--        margin-bottom:20px;-->
+    }
+<!--    label[for="username"],label[for="password"]{-->
+<!--        text-align:center;-->
+
+<!--        }-->
+    input[type="submit"]{
+<!--        margin-top: 10px;-->
+<!--        width: 8rem;-->
+
 
     }
 </style>
 
-<script src ="{% static 'users/js/script.js' %}"></script>
+<script>
+<!--    var formGroup=document.querySelectorAll(".form-group");-->
+<!--    formGroup.classList.add("justify-content-center");-->
+</script>
+<script src ="{% static 'users/js/formStyles.js' %}"></script>
 
 {% endblock %}

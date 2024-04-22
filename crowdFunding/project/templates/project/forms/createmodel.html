@@ -11,17 +11,16 @@
 <h1>hello from create Project</h1>
 <div class="container">
     
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" id="project-form">
         {% csrf_token %}
         {{ form}} {# Display ProjectModelForm fields #}
             
         <!-- Display PictureModelForm fields -->
         <label for="pic">Pictures</label>
-        <input type="file" name="pic" id="pic" multiple class="form-control">
-       
+        <input type="file" name="pic" id="pic" multiple class="form-control" id="project-form">
         
-            
-        <button type="submit" class="btn btn-success">Submit</button>
+        <div id="error-message" class="text-danger" style="display: none;"></div>
+        <button type="submit" id="submit-button" class="btn btn-success">Submit</button>
     </form>
 </div>
 
@@ -30,3 +29,37 @@
 
 </body>
 </html>
+<script>
+    
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('project-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+        
+        // Fetch the data from the form
+        var formData = new FormData(this);
+        
+        // Submit the form data via fetch
+        fetch(this.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Check if there's an error message in the response
+            if (data.error) {
+                var errorMessageElement = document.getElementById('error-message');
+                errorMessageElement.textContent = data.error;
+                errorMessageElement.style.display = 'block'; // Show the error message
+            } else {
+                // If no error message, redirect to the project's detail page
+                var projectId = data.project_id; // Fetch the project ID from the response
+                window.location.href = 'http://127.0.0.1:8000/project/' + projectId; // Redirect to the project's detail page
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+});
+
+
+
+</script>
