@@ -25,9 +25,9 @@
 //    divs[d].classList.add('mb-3')
 //}
 //
-//checkboxex=document.querySelectorAll('input[type="checkbox"]')
-//for (var d =0; d < checkboxex.length; d++){
-//    checkboxex[d].classList.remove('form-control')
+//checkboxes=document.querySelectorAll('input[type="checkbox"]')
+//for (var d =0; d < checkboxes.length; d++){
+//    checkboxes[d].classList.remove('form-control')
 //}
 ////var checkbox = document.querySelector('input[name="image-clear"]');
 ////        checkbox.addEventListener('click', function() {
