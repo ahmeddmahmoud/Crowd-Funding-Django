@@ -10,6 +10,7 @@ from django.db.models import F
 from django.http import HttpResponseForbidden
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
+from django.http import JsonResponse
 
 def hello(request):
     print(request)
@@ -90,7 +91,8 @@ def cancel_project(request, id):
             project.delete()
             return redirect(project.list_url)
         else:
-            return HttpResponseForbidden("the donation is greter than 25%")
+            return JsonResponse({'error': 'The donation is greater than 25%'})
+            
     else:
         # If the current user is not the owner, handle unauthorized access
         # For example, you can return a 403 Forbidden response or redirect to a different page
