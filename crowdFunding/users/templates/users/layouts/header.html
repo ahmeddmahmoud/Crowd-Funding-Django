@@ -53,8 +53,9 @@
 
             </ul>
             <div class="d-flex">
-              <p class="text-white me-2">{{request.user.first_name}} {{request.user.last_name}} te</p>
-              <a class="btn btn-danger me-2" href="">Logout</a>
+              <p class="text-white m-1">{{request.user.email}} </p>
+<!--                <div class="text-white m-1">te</div>-->
+              <a class="btn btn-danger me-2" href="{% url 'logout' %}">Logout</a>
             </div>
           </div>
         </div>
