@@ -35,3 +35,4 @@ for (var m = 0; m < errors.length; m++) {
     errors[m].style.color = 'red'; // Setting color to red
     errors[m].style.fontWeight = 'bold'; // Making font weight bold
 }
+

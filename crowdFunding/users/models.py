@@ -1,9 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin,BaseUserManager
-from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator,FileExtensionValidator
 from datetime import date
 from django.core.exceptions import ValidationError
-
+from django.shortcuts import reverse, get_object_or_404
 from django.forms import TimeField
 
 
@@ -41,13 +41,12 @@ AUTH_PROVIDERS = {'facebook': 'facebook', 'email': 'email'}
 
 
 class User(AbstractBaseUser,PermissionsMixin):
-
-    email = models.EmailField(db_index=True, unique=True, max_length=254)
-    first_name = models.CharField(max_length=240)
-    last_name = models.CharField(max_length=255)
-    phone = models.CharField(max_length=50, validators=[RegexValidator(r'^01[0-2,5]{1}[0-9]{8}$')])
+    email = models.EmailField(db_index=True, unique=True, max_length=254,blank=True)
+    first_name = models.CharField(max_length=240,blank=True)
+    last_name = models.CharField(max_length=255,blank=True)
+    phone = models.CharField(max_length=50, validators=[RegexValidator(r'^01[0-2,5]{1}[0-9]{8}$')],blank=True)
     address = models.CharField( max_length=250)
-    photo = models.ImageField(upload_to='users/images',blank=True)
+    photo = models.ImageField(upload_to='users/images',blank=True, validators=[FileExtensionValidator(allowed_extensions=['png', 'jpg', 'jpeg'])])
     birth_date = models.DateField(null=True, blank=True)
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
@@ -66,3 +65,8 @@ class User(AbstractBaseUser,PermissionsMixin):
     class Meta:
         verbose_name = 'User'
         verbose_name_plural = 'Users'
+
+    @property
+    def photo_url(self):
+        return f"/media/{self.photo}"
+
