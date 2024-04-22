@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, reverse, get_object_or_404
-from .forms import UserRegistrationForm,UserEditForm,UserAddFormByAdmin,UserEditFormByAdmin
+from .forms import (UserRegistrationForm,UserEditForm,UserAddFormByAdmin,UserEditFormByAdmin)
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout,get_user_model
 from users.models import User
@@ -11,6 +11,8 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from typing import Protocol
+from django import forms
+
 from .tokens import account_activation_token
 from project.models import Project, Category, Tag
 from project.forms import CategoryModelForm, TagModelForm
@@ -55,7 +57,7 @@ def login_form(request):
                 login(request, user)
                 messages.success(request, f"Hello {user.first_name}! You have been logged in")
                 if user.is_superuser:
-                    return redirect('index')
+                    return redirect('admin.dashboard')
                 else:
                     url = reverse('user.details', args=[user.id])
                     return redirect(url)
