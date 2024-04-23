@@ -138,6 +138,9 @@ class UserEditForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email', 'phone', 'birth_date', 'country', 'facebook', 'photo']
+        widgets = {
+            'facebook': forms.URLInput(attrs={'class': 'form-control'}),
+        }
     
 
 
