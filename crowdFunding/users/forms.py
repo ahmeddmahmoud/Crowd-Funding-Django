@@ -168,15 +168,11 @@ class UserEditForm(forms.ModelForm):
         widgets = {
             'facebook': forms.URLInput(attrs={'class': 'form-control'}),
         }
-    
-
-
-
 
 
 class UserAddFormByAdmin(UserCreationForm):
-    # password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    # password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
 
     class Meta(UserCreationForm.Meta):
         model = User
@@ -226,22 +222,22 @@ class UserAddFormByAdmin(UserCreationForm):
             raise forms.ValidationError('Photo is required')
         return photo
 
-    # def clean_password1(self):
-    #     password1 = self.cleaned_data['password1']
-    #     if not password1:
-    #         raise forms.ValidationError('Password is required')
+    def clean_password1(self):
+        password1 = self.cleaned_data['password1']
+        if not password1:
+            raise forms.ValidationError('Password is required')
 
-    #     return password1
+        return password1
 
-    # def clean_password2(self):
-    #     password1 = self.cleaned_data['password1']
-    #     password2 = self.cleaned_data['password2']
-    #     if not password2:
-    #         raise forms.ValidationError('Password is required')
-    #     if password1 != password2:
-    #         raise forms.ValidationError('Passwords do not match')
+    def clean_password2(self):
+        password1 = self.cleaned_data['password1']
+        password2 = self.cleaned_data['password2']
+        if not password2:
+            raise forms.ValidationError('Password is required')
+        if password1 != password2:
+            raise forms.ValidationError('Passwords do not match')
 
-    #     return password2
+        return password2
 
 
 class UserEditFormByAdmin(forms.ModelForm):
