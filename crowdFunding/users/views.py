@@ -23,7 +23,7 @@ from django.utils import timezone
 
 
 
-
+@login_required
 def index(request):
     projects=Project.objects.all()
     latest_books = projects.order_by('-created_at')[:5]
