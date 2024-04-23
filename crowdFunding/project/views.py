@@ -148,6 +148,7 @@ def donate_project(request, id):
     except Project.DoesNotExist:
 
         return render(request, 'project/crud/badrequest.html')
+    
     if project.is_run_project() == False:
         return HttpResponseForbidden("the project is not run")
     
@@ -164,7 +165,7 @@ def donate_project(request, id):
             project.current_donation += donation.donation
             project.save()
             # Redirect to project details page or any other desired page
-            return redirect(project.show_url, id=id)  
+            return redirect(project.show_url, id=id, project=project)  
 
     else:
         form = DonationModelForm()
