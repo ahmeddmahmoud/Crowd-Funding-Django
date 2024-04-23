@@ -181,7 +181,11 @@ def donate_project(request, id):
 
 @login_required
 def edit_project(request, id):
-    project=Project.get_project_by_id(id)
+    try:
+        project = Project.objects.get(pk=id)
+    except Project.DoesNotExist:
+
+        return render(request, 'project/crud/badrequest.html')
     form=ProjectModelForm(instance=project)
     if request.method == "POST":
         form=ProjectModelForm(request.POST, request.FILES, instance=project)
@@ -217,27 +221,6 @@ def add_images(request, id):
         form = PictureModelForm()
     return render(request, 'project/forms/add_image.html', {'form': form})
 
-
-@login_required
-def edit_images(request, id):
-    project = get_object_or_404(Project, pk=id)
-    if request.method == 'POST':
-        form = PictureModelForm(request.POST, request.FILES)
-        if form.is_valid():
-            # Get the list of image files from the request
-            image_files = request.FILES.getlist('image')
-
-            # Iterate over each image file
-            for image_file in image_files:
-                # Create a new Picture instance
-                picture = Picture(image=image_file, project=project)
-                picture.save()
-
-            # Redirect or render a success page
-            return redirect(project.show_url)
-    else:
-        form = PictureModelForm()
-    return render(request, 'project/forms/edit_image.html', {'form': form})
 
 def clear_images(request, id):
     try:

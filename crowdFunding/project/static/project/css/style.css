@@ -8,7 +8,7 @@
     border-radius: 10px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease;
-    background: linear-gradient(135deg, #303030, #252525); /* Dark gradient background */
+    background: linear-gradient(135deg, #2ab108, #252525); /* Dark gradient background */
 }
 
 .postcard:hover {
@@ -18,11 +18,11 @@
 
 .postcard__img {
     flex: 0 0 50%; /* Image takes 50% of the card width */
-    max-width: 50%; /* Ensure image doesn't overflow */
+    width: 300px; /* Ensure image doesn't overflow */
     object-fit: cover;
     transition: transform 0.3s ease;
-    height: 230px; /* Set a fixed height for all images */
-    margin-left: 190px;
+    height: 310px; /* Set a fixed height for all images */
+    margin-left: 280px;
     
 }
 
