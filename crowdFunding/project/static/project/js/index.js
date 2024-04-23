@@ -37,16 +37,22 @@ document.addEventListener('DOMContentLoaded', function () {
           .catch(error => console.error('Error:', error));
   });
 
+//   document.addEventListener('DOMContentLoaded', function () {
+//     const rateInput = document.getElementById('id_rate');
+//     rateInput.style.display = 'none'; // Hide the input field
+// });
+
+
 
   document.getElementById('add-comment-btn').addEventListener('click', function() {
-      if (!deleteButtonClicked){
+      
           var commentForm = document.querySelector('.add-comment-form');
       if (commentForm.style.display === 'none' || commentForm.style.display === '') {
           commentForm.style.display = 'block';
       } else {
           commentForm.style.display = 'none';
       }
-      }
+      
   });
 
 

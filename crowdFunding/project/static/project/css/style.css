@@ -1,3 +1,5 @@
+
+
 @import url("https://fonts.googleapis.com/css2?family=Baloo+2&display=swap");
 
 /* Cards */
@@ -106,3 +108,27 @@
     margin-left: auto; /* Add margin from left */
     max-width: 1200px; /* Set maximum width */
 }
+
+.search-input {
+    border: 2px solid #d2d2d2;
+    border-radius: 30px;
+    font-size: 16px;
+    text-align: left;
+    width:300px;
+  }
+  
+  .search-button {
+    border: none;
+    border-radius: 30px;
+    padding: 6px 30px;
+    background-color: #009fe3;
+    color: #fff;
+  }
+  
+  .search-button:hover {
+    background-color: #0085c4;
+  }
+  
+  .search-button i {
+    font-size: 1.2rem;
+  }
