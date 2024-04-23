@@ -16,12 +16,14 @@ from django.conf import settings
 import os
 from pathlib import Path
 from django.forms import formset_factory
+from django.contrib.auth.decorators import login_required
 
 
 def hello(request):
     print(request)
     return render(request, 'test.html', {'name': 'Hello'})
 
+@login_required
 def create_project_model_form(request):
     if request.method == 'POST':
         form = ProjectModelForm(request.POST, request.FILES)        
@@ -101,7 +103,7 @@ def project_show(request,id):
 #                   context={"project":project, 'comments': comments, 'reports': reports, 'form': form, 'form2': form2})
 #
 
-
+@login_required
 def cancel_project(request, id):
     project = get_object_or_404(Project, pk=id)
     
@@ -125,7 +127,7 @@ def list_project(request):
     return render(request, 'project/crud/list.html', {'projects': projects})
 
 
-
+@login_required
 def donate_project(request, id):
     project = get_object_or_404(Project, pk=id)
     if project.is_run_project() == False:
@@ -153,7 +155,7 @@ def donate_project(request, id):
 
 
 
-
+@login_required
 def edit_project(request, id):
     project=Project.get_project_by_id(id)
     form=ProjectModelForm(instance=project)
@@ -165,6 +167,8 @@ def edit_project(request, id):
 
     return render (request,'project/crud/edit.html', context={"form":form})
 
+
+@login_required
 def add_images(request, id):
     project = get_object_or_404(Project, pk=id)
     if request.method == 'POST':
@@ -186,6 +190,7 @@ def add_images(request, id):
     return render(request, 'project/forms/add_image.html', {'form': form})
 
 
+@login_required
 def edit_images(request, id):
     project = get_object_or_404(Project, pk=id)
     if request.method == 'POST':

@@ -1,46 +1,160 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block css %}
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=Baloo+2&display=swap");
+
+    /* Cards */
+    .postcard {
+        display: flex;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+        border-radius: 10px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease;
+        background: linear-gradient(135deg, #303030, #252525); /* Dark gradient background */
+    }
+    
+    .postcard:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .postcard__img {
+        flex: 0 0 50%; /* Image takes 50% of the card width */
+        max-width: 50%; /* Ensure image doesn't overflow */
+        object-fit: cover;
+        transition: transform 0.3s ease;
+        height: 230px; /* Set a fixed height for all images */
+        margin-left: 190px;
+        
+    }
+    
+    .postcard:hover .postcard__img {
+        transform: scale(1.05);
+    }
+    
+    .postcard__text {
+        flex: 0 0 50%; /* Details take 50% of the card width */
+        padding: 1.5rem;
+        color: white; /* Text color */
+        
+    }
+    
+    .postcard__title {
+        font-family: 'Baloo 2', cursive; /* Use Baloo 2 font */
+        font-size: 2rem; /* Increase the font size to 2rem */
+        margin-bottom: 1rem; /* Add some bottom margin to title */
+        text-align: left; /* Align title to the left */
+        text-decoration: none;
+    }
+    .postcard__title a {
+        text-decoration: none;
+    }
+    
+    .postcard__subtitle {
+        margin-bottom: 1rem; /* Add some bottom margin to subtitle */
+        text-align: left; /* Align subtitle to the left */
+    }
+    
+    .postcard__bar {
+        width: 50px;
+        height: 5px;
+        background-color: #007bff; /* Blue bar color */
+        margin-bottom: 1rem; /* Add some bottom margin to bar */
+    }
+    
+    .postcard__preview-txt {
+        margin-bottom: 1rem; /* Add some bottom margin to preview text */
+        text-align: left; /* Align preview text to the left */
+    }
+    
+    .postcard__tagbox {
+        margin-top: auto; /* Align tagbox to the bottom */
+        list-style-type: none; /* Remove bullet points */
+        padding: 0; /* Remove default padding */
+    }
+    
+    .tag__item {
+        display: inline-block;
+        background-color: rgba(255, 255, 255, 0.2); /* Transparent background */
+        color: #ffffff; /* Text color */
+        padding: 0.25rem 0.5rem; /* Adjust padding */
+        border-radius: 5px; /* Add border radius */
+        margin-right: 0.5rem; /* Add some right margin */
+    }
+    
+    .tag__item:last-child {
+        margin-right: 0; /* Remove right margin for the last tag item */
+    }
+    
+    .tag__item:hover {
+        background-color: rgba(255, 255, 255, 0.3); /* Lighter background on hover */
+    }
+    
+    .tag__item a {
+        color: #ffffff; 
+        text-decoration: none; 
+        {% comment %} padding:10px; {% endcomment %}
+    }
+    
+    .tag__item a:hover {
+        text-decoration: none; 
+        color:blue;
+    }
+
+    /* Container */
+    .container {
+        margin-right: auto; /* Add margin from right */
+        margin-left: auto; /* Add margin from left */
+        max-width: 1200px; /* Set maximum width */
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container">
-    <div class="row mb-3">
-        <div class="col">
-            <form action="{% url 'projects.search' %}" method="GET" class="d-flex">
-                <input class="form-control me-2" type="search" name="search_query" placeholder="Search Books"
-                       aria-label="Search">
-                <button class="btn btn-outline-primary" type="submit">Search</button>
-            </form>
-        </div>
-    </div>
-        <div class="row">
-            {% for project in projects %}
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        {% if project.images.all %}
-                    <img src="{{ project.images.first.image.url }}" class="card-img-top" alt="{{ project.title }}">
+<section class="dark">
+    <div class="container py-4">
+        {% for project in projects %}
+        <article class="postcard dark blue">
+            <div class="postcard__text">
+                <h1 class="postcard__title blue"><a href="{{ project.show_url }}">{{ project.title }}</a></h1>
+                <div class="postcard__subtitle small">
+                    <time datetime="{{ project.end_date }}">
+                        <i class="fas fa-calendar-alt mr-2"></i>{{ project.end_date }}
+                    </time>
+                </div>
+                <div class="postcard__bar"></div>
+                <div class="postcard__preview-txt">Current Donation: {{ project.current_donation }}</div>
+                <ul class="postcard__tagbox">
+                    {% if project.category %}
+                    {% comment %} {{project.category}} {% endcomment %}
+                    <li class="tag__item"><a href="{{ project.category }}">Category : {{ project.category }}</a></li>
+                    {% endif %}
+                    {% comment %} <li class="tag__item"><a href="{{ project.duration }}">{{ project.duration }}</a></li> {% endcomment %}
+                    
+                </ul>
+                <div>
+                    {% for tag in project.tag.all %}
+                    <a href="/tag/project">#{{ tag.name }}</span></a>
+                    {% endfor %}
+                </div>
+                <div>
+                    <li class="tag__item play"><a href="{{ project.donate_url }}">Donate</a></li>
+                </div>
+            </div>
+            <a class="postcard__img_link" href="{{ project.show_url }}">
+                {% if project.images.all %}
+                    <img class="postcard__img" src="{{ project.images.first.image.url }}" alt="{{ project.title }}">
                 {% else %}
                     <!-- Placeholder image if project has no images -->
-                    <img src="/media/project/images/3.jpg" class="card-img-top" alt="{{ project.title }}">
+                    <img class="postcard__img" src="/media/project/images/3.jpg" alt="{{ project.title }}">
                 {% endif %}
-                        <div class="card-body">
-                            <h5 class="card-title">Title: {{ project.title }}</h5>
-                            <p class="card-text">End Date: {{ project.end_date }}</p>
-                            <p class="card-text">Total Target: {{ project.total_target }}</p>
-                            <p class="card-text">Current Donation: {{ project.current_donation }}</p>
-                            
-                            <a href="{{ project.show_url }}" class="btn btn-info">Show</a>
-                            
-                            {% if not project.is_run_project %}
-                            <div class="alert alert-danger mt-2" role="alert">
-                                This project is not runnable. Please choose another project to donate.
-                            </div>
-                        {% else %}
-                            <a href="{{project.donate_url}}" class="btn btn-success">Donate</a>
-                        {% endif %}
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
+            </a>
+        </article>
+        {% endfor %}
     </div>
-
+</section>
 {% endblock %}
