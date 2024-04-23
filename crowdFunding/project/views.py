@@ -8,6 +8,7 @@ from commentary.forms import CommentForm,ReportForm
 from commentary.models import Comment
 from django.db.models import F
 from django.http import HttpResponseForbidden
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.http import JsonResponse
@@ -22,6 +23,7 @@ def hello(request):
     print(request)
     return render(request, 'test.html', {'name': 'Hello'})
 
+@login_required
 def create_project_model_form(request):
     if request.method == 'POST':
         form = ProjectModelForm(request.POST, request.FILES)        
@@ -67,12 +69,12 @@ def create_project_model_form(request):
 
 
 
-
+@login_required
 def show_category(request, id):
     category = Category.get_category_by_id(id)
     return render(request,'category/crud/show.html', context={"category": category})
 
-
+@login_required
 def project_show(request,id):
     project = get_object_or_404(Project, pk=id)
     images = project.images.all()
@@ -101,7 +103,7 @@ def project_show(request,id):
 #                   context={"project":project, 'comments': comments, 'reports': reports, 'form': form, 'form2': form2})
 #
 
-
+@login_required
 def cancel_project(request, id):
     project = get_object_or_404(Project, pk=id)
     
@@ -119,13 +121,13 @@ def cancel_project(request, id):
         # If the current user is not the owner, handle unauthorized access
         # For example, you can return a 403 Forbidden response or redirect to a different page
         return HttpResponseForbidden("You are not authorized to perform this action.")
-    
+@login_required    
 def list_project(request):
     projects = Project.objects.all()
     return render(request, 'project/crud/list.html', {'projects': projects})
 
 
-
+@login_required
 def donate_project(request, id):
     project = get_object_or_404(Project, pk=id)
     if project.is_run_project() == False:
@@ -153,7 +155,7 @@ def donate_project(request, id):
 
 
 
-
+@login_required
 def edit_project(request, id):
     project=Project.get_project_by_id(id)
     form=ProjectModelForm(instance=project)
@@ -164,7 +166,7 @@ def edit_project(request, id):
             return redirect(project.show_url)
 
     return render (request,'project/crud/edit.html', context={"form":form})
-
+@login_required
 def add_images(request, id):
     project = get_object_or_404(Project, pk=id)
     if request.method == 'POST':
@@ -185,7 +187,7 @@ def add_images(request, id):
         form = PictureModelForm()
     return render(request, 'project/forms/add_image.html', {'form': form})
 
-
+@login_required
 def edit_images(request, id):
     project = get_object_or_404(Project, pk=id)
     if request.method == 'POST':

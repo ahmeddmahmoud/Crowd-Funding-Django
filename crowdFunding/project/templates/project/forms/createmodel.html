@@ -15,10 +15,6 @@
         {% csrf_token %}
         {{ form}} {# Display ProjectModelForm fields #}
             
-        <!-- Display PictureModelForm fields -->
-        {% comment %} <label for="pic">Pictures</label>
-        <input type="file" name="pic" id="pic" multiple class="form-control" id="project-form"> {% endcomment %}
-        
         <div id="error-message" class="text-danger" style="display: none;"></div>
         <button type="submit" id="submit-button" class="btn btn-success">Submit</button>
     </form>
@@ -27,45 +23,7 @@
 <script src = "{% static 'project/js/script.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
-{% comment %} <script>
-    
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('project-form').addEventListener('submit', function(event) {
-        
-        var x = {{ x }};
-        if (x === 0) {
-            return; // Do not prevent default if x is 0
-        }
-        event.preventDefault(); // Prevent default form submission
-        
-        // Fetch the data from the form
-        var formData = new FormData(this);
-        
-        // Submit the form data via fetch
-        fetch(this.action, {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            // Check if there's an error message in the response
-            if (data.error) {
-                var errorMessageElement = document.getElementById('error-message');
-                errorMessageElement.textContent = data.error;
-                errorMessageElement.style.display = 'block'; // Show the error message
-            } else {
-                // If no error message, redirect to the project's detail page
-                var projectId = data.project_id; // Fetch the project ID from the response
-                window.location.href = 'http://127.0.0.1:8000/project/' + projectId; // Redirect to the project's detail page
-            }
-        })
-        .catch(error => console.error('Error:', error));
-    });
-});
 
-
-
-</script> {% endcomment %}
 
 
 </body>
