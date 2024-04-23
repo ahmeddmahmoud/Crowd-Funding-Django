@@ -168,10 +168,6 @@ class UserEditForm(forms.ModelForm):
         widgets = {
             'facebook': forms.URLInput(attrs={'class': 'form-control'}),
         }
-    
-
-
-
 
 
 class UserAddFormByAdmin(UserCreationForm):
