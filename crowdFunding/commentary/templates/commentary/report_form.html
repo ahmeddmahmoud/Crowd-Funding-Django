@@ -3,18 +3,14 @@
 
 {% block content %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/report_form_styles.css' %}">
-    <div class="container">
-        <h2>Report Form</h2>
-        <form method="post">
+    <div class="container row">
+        <h2 class="text-center">Report Form</h2>
+        <form method="post" class="row">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit">Report</button>
+            <button type="submit" class="w-25 mx-auto d-flex justify-content-center rounded-5">Report</button>
         </form>
     </div>
-{% endblock %}
-
-
-
 <style>
 .container {
     max-width: 500px;
@@ -49,3 +45,59 @@ form button[type="submit"]:hover {
     background-color: #0056b3;
 }
 </style>
+  <script >
+
+document.addEventListener("DOMContentLoaded", function() {
+  var inputFields = document.querySelectorAll("input[type='text']");
+  inputFields.forEach(function(input) {
+    input.classList.add("form-control");
+    input.classList.add("col-4"); // Set width to 8 columns out of 12
+  });
+
+  // Add form-group class to div containers
+  var divContainers = document.querySelectorAll("div");
+  divContainers.forEach(function(div) {
+    div.classList.add("form-group");
+  });
+
+  // Add label class to labels
+  var labels = document.querySelectorAll("label");
+  labels.forEach(function(label) {
+    label.classList.add("form-label");
+  });
+
+  // Add helptext class to divs with class "helptext"
+  var helptextDivs = document.querySelectorAll(".helptext");
+  helptextDivs.forEach(function(div) {
+    div.classList.add("form-text");
+    div.classList.add("text-muted");
+  });
+
+const selectElement = document.getElementById('id_status');
+
+  // Add Bootstrap's form-select class
+  selectElement.classList.add('form-select');
+
+  // Optionally, you can apply additional styles using JavaScript
+  selectElement.style.padding = '8px';
+  selectElement.style.border = '1px solid #ccc';
+  selectElement.style.borderRadius = '5px';
+  selectElement.style.backgroundColor = '#f8f9fa';
+
+  // Get the options within the select element
+  const options = selectElement.querySelectorAll('option');
+  options.forEach(option => {
+    option.style.padding = '8px'; // Style options with padding
+  });
+});
+errors = document.getElementsByClassName('errorlist');
+    for (var m=0 ; m < errors.length; m ++){
+    errors[m].style.color = 'red';
+}
+  </script>
+
+{% endblock %}
+
+
+
+
