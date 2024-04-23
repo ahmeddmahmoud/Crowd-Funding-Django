@@ -18,6 +18,7 @@ import os
 from pathlib import Path
 from django.forms import formset_factory
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 
 
 def hello(request):
@@ -77,7 +78,12 @@ def show_category(request, id):
 
 @login_required
 def project_show(request,id):
-    project = get_object_or_404(Project, pk=id)
+    # project = get_object_or_404(Project, pk=id)
+    try:
+        project = Project.objects.get(pk=id)
+    except Project.DoesNotExist:
+
+        return render(request, 'project/crud/badrequest.html')
     images = project.images.all()
     comments = project.comments.all()
     reports = project.reports.all()
@@ -106,7 +112,11 @@ def project_show(request,id):
 
 @login_required
 def cancel_project(request, id):
-    project = get_object_or_404(Project, pk=id)
+    try:
+        project = Project.objects.get(pk=id)
+    except Project.DoesNotExist:
+
+        return render(request, 'project/crud/badrequest.html')
     
     # Check if the current user is the owner of the project
     if request.user == project.project_owner:
@@ -133,7 +143,11 @@ def list_project(request):
 
 @login_required
 def donate_project(request, id):
-    project = get_object_or_404(Project, pk=id)
+    try:
+        project = Project.objects.get(pk=id)
+    except Project.DoesNotExist:
+
+        return render(request, 'project/crud/badrequest.html')
     if project.is_run_project() == False:
         return HttpResponseForbidden("the project is not run")
     
@@ -174,7 +188,11 @@ def edit_project(request, id):
 
 @login_required
 def add_images(request, id):
-    project = get_object_or_404(Project, pk=id)
+    try:
+        project = Project.objects.get(pk=id)
+    except Project.DoesNotExist:
+
+        return render(request, 'project/crud/badrequest.html')
     if request.method == 'POST':
         form = PictureModelForm(request.POST, request.FILES)
         if form.is_valid():
