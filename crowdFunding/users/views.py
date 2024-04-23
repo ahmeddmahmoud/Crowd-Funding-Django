@@ -44,8 +44,9 @@ def index(request):
                            })
 
 
-
 def login_form(request):
+    if request.user.is_authenticated:
+        return redirect('index')
     form = AuthenticationForm()
     if request.method == 'POST':
         form = AuthenticationForm(request, request.POST)
