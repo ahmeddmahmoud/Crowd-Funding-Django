@@ -65,11 +65,17 @@
     <div class="card-body">
         <div class="project-info">
             <p><span class="label">Details:</span> {{ project.details }}</p>
+             <div class="progress mb-3">
+        <div class="progress-bar bg-success" role="progressbar" 
+        style="width:  {{ progress_percentage }}%" aria-valuenow="{{ project.current_donation }}" 
+        aria-valuemin="0" aria-valuemax="{{ project.total_target }}"></div>
+       </div>
+    
             <p><span class="label">Total Target:</span> {{ project.total_target }}$</p>
+            <p><span class="label">Current Donation:</span> {{ project.current_donation }}$</p>
+
             <p><span class="label">Start Date:</span> {{ project.start_date }}</p>
             <p><span class="label">End Date:</span> {{ project.end_date }}</p>
-            <p><span class="label">Created At:</span> {{ project.created_at }}</p>
-            <p><span class="label">Current Donation:</span> {{ project.current_donation }}$</p>
             <p>Tags: </p>
             {% for tag in project.tag.all %}
             <p><span class="label"></span> {{  tag.name  }}</p>
@@ -258,25 +264,28 @@
 {% comment %} project with similar tags {% endcomment %}
 <div class="container">
     <h4 class="text-center mt-4">See Also :: Projects with Same Tags</h4>
-    <div class="row text-center">
+    <div class="row justify-content-center">
         {% for tag in project.tag.all %}
             <div class="col-md-4">
-                <h5 class="mt-3">Tag Name: {{ tag.name }}</h5>
-                <div class="card mx-auto text-center">
+                <div class="card bg-dark text-white mt-3">
                     <div class="card-body">
-                        {% for related_project in tag.projects.all %}
-                            {% if forloop.counter <= 4 %}
-                                <p class="card-text">
-                                    <a href="{{ related_project.show_url }}">{{ related_project.title }}</a>
-                                </p>
-                            {% endif %}
-                        {% endfor %}
+                        <h5 class="card-title">Tag Name: {{ tag.name }}</h5>
+                        <ul class="list-unstyled">
+                            {% for related_project in tag.projects.all %}
+                                {% if forloop.counter <= 4 %}
+                                    <li>
+                                        <a href="{{ related_project.show_url }}" class="text-white">{{ related_project.title }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
                     </div>
                 </div>
             </div>
         {% endfor %}
     </div>
 </div>
+
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js" integrity="sha512-Ry4FzxO9+ri4OkYyLgSaxRuWcsM2b9hjNKeJAd6D8/5xtHqjAW90DXv+XHtgr7pZCHZjy9t5A5pt0YKgKx2/7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
