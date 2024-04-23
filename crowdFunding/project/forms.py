@@ -18,6 +18,12 @@ class ProjectModelForm(forms.ModelForm):
                 raise forms.ValidationError('End date must be greater than start date')
 
         return cleaned_data
+    
+    def clean_title(self):
+        title = self.cleaned_data['title']
+        if len(title) < 3:
+            raise forms.ValidationError('Title length must be greater then 3 characters')
+        return title
 
 
 class CategoryModelForm(forms.ModelForm):
@@ -65,6 +71,11 @@ class DonationModelForm(forms.ModelForm):
 class PictureModelForm(forms.ModelForm):
     class Meta:
         model = Picture
-        fields = ('image',)
-    
+        fields = ['image']
+        
+    def clean_image(self):
+        image = self.cleaned_data.get('image')
+        if not image:
+            raise forms.ValidationError("You must upload an image.")
+        return image
 

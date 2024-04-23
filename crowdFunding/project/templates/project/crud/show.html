@@ -19,7 +19,7 @@
 </style>
 
 <div class="container">
-<!--<h1>{{ images }}</h1>-->
+{% if images %}
 <div id="carouselExampleIndicators" class="carousel slide">
   <div class="carousel-indicators">
     {% for image in images %}
@@ -29,8 +29,12 @@
   <div class="carousel-inner">
     {% for image in images %}
       <div class="carousel-item {% if forloop.first %}active{% endif %}">
-<!--        <h1>{{image}}</h1>-->
-        <img src="{{ image.image.url }}" class="d-block w-100" alt="Image {{ forloop.counter }}">
+        {% if image.image %}
+          <img src="{{ image.image.url }}" class="d-block w-100" alt="Image {{ forloop.counter }}">
+        {% else %}
+          <!-- Provide the URL of the alternative image -->
+          <img src="/media/project/images/3.jpg" class="d-block w-100" alt="Image {{ forloop.counter }}">
+        {% endif %}
       </div>
     {% endfor %}
   </div>
@@ -43,6 +47,12 @@
     <span class="visually-hidden">Next</span>
   </button>
 </div>
+{% else %}
+<div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <img src="/media/project/images/3.jpg" class="w-50 h-75" alt="Default Image">
+</div>
+
+{% endif %}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -106,6 +116,8 @@
     {% if request.user == project.project_owner %}
     <a href="{{ project.delete_url }}" id="delete-project-btn" class="btn btn-danger">Delete Project</a>
     <a href="{{ project.edit_url }}" class="btn btn-primary">Edit</a>
+    <a href="{{ project.add_image_url }}" class="btn btn-success">Add Images</a>
+
     <div id="error-message" class="text-danger" style="display: none;"></div> <!-- Placeholder for error message -->
 </div>
 {% endif %}

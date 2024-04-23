@@ -137,9 +137,14 @@ class Project(models.Model):
             self.is_run = False
             self.save(update_fields=['is_run'])
         return self.is_run
+    
+    @property
+    def add_image_url(self):
+        url = reverse('project.addimage', args=[self.id])
+        return url
 
 class Picture(models.Model):
-    image = models.ImageField(upload_to='project/images/', null=True)
+    image = models.ImageField(upload_to='project/images/' )
     project = models.ForeignKey(Project, on_delete=models.CASCADE , related_name='images')
 
     def __str__(self):
