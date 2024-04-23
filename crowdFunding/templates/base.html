@@ -66,7 +66,7 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link tab text-white" href="{% url 'index' %}"><i class="fas fa-home"></i></a>
+                        <a class="nav-link tab text-white" href="{% url 'home_page' %}"><i class="fas fa-home"></i></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link tab text-white" href="{% url 'user.details' user.id %}">User Details</a>
@@ -88,7 +88,7 @@
             <div class="d-flex align-items-center">
                 {% if not user.is_authenticated %}
                     <a class="btn btn-outline-success me-2" href="{% url 'user.login' %}">Sign In</a>
-                    <a class="btn btn-success" href="{% url 'user.register' %}">Get Started</a>
+                    <a class="btn btn-success" href="{% url 'user.register' %}">Sign up</a>
                 {% else %}
                     {% if user.photo %}
                         <img src="{{ user.photo.url }}" alt="user photo" class="rounded-circle me-2" style="width: 40px; height: 40px;">
@@ -105,8 +105,7 @@
 
 
 <div id="alert-container">
-    {% block message %} 
-    {% endblock %}
+    {% include 'users/includes/messaging.html'%}
 </div>
 
 <div class="main-content">

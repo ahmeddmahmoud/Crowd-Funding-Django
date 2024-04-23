@@ -54,7 +54,7 @@
 
       <div class="mt-3">
         <a href="{% url 'user.edit' user.id %}" class="btn btn-primary mx-3">Edit</a>
-        <form action="{% url 'user.delete' user.id %}" method="post">
+        <form action="{% url 'user.delete' user.id %}" method="post" class="d-inline ">
           {% csrf_token %}
           <button type="button" onclick="confirmDelete(this)" class="btn btn-danger">Delete</button>
         </form>
