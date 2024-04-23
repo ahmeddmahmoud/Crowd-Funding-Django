@@ -2,30 +2,35 @@
 
 <div class="container">
         <div class="row">
-                <h1 class="mt-4 mb-3">Projects by User {{ user.first_name }} {{ user.last_name }}</h1>
-
-                {% for project in projects %}
-                <div class="col-md-4 mb-4">
-                        <div class="card">
-                        {% if project.images.all %}
-                        <img src="{{ project.images.first.image.url }}" class="card-img-top" alt="{{ project.title }}">
+                <h1 class="text-center text-success fw-bold fst-italic fs-1 my-3 text-capitalize">Projects by User {{ user.first_name }} {{ user.last_name }}</h1>
+                {% if projects %}
+                        {% for project in projects %}
+                        <div class="col-md-4 mb-4">
+                                <div class="card">
+                                {% if project.images.all %}
+                                <img src="{{ project.images.first.image.url }}" class="card-img-top" alt="{{ project.title }}">
+                        {% else %}
+                                <!-- Placeholder image if project has no images -->
+                                <img src="{% static 'placeholder.jpg' %}" class="card-img-top" alt="Placeholder">
+                        {% endif %}
+                                <div class="card-body">
+                                        <h5 class="card-title">Title: {{ project.title }}</h5>
+                                        <p class="card-text">Details: {{ project.details }}</p>
+                                        <p class="card-text">Start Date: {{ project.start_date }}</p>
+                                        <p class="card-text">Total Target: {{ project.total_target }}</p>
+                                        {% comment %} <a href="{{ project.delete_url }}" class="btn btn-danger">Delete</a> {% endcomment %}
+                                        <a href="{{ project.show_url }}" class="btn btn-info">Show</a>
+                                        {% comment %} <a href="{{ project.edit_url }}" class="btn btn-primary">Edit</a> {% endcomment %}
+                                        <a href="{{project.donate_url}}" class="btn btn-success">Donate</a>
+                                </div>
+                                </div>
+                        </div>
+                        {% endfor %}
                 {% else %}
-                        <!-- Placeholder image if project has no images -->
-                        <img src="{% static 'placeholder.jpg' %}" class="card-img-top" alt="Placeholder">
+                        <div class="col-12">
+                                <p class="text-center text-danger fw-bold fs-3 text-capitalize mb-3">You haven't started any projects yet!</p>
+                        </div>
                 {% endif %}
-                        <div class="card-body">
-                                <h5 class="card-title">Title: {{ project.title }}</h5>
-                                <p class="card-text">Details: {{ project.details }}</p>
-                                <p class="card-text">Start Date: {{ project.start_date }}</p>
-                                <p class="card-text">Total Target: {{ project.total_target }}</p>
-                                {% comment %} <a href="{{ project.delete_url }}" class="btn btn-danger">Delete</a> {% endcomment %}
-                                <a href="{{ project.show_url }}" class="btn btn-info">Show</a>
-                                {% comment %} <a href="{{ project.edit_url }}" class="btn btn-primary">Edit</a> {% endcomment %}
-                                <a href="{{project.donate_url}}" class="btn btn-success">Donate</a>
-                        </div>
-                        </div>
-                </div>
-                {% endfor %}
         </div>
         </div>
 {% endblock %}
