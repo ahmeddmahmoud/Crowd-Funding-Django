@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import User
 from django.core.validators import URLValidator
 from datetime import date
-
+import re
 
 
 class UserRegistrationForm(UserCreationForm):
@@ -77,6 +77,16 @@ class UserRegistrationForm(UserCreationForm):
 
 
 class UserEditForm(forms.ModelForm):
+    new_password1 = forms.CharField(
+        label="New Password",
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        required=False
+    )
+    new_password2 = forms.CharField(
+        label="Confirm New Password",
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        required=False
+    )
     def __init__(self, *args, **kwargs):
         super(UserEditForm, self).__init__(*args, **kwargs)
         if self.instance and self.instance.pk:
@@ -134,6 +144,23 @@ class UserEditForm(forms.ModelForm):
         if len(country) < 3:
             raise forms.ValidationError('country name must be at least 3 characters long')
         return country
+    
+    def clean_new_password2(self):
+        new_password1 = self.cleaned_data.get("new_password1")
+        new_password2 = self.cleaned_data.get("new_password2")
+        if new_password1 and new_password2:
+            if new_password1 != new_password2:
+                raise forms.ValidationError("Passwords do not match.")
+        return new_password2
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        new_password = self.cleaned_data.get("new_password1")
+        if new_password:
+            user.set_password(new_password)
+        if commit:
+            user.save()
+        return user
     
     class Meta:
         model = User

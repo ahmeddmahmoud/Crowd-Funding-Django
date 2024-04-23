@@ -354,6 +354,6 @@ def categories_project(request):
 @login_required
 def user_logout(request):
     logout(request)
-    # messages.info(request, "You have been successfully logged out.")
+    messages.info(request, "You have been successfully logged out.")
     url = reverse("home_page")
     return redirect(url)
