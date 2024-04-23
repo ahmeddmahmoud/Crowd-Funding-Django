@@ -8,32 +8,36 @@
 {% block content %}
 
 <div class="container">
-        <div class="text-center">
-            <h1 class="text-center text-success fw-bold fst-italic fs-1 mt-2 mb-3 text-capitalize">Donation Summary for {{ user.first_name }} {{ user.last_name }}</h1>
+        <div class="text-center my-3">
+            <h1 class="text-center text-success fw-bold fst-italic fs-1  text-capitalize mb-3">Donation Summary for {{ user.first_name }} {{ user.last_name }}</h1>
 
                 <p class="d-inline-block me-5 fw-bold  fs-5">Total Donations: ${{ total_donation_user }}</p>
                 <a class="d-inline-block btn btn-success ms-5" href="{% url 'user.projects' user.id %}">Go to your projects</a>
 
         </div>
         <div class="accordion" id="donations">
-            {% for donation in project_donations %}
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="heading{{ donation.project_id }}">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ donation.project_id }}" aria-expanded="true" aria-controls="collapse{{ donation.project_id }}">
-                            Project title: {{ donation.project__title }}, Total Donation: ${{ donation.total_donation_project }}
-                        </button>
-                    </h2>
-                    <div id="collapse{{ donation.project_id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ donation.project_id }}" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                            <ul>
-                                {% for user_donation in donation.user_donations %}
-                                    <li>Donation Amount: ${{ user_donation.donation }}, Time: {{ user_donation.created_at }}</li>
-                                {% endfor %}
-                            </ul>
+            {% if project_donations %}
+                {% for donation in project_donations %}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading{{ donation.project_id }}">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ donation.project_id }}" aria-expanded="true" aria-controls="collapse{{ donation.project_id }}">
+                                Project title: {{ donation.project__title }}, Total Donation: ${{ donation.total_donation_project }}
+                            </button>
+                        </h2>
+                        <div id="collapse{{ donation.project_id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ donation.project_id }}" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <ul>
+                                    {% for user_donation in donation.user_donations %}
+                                        <li>Donation Amount: ${{ user_donation.donation }}, Time: {{ user_donation.created_at }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            {% else %}
+                <p class="text-center text-danger fw-bold fs-3 text-capitalize mb-3">No donations have been made yet!</p>
+            {% endif %}
         </div>
     </div>
     
