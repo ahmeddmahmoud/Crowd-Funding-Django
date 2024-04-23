@@ -20,6 +20,7 @@ select= document.querySelector('select')
 
 select.classList.add('form-select', 'mb-3');
 
+
 divs = document.getElementsByClassName("form_element")
 for (var d =0; d < divs.length; d++){
     divs[d].classList.add('mb-3')
