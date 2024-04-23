@@ -4,6 +4,25 @@
 {% block css %}
 <link rel="stylesheet" href="{% static 'project/css/style.css' %}">
 <style>
+    .postcard {
+        display: flex;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+        border-radius: 10px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease;
+        background: linear-gradient(135deg, #333333 , #007bff); /* Green to white gradient background */
+    }
+    .postcard__img {
+        flex: 0 0 50%; /* Image takes 50% of the card width */
+        width: 300px; /* Ensure image doesn't overflow */
+        object-fit: cover;
+        transition: transform 0.3s ease;
+        height: 310px; /* Set a fixed height for all images */
+        margin-left: 280px;
+        
+    }
     
 </style>
 {% endblock %}
