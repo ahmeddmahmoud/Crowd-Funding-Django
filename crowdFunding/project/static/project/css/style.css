@@ -1,0 +1,108 @@
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2&display=swap");
+
+/* Cards */
+.postcard {
+    display: flex;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+    background: linear-gradient(135deg, #303030, #252525); /* Dark gradient background */
+}
+
+.postcard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.postcard__img {
+    flex: 0 0 50%; /* Image takes 50% of the card width */
+    max-width: 50%; /* Ensure image doesn't overflow */
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    height: 230px; /* Set a fixed height for all images */
+    margin-left: 190px;
+    
+}
+
+.postcard:hover .postcard__img {
+    transform: scale(1.05);
+}
+
+.postcard__text {
+    flex: 0 0 50%; /* Details take 50% of the card width */
+    padding: 1.5rem;
+    color: white; /* Text color */
+    
+}
+
+.postcard__title {
+    font-family: 'Baloo 2', cursive; /* Use Baloo 2 font */
+    font-size: 2rem; /* Increase the font size to 2rem */
+    margin-bottom: 1rem; /* Add some bottom margin to title */
+    text-align: left; /* Align title to the left */
+    text-decoration: none;
+}
+.postcard__title a {
+    text-decoration: none;
+}
+
+.postcard__subtitle {
+    margin-bottom: 1rem; /* Add some bottom margin to subtitle */
+    text-align: left; /* Align subtitle to the left */
+}
+
+.postcard__bar {
+    width: 50px;
+    height: 5px;
+    background-color: #007bff; /* Blue bar color */
+    margin-bottom: 1rem; /* Add some bottom margin to bar */
+}
+
+.postcard__preview-txt {
+    margin-bottom: 1rem; /* Add some bottom margin to preview text */
+    text-align: left; /* Align preview text to the left */
+}
+
+.postcard__tagbox {
+    margin-top: auto; /* Align tagbox to the bottom */
+    list-style-type: none; /* Remove bullet points */
+    padding: 0; /* Remove default padding */
+}
+
+.tag__item {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.2); /* Transparent background */
+    color: #ffffff; /* Text color */
+    padding: 0.25rem 0.5rem; /* Adjust padding */
+    border-radius: 5px; /* Add border radius */
+    margin-right: 0.5rem; /* Add some right margin */
+}
+
+.tag__item:last-child {
+    margin-right: 0; /* Remove right margin for the last tag item */
+}
+
+.tag__item:hover {
+    background-color: rgba(255, 255, 255, 0.3); /* Lighter background on hover */
+}
+
+.tag__item a {
+    color: #ffffff; 
+    text-decoration: none; 
+    {% comment %} padding:10px; {% endcomment %}
+}
+
+.tag__item a:hover {
+    text-decoration: none; 
+    color:blue;
+}
+
+/* Container */
+.container {
+    margin-right: auto; /* Add margin from right */
+    margin-left: auto; /* Add margin from left */
+    max-width: 1200px; /* Set maximum width */
+}

@@ -23,7 +23,7 @@ from django.utils import timezone
 
 
 
-
+@login_required
 def index(request):
     projects=Project.objects.all()
     latest_books = projects.order_by('-created_at')[:5]
@@ -59,7 +59,7 @@ def login_form(request):
                 if user.is_superuser:
                     return redirect('admin.dashboard')
                 else:
-                    url = reverse('user.details', args=[user.id])
+                    url = reverse('index')
                     return redirect(url)
 
     return render(request, 'users/login.html', {'form': form})
