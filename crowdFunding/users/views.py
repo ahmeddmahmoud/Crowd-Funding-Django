@@ -94,7 +94,7 @@ def activate_email(request, user, to_email):
 def register(request):
     if request.user.is_authenticated:
         messages.error(request, "You are already logged in.")
-        return redirect('index')
+        return redirect('home_page')
     form = UserRegistrationForm()
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST, request.FILES)
