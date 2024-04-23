@@ -115,7 +115,9 @@
 </div>
 
 <div class="container my-2 d-flex justify-content-center align-items-center">
-    
+    {% if project.is_run_project %}
+    <a href="{{ project.donate_url }}" class="btn btn-success mx-1">Donate Now</a>
+    {% endif %}
     {% if request.user == project.project_owner %}
     <a href="{{ project.delete_url }}" id="delete-project-btn" class="btn btn-danger"
     data-bs-toggle="modal" data-bs-target="#exampleModal{{project.id}}">Delete Project</a>
@@ -129,8 +131,6 @@
         {{ request.GET.error_message }}
     </div>
     {% endif %}
-{% else %}
-<h3 class="text-center text-success fw-bold fst-italic fs-1 my-3 text-capitalize">Actions For Project Creator Only!</h3>
 {% endif %}
 </div>
 
@@ -264,9 +264,11 @@
 
 {% comment %} project with similar tags {% endcomment %}
 <div class="container">
-    <h4 class="text-center text-success fw-bold fst-italic fs-1 my-3 text-capitalize">See Also :: Projects with Same Tags</h4>
     <div class="row justify-content-center">
         {% for tag in project.tag.all %}
+        {% if tag %}
+            <h4 class="text-center text-success fw-bold fst-italic fs-1 my-3 text-capitalize">See Also :: Projects with Same Tags</h4>
+        {% endif %}
             <div class="col-md-4">
                 <div class="card text-white mt-3" style="background: linear-gradient(135deg, #333333 , #007bff);">
                     <div class="card-body">
