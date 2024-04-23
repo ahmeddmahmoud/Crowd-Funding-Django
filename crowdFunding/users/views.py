@@ -131,14 +131,24 @@ def user_details(request, id):
 
 @login_required
 def user_delete(request, id):
+    user_exists = User.objects.filter(id=id).exists()
+    if not user_exists:
+        return render(request, 'users/unauthorized.html')
     user = get_object_or_404(User, pk=id)
+    if request.user != user:
+        return render(request, 'users/unauthorized.html')
     user.delete()
     url = reverse("user.login")
     return redirect(url)
 
 @login_required
-def user_edit(request, id):
-    user = get_object_or_404(User, id=id)
+def user_edit(request, id):    
+    user_exists = User.objects.filter(id=id).exists()
+    if not user_exists:
+        return render(request, 'users/unauthorized.html')
+    user = get_object_or_404(User, pk=id)
+    if request.user != user:
+        return render(request, 'users/unauthorized.html')
     if request.method == 'POST':
         form = UserEditForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
