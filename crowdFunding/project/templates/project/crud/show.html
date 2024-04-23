@@ -274,9 +274,9 @@
                         <h5 class="card-title">Tag Name: {{ tag.name }}</h5>
                         <ul class="list-unstyled">
                             {% for related_project in tag.projects.all %}
-                                {% if forloop.counter <= 4 %}
+                                {% if forloop.counter <= 4 and related_project != project %}
                                     <li>
-                            <div class="rounded-2" style="background-color: black; padding: 5px;">
+                            <div class="rounded-2 my-1" style="background-color: black; padding: 5px;">
                                 <a href="{{ related_project.show_url }}" class="text-white text-decoration-none">Project: {{ related_project.title }}</a>
                             </div>
                             </li>
