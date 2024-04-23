@@ -4,6 +4,10 @@
 
    {% block css %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+       
+        
+    </style>
     {% endblock %}
 
 
@@ -61,7 +65,7 @@
                             <div>
                                 <a href="{{ project.show_url }}">
                                     {% if project.image_urls %}
-                                    <img src="{{ project.image_urls.0 }}" alt="">
+                                    <img src="{{ project.image_urls.0 }}"  alt="">
                                     {% else %}
                     <!-- Placeholder image if project has no images -->
                                     <img src="/media/project/images/default.jpg" >
@@ -82,10 +86,10 @@
                         <label for="slide-{{ forloop.counter }}">
 
                                     {% if project.image_urls %}
-                                    <img src="{{ project.image_urls.0 }}" class="w-100 h-100" alt="">
+                                    <img src="{{ project.image_urls.0 }}" style="width: 150px; height: 150px; object-fit: cover;" alt="">
                                     {% else %}
                     <!-- Placeholder image if project has no images -->
-                                    <img src="/media/project/images/default.jpg" >
+                                    <img src="/media/project/images/default.jpg" style="width: 150px; height: 150px; object-fit: cover;" >
                                     {% endif %}
                                 </a>
                         </label>
@@ -181,6 +185,8 @@
                     {% if project.image_urls %}
                     <img src="{{ project.image_urls.0 }}" style="max-height: 400px; max-width: 50%;"
                          class="d-block w-100 mx-auto" alt="{{ project.title }}">
+                    {% else %}
+                    <img class="card-img-top img-fluid project-img" src="/media/project/images/default.jpg" alt="{{ project.title }}">
                     {% endif %}
                     <div class="carousel-caption rounded" style="background-color: rgba(255, 255, 255, 0.75);">
                         <h3>{{ project.title }}</h3>
