@@ -2,18 +2,26 @@
 {% load static %} 
 {% block content %}
 <style>
-  input{
+  input
+  {
       width:fit-content: !important;
   }
-  body{
+  body
+  {
       background-color: lightgray;
   }
+  input[type="text"], input[type="email"], input[type="url"], input[type="password"], input[type="file"]
+  {
+      margin-bottom: 8px; 
+  }
+</style>
+
 </style>
   <h2 class="text-center mt-1">Edit User Data</h2>
-  <form method="post" enctype="multipart/form-data" class="row w-50 mx-auto mt-2">
+  <form method="post" enctype="multipart/form-data" class="row w-50 mx-auto mt-1">
     {% csrf_token %} 
     {{ form }}
-    <button type="submit" class="btn btn-success">Edit</button>
+    <button type="submit" class="btn btn-success ">Edit</button>
   </form>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script src="{% static 'users/js/formStyles.js' %}"></script>
