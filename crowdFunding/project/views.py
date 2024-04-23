@@ -8,7 +8,7 @@ from commentary.forms import CommentForm,ReportForm
 from commentary.models import Comment
 from django.db.models import F
 from django.http import HttpResponseForbidden
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required,user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.http import JsonResponse
@@ -19,13 +19,15 @@ from pathlib import Path
 from django.forms import formset_factory
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
+from users.views import check_superuser,check_user
 
 
-def hello(request):
-    print(request)
-    return render(request, 'test.html', {'name': 'Hello'})
+# def hello(request):
+#     print(request)
+#     return render(request, 'test.html', {'name': 'Hello'})
 
 @login_required
+@user_passes_test(check_user)
 def create_project_model_form(request):
     if request.method == 'POST':
         form = ProjectModelForm(request.POST, request.FILES)        
@@ -40,41 +42,6 @@ def create_project_model_form(request):
         
     return render(request, 'project/forms/createmodel.html', {'form': form})
 
-# def create_project_model_form(request):
-#     if request.method == 'POST':
-#         form = ProjectModelForm(request.POST, request.FILES)        
-#         if form.is_valid():
-#             project = form.save(commit=False)
-#             project.project_owner = request.user
-
-#             # Save tags associated with the project
-
-#             # Save form_pic instances, associate them with the project
-#             for img in request.FILES.getlist('pic'):
-#                 if img.content_type in ['image/png', 'image/jpeg', 'image/jpg']:
-#                     project.save()
-#                     form.save_m2m()
-#                     picture_instance = Picture(image=img, project=project)
-#                     picture_instance.save()
-#                 else:
-#                     return JsonResponse({'error': 'Invalid file type only png and jpeg and jpg are allowed', 'x': 0})
-
-#             # Return JSON response with success message and project ID
-            
-#             return JsonResponse({'success': 'Project created successfully', 'project_id': project.id, 'x': 1})
-#     else:
-#         form = ProjectModelForm()
-        
-#     return render(request, 'project/forms/createmodel.html', {'form': form, 'x': 0})
-
-
-
-
-
-@login_required
-def show_category(request, id):
-    category = Category.get_category_by_id(id)
-    return render(request,'category/crud/show.html', context={"category": category})
 
 @login_required
 def project_show(request,id):
@@ -101,20 +68,6 @@ def project_show(request,id):
                         'form': form, 'form2': form2, "reply_form":reply_form, "reviews_reply":reviews_reply
                         , 'progress_percentage': progress_percentage})
 
-# def project_show(request,id):
-#     project = get_object_or_404(Project, pk=id)
-#     comments = Comment.objects.filter(project=project)
-#     for comment in comments:
-#         comment.stars = range(int(comment.rate))
-#         comment.empty_stars = range(5 - int(comment.rate))
-#
-#     reports = project.reports.all()
-#     form = CommentForm()
-#     form2 = ReportForm()
-#
-#     return render(request, "project/crud/show.html",
-#                   context={"project":project, 'comments': comments, 'reports': reports, 'form': form, 'form2': form2})
-#
 
 @login_required
 def cancel_project(request, id):
@@ -142,12 +95,14 @@ def cancel_project(request, id):
         # For example, you can return a 403 Forbidden response or redirect to a different page
         return HttpResponseForbidden("You are not authorized to perform this action.") 
 
+
 def list_project(request):
     projects = Project.objects.all()
     return render(request, 'project/crud/list.html', {'projects': projects})
 
 
 @login_required
+@user_passes_test(check_user)
 def donate_project(request, id):
     try:
         project = Project.objects.get(pk=id)
@@ -157,8 +112,7 @@ def donate_project(request, id):
     
     if project.is_run_project() == False:
         return HttpResponseForbidden("the project is not run")
-    
-    
+
     if request.method == 'POST':
         form = DonationModelForm(request.POST)
         if form.is_valid():
@@ -181,58 +135,66 @@ def donate_project(request, id):
 
 
 @login_required
+@user_passes_test(check_user)
 def edit_project(request, id):
     try:
         project = Project.objects.get(pk=id)
     except Project.DoesNotExist:
-
         return render(request, 'project/crud/badrequest.html')
-    form=ProjectModelForm(instance=project)
-    if request.method == "POST":
-        form=ProjectModelForm(request.POST, request.FILES, instance=project)
-        if form.is_valid():
-            project=form.save()
-            return redirect(project.show_url)
+    if request.user == project.project_owner:
+        form = ProjectModelForm(instance=project)
+        if request.method == "POST":
+            form = ProjectModelForm(request.POST, request.FILES, instance=project)
+            if form.is_valid():
+                project = form.save()
+                return redirect(project.show_url)
 
-    return render (request,'project/crud/edit.html', context={"form":form})
+        return render(request, 'project/crud/edit.html', context={"form": form})
+    else:
+        return render(request, 'project/crud/badrequest.html')
 
 
 @login_required
+@user_passes_test(check_user)
 def add_images(request, id):
     try:
         project = Project.objects.get(pk=id)
     except Project.DoesNotExist:
 
         return render(request, 'project/crud/badrequest.html')
-    if request.method == 'POST':
-        form = PictureModelForm(request.POST, request.FILES)
-        if form.is_valid():
-            # Get the list of image files from the request
-            image_files = request.FILES.getlist('image')
+    if request.user == project.project_owner:
+        if request.method == 'POST':
+            form = PictureModelForm(request.POST, request.FILES)
+            if form.is_valid():
+                # Get the list of image files from the request
+                image_files = request.FILES.getlist('image')
 
-            # Iterate over each image file
-            for image_file in image_files:
-                # Create a new Picture instance
-                picture = Picture(image=image_file, project=project)
-                picture.save()
+                # Iterate over each image file
+                for image_file in image_files:
+                    # Create a new Picture instance
+                    picture = Picture(image=image_file, project=project)
+                    picture.save()
 
-            # Redirect or render a success page
-            return redirect(project.show_url)
+                # Redirect or render a success page
+                return redirect(project.show_url)
+        else:
+            form = PictureModelForm()
+        return render(request, 'project/forms/add_image.html', {'form': form})
     else:
-        form = PictureModelForm()
-    return render(request, 'project/forms/add_image.html', {'form': form})
+        return render(request, 'project/crud/badrequest.html')
 
-
+@login_required
+@user_passes_test(check_user)
 def clear_images(request, id):
     try:
         project = Project.objects.get(pk=id)
     except Project.DoesNotExist:
 
         return render(request, 'project/crud/badrequest.html')
-    for picture in project.images.all():
+    if request.user == project.project_owner:
+        for picture in project.images.all():
             picture.image.delete()  # This will delete the image file from the storage
             picture.delete()  # This will delete the Picture instance from the database
-    return redirect(project.show_url)
-     
-
-        
+        return redirect(project.show_url)
+    else:
+        return render(request, 'project/crud/badrequest.html')
