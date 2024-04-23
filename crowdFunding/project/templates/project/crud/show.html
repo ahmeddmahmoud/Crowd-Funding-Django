@@ -298,8 +298,11 @@
       });
     });
 
+var deleteButtonClicked = false;
+
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('delete-project-btn').addEventListener('click', function(event) {
+        deleteButtonClicked = true;
         // Prevent the default action by default
         event.preventDefault();
 
@@ -315,7 +318,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     errorMessageElement.style.display = 'block'; // Show the error message
                 } else {
                     // If no error message, allow the default action (redirecting to list.html)
-                    window.location.href = ''http://127.0.0.1:8000/project/'';
+                    {% comment %} window.location.href = ''http://127.0.0.1:8000/project/''; {% endcomment %}
+                    window.location.href = 'http://127.0.0.1:8000/project/';
+
                 }
             })
             .catch(error => console.error('Error:', error));
@@ -323,6 +328,20 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+
+
+document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('add-comment-btn').addEventListener('click', function() {
+                if (!deleteButtonClicked){
+                    var commentForm = document.querySelector('.add-comment-form');
+                if (commentForm.style.display === 'none' || commentForm.style.display === '') {
+                    commentForm.style.display = 'block';
+                } else {
+                    commentForm.style.display = 'none';
+                }
+                }
+            });
+        });
 
     
 
