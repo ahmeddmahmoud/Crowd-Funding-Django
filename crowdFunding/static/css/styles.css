@@ -46,11 +46,7 @@
   object-fit: cover;
   transition: transform 0.3s ease;
 }
-.project-image-container img {
-  width: 100%; /* Adjust this value as needed */
-  height: 200px; /* Adjust this value as needed */
-  object-fit: cover;
-}
+
 
 :root {
   --red-light: #ff5c7c;
@@ -139,6 +135,10 @@ overflow: hidden;
 
 .project-img {
 transition: transform 0.3s ease;
+}
+.card-img{
+ width: 100%;
+ height: 100%;
 }
 
 .project-details {
