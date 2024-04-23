@@ -77,10 +77,11 @@
                     {% comment %} <li class="nav-item">
                         <a class="nav-link tab text-white" href="{% url 'project.list' %}">All Projects</a>
                     </li> {% endcomment %}
-                    <li class="nav-item">
+
+                {% endif %}
+                <li class="nav-item">
                         <a class="nav-link tab text-white" href="{% url 'categories.projects' %}">Categories</a>
                     </li>
-                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link tab text-white" href="{% url 'project.list' %}">All Projects</a>
                 </li>
