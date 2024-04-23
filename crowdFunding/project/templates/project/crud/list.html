@@ -6,6 +6,9 @@
 {% endblock %}
 
 {% block content %}
+<div class="text-center my-3 "> 
+    <a class=" btn btn-primary" href="{% url 'project.createmodel' %}">Start your project!</a>
+</div>
 <section class="dark">
     <div class="container py-4">
         {% for project in projects %}
