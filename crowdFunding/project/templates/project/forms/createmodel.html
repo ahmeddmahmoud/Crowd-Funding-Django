@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'project/css/style1.css' %}">
+{% endblock %}
+
+
 {% block content %}
 <h2 class="text-center text-success fw-bold fst-italic fs-1 my-3 text-capitalize">Create your own project</h2>
 <div class="container">
