@@ -20,6 +20,8 @@ from project.models import Project,Donation
 from django.db.models import Sum
 from django.utils import timezone
 from django.core.exceptions import PermissionDenied
+from django.views.decorators.http import require_POST
+
 
 
 def check_superuser(user):
@@ -126,7 +128,7 @@ def user_details(request, id):
         return render(request, 'users/unauthorized.html')
     return render(request, 'users/user_details.html', {'user': user})
 
-
+@require_POST
 @login_required
 @user_passes_test(check_user)
 def user_delete(request, id):
