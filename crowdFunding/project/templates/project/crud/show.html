@@ -264,11 +264,10 @@
 
 {% comment %} project with similar tags {% endcomment %}
 <div class="container">
+            <h4 class="text-center text-success fw-bold fst-italic fs-1 my-3 text-capitalize">See Also :: Projects with Same Tags</h4>
+
     <div class="row justify-content-center">
         {% for tag in project.tag.all %}
-        {% if tag %}
-            <h4 class="text-center text-success fw-bold fst-italic fs-1 my-3 text-capitalize">See Also :: Projects with Same Tags</h4>
-        {% endif %}
             <div class="col-md-4">
                 <div class="card text-white mt-3" style="background: linear-gradient(135deg, #333333 , #007bff);">
                     <div class="card-body">
@@ -277,8 +276,11 @@
                             {% for related_project in tag.projects.all %}
                                 {% if forloop.counter <= 4 %}
                                     <li>
-                                        <a href="{{ related_project.show_url }}" class="text-white">Project: {{ related_project.title }}</a>
-                                    </li>
+                            <div class="rounded-2" style="background-color: black; padding: 5px;">
+                                <a href="{{ related_project.show_url }}" class="text-white text-decoration-none">Project: {{ related_project.title }}</a>
+                            </div>
+                            </li>
+
                                 {% endif %}
                             {% endfor %}
                         </ul>

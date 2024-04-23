@@ -4,7 +4,7 @@ from users.models import User
 
 
 class Comment(models.Model):
-    text=models.TextField(blank=True, null=True)
+    text=models.TextField(null=True)
     rate= models.IntegerField(default=0)
     project = models.ForeignKey(Project,on_delete=models.CASCADE,related_name='comments')
     user =models.ForeignKey(User,on_delete=models.CASCADE,related_name='comments')
@@ -31,6 +31,6 @@ class Report(models.Model):
 class Reply(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE, related_name='replies')
     comment = models.ForeignKey(Comment,on_delete=models.CASCADE, related_name='replies')
-    product = models.ForeignKey(Project,on_delete=models.CASCADE, related_name='replies', null=True, blank=True)
+    product = models.ForeignKey(Project,on_delete=models.CASCADE, related_name='replies', null=True)
     content = models.CharField(max_length=500, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
