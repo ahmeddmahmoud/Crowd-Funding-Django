@@ -25,9 +25,11 @@
   </div> 
   <div class="carousel-inner">
     {% for image in images %}
-      <div class="carousel-item {% if forloop.first %}active{% endif %}">
+      <div class="carousel-item {% if forloop.first %}active{% endif %}" style="width: 100%; height: 75vh;">
         {% if image.image %}
-          <img src="{{ image.image.url }}" class="d-block w-100 h-75" alt="Image {{ forloop.counter }}">
+         <img src="{{ image.image.url }}" class="d-block w-100 h-100" alt="Image {{ forloop.counter }}">
+          {% comment %} <img src="{{ image.image.url }}" class="d-block" style="width: 100%; height: 100%;" alt="Image {{ forloop.counter }}"> {% endcomment %}
+
         {% else %}
           <!-- Provide the URL of the alternative image -->
           <img src="/media/project/images/3.jpg" class="d-block w-100" alt="Image {{ forloop.counter }}">
@@ -67,8 +69,9 @@
                 <p><span class="label">End Date:</span> {{ project.end_date }}</p>
                 <p><span class="label">Created At:</span> {{ project.created_at }}</p>
                 <p><span class="label">Current Donation:</span> {{ project.current_donation }}</p>
+                <p>Tags: </p>
                 {% for tag in project.tag.all %}
-                <p><span class="label">Tags</span> {{  tag.name  }}</p>
+                <p><span class="label"></span> {{  tag.name  }}</p>
                 
                 {% endfor %}
 

@@ -33,7 +33,7 @@ def create_project_model_form(request):
             project = form.save(commit=False)
             project.project_owner = request.user
             project.save()
-            
+            form.save_m2m()
             return redirect(project.show_url)
     else:
         form = ProjectModelForm()
