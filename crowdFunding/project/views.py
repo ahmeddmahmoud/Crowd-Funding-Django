@@ -91,9 +91,14 @@ def project_show(request,id):
     form = CommentForm()
     form2 = ReportForm()
     reply_form = ReplyForm()
+    if project.total_target != 0:
+        progress_percentage = (project.current_donation / project.total_target) * 100
+    else:
+        progress_percentage = 0
     return render(request, "project/crud/show.html",
                 context={"project": project,'images': images, 'comments': comments, 'reports': reports,
-                        'form': form, 'form2': form2, "reply_form":reply_form, "reviews_reply":reviews_reply})
+                        'form': form, 'form2': form2, "reply_form":reply_form, "reviews_reply":reviews_reply
+                        , 'progress_percentage': progress_percentage})
 
 # def project_show(request,id):
 #     project = get_object_or_404(Project, pk=id)

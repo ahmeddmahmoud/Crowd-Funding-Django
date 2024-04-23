@@ -1,6 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import User
+from django.core.validators import URLValidator
+from datetime import date
+
 
 
 class UserRegistrationForm(UserCreationForm):
@@ -74,9 +77,72 @@ class UserRegistrationForm(UserCreationForm):
 
 
 class UserEditForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(UserEditForm, self).__init__(*args, **kwargs)
+        if self.instance and self.instance.pk:
+            self.fields['email'].disabled = True
+
+    def clean_first_name(self):
+        first_name = self.cleaned_data['first_name']
+        if not first_name:
+            raise forms.ValidationError('First name is required')
+        if not first_name.isalpha():
+            raise forms.ValidationError('First name must be alphabetic')
+        if len(first_name) < 3:
+            raise forms.ValidationError('First name must be at least 3 characters long')
+        return first_name
+
+    def clean_last_name(self):
+        last_name = self.cleaned_data['last_name']
+        if not last_name:
+            raise forms.ValidationError('Last name is required')
+        if not last_name.isalpha():
+            raise forms.ValidationError('Last name must be alphabetic')
+        if len(last_name) < 3:
+            raise forms.ValidationError('Last name must be at least 3 characters long')
+        return last_name
+
+    def clean_phone(self):
+        phone = self.cleaned_data['phone']
+        if not phone:
+            raise forms.ValidationError('Mobile phone is required')
+        if not phone.startswith('01'):
+            raise forms.ValidationError('Mobile phone must start with 01')
+        if not phone.isdigit():
+            raise forms.ValidationError('Mobile phone must be digits')
+        return phone
+    
+    def clean_birth_date(self):
+        birth_date = self.cleaned_data['birth_date']
+        if birth_date and birth_date > date.today():
+            raise forms.ValidationError('Birth date cannot be in the future.')
+        return birth_date
+    
+    def clean_facebook(self):
+        facebook = self.cleaned_data['facebook']
+        if facebook:
+            validator = URLValidator()
+            validator(facebook)
+            if "facebook.com" not in facebook:
+                raise forms.ValidationError('Please enter a valid Facebook URL.')
+        return facebook
+    
+    def clean_country(self):
+        country = self.cleaned_data['country']
+        if not country.isalpha():
+            raise forms.ValidationError('country name must be alphabetic')
+        if len(country) < 3:
+            raise forms.ValidationError('country name must be at least 3 characters long')
+        return country
+    
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email', 'phone', 'birth_date', 'country', 'facebook', 'photo']
+        widgets = {
+            'facebook': forms.URLInput(attrs={'class': 'form-control'}),
+        }
+    
+
 
 
 
