@@ -9,7 +9,7 @@
 {% block content %}
 
     <div class="container">
-        <h1>Categories and Projects</h1>
+        <h1 class="text-center text-success fw-bold fst-italic fs-1 my-3 text-capitalize">Categories and Projects</h1>
         <div class="accordion" id="categoryAccordion">
             {% for category in categories %}
             <div class="accordion-item">
@@ -24,14 +24,14 @@
                             {% for project in category.project_set.all %}
                             <li><a href="{% url 'project.show' project.id %}">{{ project.title }}</a></li>
                             {% empty %}
-                            <li>No projects in this category.</li>
+                            <li >No projects in this category.</li>
                             {% endfor %}
                         </ul>
                     </div>
                 </div>
             </div>
             {% empty %}
-            <p>No categories found.</p>
+            <p class="text-center text-danger fw-bold fs-3 text-capitalize mb-3">No categories found.</p>
             {% endfor %}
         </div>
     </div>

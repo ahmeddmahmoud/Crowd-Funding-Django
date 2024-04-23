@@ -1,12 +1,21 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block css %}
+<link rel="stylesheet" href="{% static 'project/css/style.css' %}">
+<style>
+    
+</style>
+{% endblock %}
+
 {% block content %}
 
-
 <section class="dark">
-    <div class="container py-4">
-        <div class="row mb-3" style="position: absolute; top: 0; left: 0; width: 100%;">
+    <div class="container ">
+        <div class="text-end my-3 "> 
+            <a class=" btn btn-primary" href="{% url 'project.createmodel' %}">Start your project!</a>
+        </div>
+        <div class="row mb-3">
             <div class="col d-flex justify-content-center">
                 <div class="search-container">
                     <form action="{% url 'projects.search' %}" method="GET" class="d-flex">
@@ -19,8 +28,7 @@
                 </div>
             </div>
         </div>
-
-        {% if projects %} 
+    <div class="container py-4">
         {% for project in projects %}
         <article class="postcard dark blue">
             <div class="postcard__text">
@@ -49,9 +57,9 @@
                 <div class="alert alert-danger mt-2" role="alert">
                     This project is not runnable. Please choose another project to donate.
                 </div>
-            {% else %}
-                <a href="{{project.donate_url}}" class="btn btn-success">Donate</a>
-            {% endif %}
+                {% else %}
+                    <a href="{{project.donate_url}}" class="btn btn-success">Donate</a>
+                {% endif %}
             </div>
             <a class="postcard__img_link" href="{{ project.show_url }}">
                 {% if project.images.all %}
@@ -63,48 +71,7 @@
             </a>
         </article>
         {% endfor %}
-        {% else %}
-            <div class="text-center my-3 "> 
-            <a class="text-center text-success fw-bold fst-italic fs-1 my-3 text-capitalize">There is no Projects</a>
-            </div>
-        {% endif %}
     </div>
 </section>
 {% endblock %}
 
-
-{% block css %}
-<link rel="stylesheet" href="{% static 'project/css/style.css' %}">
-<style>
-    .search-container{
-        margin:70px;
-    }
-    .dark{
-        margin-top:25px;
-    }
-    .search-input {
-    border: 2px solid #d2d2d2;
-    border-radius: 30px;
-    font-size: 16px;
-    text-align: left;
-    width:300px;
-  }
-  
-  .search-button {
-    border: none;
-    border-radius: 30px;
-    padding: 6px 30px;
-    background-color: #009fe3;
-    color: #fff;
-  }
-  
-  .search-button:hover {
-    background-color: #0085c4;
-  }
-  
-  .search-button i {
-    font-size: 1.2rem;
-  }
-
-</style>
-{% endblock %}

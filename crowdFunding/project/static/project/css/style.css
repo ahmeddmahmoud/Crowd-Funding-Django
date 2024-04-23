@@ -1,7 +1,3 @@
-
-
-@import url("https://fonts.googleapis.com/css2?family=Baloo+2&display=swap");
-
 /* Cards */
 .postcard {
     display: flex;
@@ -94,7 +90,7 @@
 .tag__item a {
     color: #ffffff; 
     text-decoration: none; 
-    {% comment %} padding:10px; {% endcomment %}
+    /* {% comment %} padding:10px; {% endcomment %} */
 }
 
 .tag__item a:hover {
@@ -132,3 +128,5 @@
   .search-button i {
     font-size: 1.2rem;
   }
+
+ 
