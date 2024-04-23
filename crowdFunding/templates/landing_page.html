@@ -103,12 +103,16 @@
                                 <div class="project-image-container">
                                     <img src="{{ project.image_urls.0 }}" class="card-img-top img-fluid project-img"
                                          alt="{{ project.title }}">
+                                         {% else %}
+                                         <!-- Placeholder image if project has no images -->
+                                         <img class="card-img-top img-fluid project-img" src="/media/project/images/default.jpg" alt="{{ project.title }}">
+                                     {% endif %}         
                                     <div class="project-details">
                                         <h6>{{ project.title }}</h6>
                                         <p>{{ project.details }}</p>
                                     </div>
                                 </div>
-                                {% endif %}
+                                {% comment %} {% endif %} {% endcomment %}
 
                                 <main role="main" style="margin-left: 3.5em;">
                                     {% for tag in project.tag.all %}
