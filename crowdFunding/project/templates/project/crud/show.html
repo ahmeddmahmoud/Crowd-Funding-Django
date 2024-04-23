@@ -102,7 +102,8 @@
 <div class="container my-2">
     <h3>Delete and Edit project for project Creator only!</h3>
     {% if request.user == project.project_owner %}
-    <a href="{{ project.delete_url }}" id="delete-project-btn" class="btn btn-danger">Delete Project</a>
+    <a href="{{ project.delete_url }}" id="delete-project-btn" class="btn btn-danger"
+    data-bs-toggle="modal" data-bs-target="#exampleModal{{project.id}}">Delete Project</a>
     <a href="{{ project.edit_url }}" class="btn btn-primary">Edit</a>
     <a href="{{ project.add_image_url }}" class="btn btn-success">Add Images</a>
 
@@ -114,6 +115,21 @@
 </div>
 {% endif %}
 
+
+<div class="modal fade" id="exampleModal{{project.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Are you sure to delete?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="{{project.delete_url}}" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 

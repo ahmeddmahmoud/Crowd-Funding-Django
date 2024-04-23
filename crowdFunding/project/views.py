@@ -233,3 +233,13 @@ def edit_images(request, id):
     else:
         form = PictureModelForm()
     return render(request, 'project/forms/edit_image.html', {'form': form})
+
+def clear_images(request, id):
+    project = get_object_or_404(Project, pk=id)
+    if request.method == 'POST':
+        project.pictures.all().delete()
+
+        return redirect(project.show_url)
+    else:
+        return redirect(project.show_url)
+        
