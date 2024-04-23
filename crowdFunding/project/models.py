@@ -68,7 +68,7 @@ class Project(models.Model):
     project_owner=models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     is_featured = models.BooleanField(default=False)
     featured_at = models.DateTimeField(default=None, null=True, blank=True)
-    category= models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
+    category= models.ForeignKey(Category, on_delete=models.CASCADE)
     tag = models.ManyToManyField(Tag, blank=True, related_name="projects")
     is_run = models.BooleanField(default=True)
 

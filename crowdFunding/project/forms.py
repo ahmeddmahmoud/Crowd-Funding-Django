@@ -24,6 +24,12 @@ class ProjectModelForm(forms.ModelForm):
         if len(title) < 3:
             raise forms.ValidationError('Title length must be greater then 3 characters')
         return title
+    
+    def clean_total_target(self):
+        total_target = self.cleaned_data['total_target']
+        if total_target <= 5000:
+            raise forms.ValidationError("Total target must be grater than 5000.")
+        return total_target
 
 
 class CategoryModelForm(forms.ModelForm):

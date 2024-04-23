@@ -184,3 +184,24 @@ def add_images(request, id):
     else:
         form = PictureModelForm()
     return render(request, 'project/forms/add_image.html', {'form': form})
+
+
+def edit_images(request, id):
+    project = get_object_or_404(Project, pk=id)
+    if request.method == 'POST':
+        form = PictureModelForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Get the list of image files from the request
+            image_files = request.FILES.getlist('image')
+
+            # Iterate over each image file
+            for image_file in image_files:
+                # Create a new Picture instance
+                picture = Picture(image=image_file, project=project)
+                picture.save()
+
+            # Redirect or render a success page
+            return redirect(project.show_url)
+    else:
+        form = PictureModelForm()
+    return render(request, 'project/forms/edit_image.html', {'form': form})
