@@ -161,7 +161,11 @@ class UserEditForm(forms.ModelForm):
     #     if commit:
     #         user.save()
     #     return user
-    
+    # def clean_photo(self):
+    #     photo = self.cleaned_data['photo']
+    #     if not photo:
+    #         raise forms.ValidationError('Photo is required')
+    #     return photo
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email', 'phone', 'birth_date', 'country', 'facebook', 'photo']
@@ -251,10 +255,9 @@ class UserEditFormByAdmin(forms.ModelForm):
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
-        if password1 and password1 != password2:
+        if (password1 and password1 != password2) or (password2 and password2 != password1):
             raise forms.ValidationError("Passwords don't match")
         return password2
-
 
     def clean_photo(self):
         photo = self.cleaned_data['photo']
