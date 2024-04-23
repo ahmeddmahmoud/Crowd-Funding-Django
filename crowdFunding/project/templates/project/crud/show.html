@@ -25,9 +25,11 @@
   </div> 
   <div class="carousel-inner">
     {% for image in images %}
-      <div class="carousel-item {% if forloop.first %}active{% endif %}">
+      <div class="carousel-item {% if forloop.first %}active{% endif %}" style="width: 100%; height: 75vh;">
         {% if image.image %}
-          <img src="{{ image.image.url }}" class="d-block w-100 h-75" alt="Image {{ forloop.counter }}">
+         <img src="{{ image.image.url }}" class="d-block w-100 h-100" alt="Image {{ forloop.counter }}">
+          {% comment %} <img src="{{ image.image.url }}" class="d-block" style="width: 100%; height: 100%;" alt="Image {{ forloop.counter }}"> {% endcomment %}
+
         {% else %}
           <!-- Provide the URL of the alternative image -->
           <img src="/media/project/images/3.jpg" class="d-block w-100" alt="Image {{ forloop.counter }}">
@@ -58,19 +60,25 @@
     <div class="card">
       
         <div class="card-body">
-          
-            <h5 class="card-title">Title: {{ project.title }}</h5>
-            <div class="project-info">
-                <p><span class="label">Details:</span> {{ project.details }}</p>
-                <p><span class="label">Total Target:</span> {{ project.total_target }}</p>
-                <p><span class="label">Start Date:</span> {{ project.start_date }}</p>
-                <p><span class="label">End Date:</span> {{ project.end_date }}</p>
-                <p><span class="label">Created At:</span> {{ project.created_at }}</p>
-                <p><span class="label">Current Donation:</span> {{ project.current_donation }}</p>
-                {% for tag in project.tag.all %}
-                <p><span class="label">Tags</span> {{  tag.name  }}</p>
-                
-                {% endfor %}
+            <div class="card bg-dark text-white">
+        <h5 class="card-title">Title is {{ project.title }}</h5>
+    <div class="card-body">
+        <div class="project-info">
+            <p><span class="label">Details:</span> {{ project.details }}</p>
+            <p><span class="label">Total Target:</span> {{ project.total_target }}$</p>
+            <p><span class="label">Start Date:</span> {{ project.start_date }}</p>
+            <p><span class="label">End Date:</span> {{ project.end_date }}</p>
+            <p><span class="label">Created At:</span> {{ project.created_at }}</p>
+            <p><span class="label">Current Donation:</span> {{ project.current_donation }}$</p>
+            <p>Tags: </p>
+            {% for tag in project.tag.all %}
+            <p><span class="label"></span> {{  tag.name  }}</p>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+
+            
 
                 <!-- Include Font Awesome CSS -->
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
@@ -99,13 +107,13 @@
     </div>
 </div>
 
-<div class="container my-2">
-    <h3>Delete and Edit project for project Creator only!</h3>
+<div class="container my-2 d-flex justify-content-center align-items-center">
+    
     {% if request.user == project.project_owner %}
     <a href="{{ project.delete_url }}" id="delete-project-btn" class="btn btn-danger"
     data-bs-toggle="modal" data-bs-target="#exampleModal{{project.id}}">Delete Project</a>
-    <a href="{{ project.edit_url }}" class="btn btn-primary">Edit</a>
-    <a href="{{ project.add_image_url }}" class="btn btn-success">Add Images</a>
+    <a href="{{ project.edit_url }}" class="btn btn-primary mx-1">Edit Project</a>
+    <a href="{{ project.add_image_url }}" class="btn btn-success mx-1">Add Images</a>
     <a href="{{ project.clear_url }}" class="btn btn-danger">Clear All Images</a>
 
 
@@ -114,8 +122,10 @@
         {{ request.GET.error_message }}
     </div>
     {% endif %}
-</div>
+{% else %}
+<h3>Actions For Project Creator Only!</h3>
 {% endif %}
+</div>
 
 
 <div class="modal fade" id="exampleModal{{project.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -134,6 +144,13 @@
     </div>
 
 
+    {% if messages %}
+    <div class="messages alert alert-success text-center list-unstyled w-25 m-auto">
+        {% for message in messages %}
+            <li class="nav-item ">{{ message }}</li>
+        {% endfor %}
+    </div>
+    {% endif %}
 
 <!-- jQuery (Optional) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -181,13 +198,13 @@
                 <!-- Reply form -->
                 <form method="post" action="{% url 'projects.reply' project.id comment.id %}">
                     {% csrf_token %}
-                    {% if messages %}
+                    {% comment %} {% if messages %}
             <ul class="messages alert alert-success text-center list-unstyled">
                 {% for message in messages %}
                     <li class="nav-item ">{{ message }}</li>
                 {% endfor %}
             </ul>
-                  {% endif %}
+                  {% endif %} {% endcomment %}
                     {{ reply_form.as_p }}
                     <button type="submit">Reply</button>
                 </form>

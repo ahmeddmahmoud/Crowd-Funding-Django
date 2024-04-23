@@ -30,6 +30,12 @@ class ProjectModelForm(forms.ModelForm):
         if total_target <= 5000:
             raise forms.ValidationError("Total target must be grater than 5000.")
         return total_target
+    
+    def clean_start_date(self):
+        start_date = self.cleaned_data['start_date']
+        if start_date < datetime.now().date():
+            raise forms.ValidationError('Start date must be greater than today')
+        return start_date
 
 
 class CategoryModelForm(forms.ModelForm):

@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'project.apps.ProjectConfig',
     'users.apps.UsersConfig',
     'commentary.apps.CommentaryConfig',
-    'homepage.apps.HomepageConfig',
     'star_ratings',
 ]
 AUTH_USER_MODEL = 'users.User'

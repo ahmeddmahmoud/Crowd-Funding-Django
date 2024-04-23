@@ -25,31 +25,12 @@ from django.core.exceptions import PermissionDenied
 
 
 
-# @login_required
-def index(request):
-    projects=Project.objects.all()
-    latest_books = projects.order_by('-created_at')[:5]
-    latest_featured_projects = Project.objects.filter(is_featured=True).order_by('-featured_at')[:5]
-    for project in latest_books:
-        project.progress_donation=(project.current_donation / project.total_target) * 100
-
-    sorted_products = sorted(projects, key=lambda p: p.rate, reverse=True)
-
-    # Get the top five products
-    top_five_products = sorted_products[:5]
-    print("Top Five Product Rates:")
-    for product in top_five_products:
-        print(f"Product: {product.title}, Rate: {product.rate}")
-    return render(request , 'users/index.html' ,
-                  context={"projects" : projects,"latest_books":latest_books,
-                           "top_five_products": top_five_products, "latest_featured_projects":latest_featured_projects
-                           })
 
 
 def login_form(request):
     if request.user.is_authenticated:
         messages.error(request, "You are already logged in.")
-        return redirect('index')
+        return redirect('home_page')
     form = AuthenticationForm()
     if request.method == 'POST':
         form = AuthenticationForm(request, request.POST)
@@ -63,7 +44,7 @@ def login_form(request):
                 if user.is_superuser:
                     return redirect('admin.dashboard')
                 else:
-                    url = reverse('index')
+                    url = reverse('home_page')
                     return redirect(url)
 
     return render(request, 'users/login.html', {'form': form})
@@ -78,7 +59,7 @@ def activate(request, uidb64, token):
     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
         # Handle decoding errors or user not found
         messages.error(request, "Invalid activation link.")
-        return redirect('index')
+        return redirect('home_page')
 
     if account_activation_token.check_token(user, token):
         # Activate the user account
@@ -89,7 +70,7 @@ def activate(request, uidb64, token):
     else:
         # Invalid token
         messages.error(request, "Invalid activation link.")
-        return redirect('index')
+        return redirect('home_page')
 
 
 def activate_email(request, user, to_email):
@@ -120,7 +101,7 @@ def register(request):
         if form.is_valid():
             user=form.save()
             activate_email(request, user, form.cleaned_data.get('email'))
-            login_url = reverse("index")
+            login_url = reverse("home_page")
             return redirect(login_url)
     return render(request, 'users/register.html', {'form': form})
 
@@ -140,7 +121,7 @@ def user_details(request, id):
 def user_delete(request, id):
     if not request.user.id == id:
         messages.error(request, "Unauthorized attempt to delete user.")
-        return redirect('index')
+        return redirect('home_page')
     user = get_object_or_404(User, pk=id)
     user.delete()
     logout(request)  

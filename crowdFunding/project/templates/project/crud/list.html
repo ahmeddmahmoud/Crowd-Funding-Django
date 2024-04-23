@@ -42,8 +42,9 @@
                 <div class="postcard__preview-txt">Current Donation: {{ project.current_donation }}</div>
                 <ul class="postcard__tagbox">
                     {% if project.category %}
-                    {% comment %} {{project.category}} {% endcomment %}
-                    <li class="tag__item"><a href="{{ project.category }}">Category : {{ project.category }}</a></li>
+                    {% comment %} <li class="tag__item"><a href="{{ project.category }}">Category : {{ project.category }}</a></li> {% endcomment %}
+                    <li class="tag__item"><span >Category : {{ project.category }}</span></li>
+
                     {% endif %}
                     {% comment %} <li class="tag__item"><a href="{{ project.duration }}">{{ project.duration }}</a></li> {% endcomment %}
                     
