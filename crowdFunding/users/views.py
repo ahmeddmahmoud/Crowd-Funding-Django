@@ -28,15 +28,12 @@ def check_superuser(user):
     else:
         raise PermissionDenied("You do not have permission to access this page.")
 
+
 def check_user(user):
     if not user.is_superuser:
         return True
     else:
         raise PermissionDenied("You do not have permission to access this page.")
-
-
-
-
 
 
 def login_form(request):
@@ -130,7 +127,8 @@ def user_details(request, id):
     return render(request, 'users/user_details.html', {'user': user})
 
 
-@login_required 
+@login_required
+@user_passes_test(check_user)
 def user_delete(request, id):
     if not request.user.id == id:
         messages.error(request, "Unauthorized attempt to delete user.")
@@ -143,6 +141,7 @@ def user_delete(request, id):
 
 
 @login_required
+@user_passes_test(check_user)
 def user_edit(request, id):    
     user_exists = User.objects.filter(id=id).exists()
     if not user_exists:
@@ -162,11 +161,15 @@ def user_edit(request, id):
     return render(request, 'users/user_edit.html', {'form': form})
 
 
+@login_required
+@user_passes_test(check_superuser)
 def featured_projects(request):
     projects = Project.objects.all()
     return render(request, 'admin/featured_projects.html', {'projects': projects})
 
 
+@login_required
+@user_passes_test(check_superuser)
 def add_to_featured(request, id):
     project = get_object_or_404(Project, pk=id)
 
@@ -185,7 +188,7 @@ def add_to_featured(request, id):
 def admin_dashboard(request):
     return render(request, 'admin/admin_dashboard.html')
 
-
+@login_required
 @user_passes_test(check_superuser)
 def add_category(request):
     form = CategoryModelForm()
@@ -198,13 +201,13 @@ def add_category(request):
 
     return render(request, 'admin/add_category.html', {'form': form})
 
-
+@login_required
 @user_passes_test(check_superuser)
 def category_index(request):
     categories=Category.objects.all()
     return render(request,'admin/category_index.html', context={"categories":categories})
 
-
+@login_required
 @user_passes_test(check_superuser)
 def edit_category(request, id):
     category = Category.get_category_by_id(id)
@@ -217,19 +220,21 @@ def edit_category(request, id):
 
     return render(request,'admin/edit_category.html', context={"form": form})
 
-
+@login_required
+@user_passes_test(check_superuser)
 def delete_category(request, id):
     category = get_object_or_404(Category, pk=id)
     category.delete()
     return redirect("category.index")
 
-
+@login_required
 @user_passes_test(check_superuser)
 def tag_index(request):
     tags=Tag.objects.all()
     return render(request,'admin/tag_index.html', context={"tags":tags})
 
 
+@login_required
 @user_passes_test(check_superuser)
 def add_tag(request):
     form = TagModelForm()
@@ -241,6 +246,7 @@ def add_tag(request):
     return render(request, 'admin/add_tag.html',context={'form': form})
 
 
+@login_required
 @user_passes_test(check_superuser)
 def edit_tag(request, id):
     tag = Tag.get_tag_by_id(id)
@@ -254,6 +260,7 @@ def edit_tag(request, id):
     return render(request,'admin/edit_tag.html', context={"form": form})
 
 
+@login_required
 @user_passes_test(check_superuser)
 def delete_tag(request, id):
     tag = get_object_or_404(Tag, pk=id)
@@ -261,18 +268,21 @@ def delete_tag(request, id):
     return redirect("tag.index")
 
 
+@login_required
 @user_passes_test(check_superuser)
 def user_index(request):
     users = User.objects.all()
     return render(request, 'admin/user_index.html', context={"users": users})
 
-
+@login_required
+@user_passes_test(check_superuser)
 def delete_user_by_admin(request, id):
     user = get_object_or_404(User, pk=id)
     user.delete()
     return redirect("user.index")
 
 
+@login_required
 @user_passes_test(check_superuser)
 def add_user_by_admin(request):
     form = UserAddFormByAdmin()
@@ -286,6 +296,7 @@ def add_user_by_admin(request):
     return render(request, 'admin/add_user_by_admin.html', {'form': form})
 
 
+@login_required
 @user_passes_test(check_superuser)
 def edit_user_by_admin(request, id):
     user = get_object_or_404(User, id=id)
@@ -340,7 +351,9 @@ def user_donations(request,id) :
         'project_donations': project_donations
     })
 
+
 @login_required
+@user_passes_test(check_user)
 def user_projects(request, id):
 
     user_exists = User.objects.filter(id=id).exists()
@@ -359,7 +372,7 @@ def user_projects(request, id):
         'projects': projects,
     })
 
-@login_required
+
 def categories_project(request):
     categories = Category.objects.all().prefetch_related('project_set')
     return render(request, 'users/categories_projects.html', {
