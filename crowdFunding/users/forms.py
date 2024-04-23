@@ -53,8 +53,6 @@ class UserRegistrationForm(UserCreationForm):
         photo = self.cleaned_data['photo']
         if not photo:
             raise forms.ValidationError('Photo is required')
-        if not (photo.content_type.endswith('png') or photo.content_type.endswith('jpg') or photo.content_type.endswith('jpeg')):
-            raise forms.ValidationError('Invalid file type. Only png, jpg and jpeg files are allowed')
         return photo
 
     def clean_password1(self):
@@ -79,6 +77,8 @@ class UserEditForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email', 'phone', 'birth_date', 'country', 'facebook', 'photo']
+
+
 
 
 class UserAddFormByAdmin(UserCreationForm):
@@ -165,3 +165,10 @@ class UserEditFormByAdmin(forms.ModelForm):
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError("Passwords don't match")
         return password2
+
+
+    def clean_photo(self):
+        photo = self.cleaned_data['photo']
+        if not photo:
+            raise forms.ValidationError('Photo is required')
+        return photo

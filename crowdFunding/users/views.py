@@ -3,7 +3,7 @@ from .forms import (UserRegistrationForm,UserEditForm,UserAddFormByAdmin,UserEdi
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout,get_user_model
 from users.models import User
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required,user_passes_test
 from django.contrib import messages
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
@@ -19,6 +19,8 @@ from project.forms import CategoryModelForm, TagModelForm
 from project.models import Project,Donation
 from django.db.models import Sum
 from django.utils import timezone
+from django.core.exceptions import PermissionDenied
+
 
 
 
@@ -90,6 +92,9 @@ def activate_email(request, user, to_email):
 
 
 def register(request):
+    if request.user.is_authenticated:
+        messages.error(request, "You are already logged in.")
+        return redirect('index')
     form = UserRegistrationForm()
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST, request.FILES)
@@ -161,10 +166,18 @@ def add_to_featured(request, id):
     return redirect('featured')
 
 
+def check_superuser(user):
+    if user.is_superuser:
+        return True
+    else:
+        raise PermissionDenied("You do not have permission to access this page.")
+
+@user_passes_test(check_superuser)
 def admin_dashboard(request):
     return render(request, 'admin/admin_dashboard.html')
 
 
+@user_passes_test(check_superuser)
 def add_category(request):
     form = CategoryModelForm()
 
@@ -176,12 +189,13 @@ def add_category(request):
 
     return render(request, 'admin/add_category.html', {'form': form})
 
-
+@user_passes_test(check_superuser)
 def category_index(request):
     categories=Category.objects.all()
     return render(request,'admin/category_index.html', context={"categories":categories})
 
 
+@user_passes_test(check_superuser)
 def edit_category(request, id):
     category = Category.get_category_by_id(id)
     form = CategoryModelForm(instance=category)
@@ -200,11 +214,12 @@ def delete_category(request, id):
     return redirect("category.index")
 
 
+@user_passes_test(check_superuser)
 def tag_index(request):
     tags=Tag.objects.all()
     return render(request,'admin/tag_index.html', context={"tags":tags})
 
-
+@user_passes_test(check_superuser)
 def add_tag(request):
     form = TagModelForm()
     if request.method == 'POST':
@@ -215,6 +230,7 @@ def add_tag(request):
     return render(request, 'admin/add_tag.html',context={'form': form})
 
 
+@user_passes_test(check_superuser)
 def edit_tag(request, id):
     tag = Tag.get_tag_by_id(id)
     form = TagModelForm(instance=tag)
@@ -227,12 +243,13 @@ def edit_tag(request, id):
     return render(request,'admin/edit_tag.html', context={"form": form})
 
 
+@user_passes_test(check_superuser)
 def delete_tag(request, id):
     tag = get_object_or_404(Tag, pk=id)
     tag.delete()
     return redirect("tag.index")
 
-
+@user_passes_test(check_superuser)
 def user_index(request):
     users = User.objects.all()
     return render(request, 'admin/user_index.html', context={"users": users})
@@ -243,7 +260,7 @@ def delete_user_by_admin(request, id):
     user.delete()
     return redirect("user.index")
 
-
+@user_passes_test(check_superuser)
 def add_user_by_admin(request):
     form = UserAddFormByAdmin()
     if request.method == 'POST':
@@ -255,7 +272,7 @@ def add_user_by_admin(request):
             return redirect("user.index")
     return render(request, 'admin/add_user_by_admin.html', {'form': form})
 
-
+@user_passes_test(check_superuser)
 def edit_user_by_admin(request, id):
     user = get_object_or_404(User, id=id)
     if request.method == 'POST':
