@@ -50,7 +50,7 @@
                 </ul>
                 <div>
                     {% for tag in project.tag.all %}
-                    <a href="/tag/project">#{{ tag.name }}</span></a>
+                    <span style="color: blue;">#{{ tag.name }}</span>
                     {% endfor %}
                 </div>
                 {% if not project.is_run_project %}
