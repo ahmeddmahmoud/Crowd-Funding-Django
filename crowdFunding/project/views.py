@@ -116,13 +116,16 @@ def cancel_project(request, id):
             project.delete()
             return redirect(project.list_url)
         else:
-            return JsonResponse({'error': 'The donation is greater than 25%'})
+            error_message = 'The donation is greater than 25%'
+            # return render(request, 'project/crud/show.html', {'error_message': error_message})
+            redirect_url = f"{project.show_url}?error_message={error_message}"
+            return redirect(redirect_url)
             
     else:
         # If the current user is not the owner, handle unauthorized access
         # For example, you can return a 403 Forbidden response or redirect to a different page
-        return HttpResponseForbidden("You are not authorized to perform this action.")
-@login_required    
+        return HttpResponseForbidden("You are not authorized to perform this action.") 
+
 def list_project(request):
     projects = Project.objects.all()
     return render(request, 'project/crud/list.html', {'projects': projects})

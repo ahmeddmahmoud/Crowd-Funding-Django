@@ -18,7 +18,7 @@ for (var i = 0; i < inputs.length; i++) {
 }
 select= document.querySelector('select')
 
-select.classList.add('form-control')
+select.classList.add('form-select', 'mb-3');
 
 divs = document.getElementsByClassName("form_element")
 for (var d =0; d < divs.length; d++){

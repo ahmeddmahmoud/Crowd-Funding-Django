@@ -4,12 +4,12 @@
 <h2 class="text-center  bg-body-secondary">Create your own project</h2>
 <div class="container">
     
-    <form method="post" enctype="multipart/form-data" id="project-form">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form}} {# Display ProjectModelForm fields #}
+        {{ form.as_p }} {# Display ProjectModelForm fields #}
             
         <div id="error-message" class="text-danger" style="display: none;"></div>
-        <button type="submit" id="submit-button" class="btn btn-success">Submit</button>
+        <button type="submit" id="submit-button" class="btn btn-success my-1">Submit</button>
     </form>
 </div>
 
@@ -17,8 +17,3 @@
 {% endblock %}
 
 
-
-</body>
-
-
-</html>

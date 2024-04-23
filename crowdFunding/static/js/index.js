@@ -11,31 +11,37 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
 
-    var deleteButtonClicked = false;
-    document.getElementById('delete-project-btn').addEventListener('click', function(event) {
-      deleteButtonClicked = true;
-      // Prevent the default action by default
-      event.preventDefault();
+//     var deleteButtonClicked = false;
+//     document.getElementById('delete-project-btn').addEventListener('click', function(event) {
+//       deleteButtonClicked = true;
+//       // Prevent the default action by default
+//       event.preventDefault();
 
-      // Fetch the data from the provided URL
-      fetch(this.href)
-          .then(response => response.json())
-          .then(data => {
-              // Check if there's an error message in the response
-              if (data.error) {
-                  // Update the error message placeholder with the received error message
-                  var errorMessageElement = document.getElementById('error-message');
-                  errorMessageElement.textContent = data.error;
-                  errorMessageElement.style.display = 'block'; // Show the error message
-              } else {
-                  // If no error message, allow the default action (redirecting to list.html)
-                //    window.location.href = ''http://127.0.0.1:8000/project/''; 
-                  window.location.href = 'http://127.0.0.1:8000/project/';
+//       // Fetch the data from the provided URL
+//       fetch(this.href)
+//           .then(response => response.json())
+//           .then(data => {
+//               // Check if there's an error message in the response
+//               if (data.error) {
+//                   // Update the error message placeholder with the received error message
+//                   var errorMessageElement = document.getElementById('error-message');
+//                   errorMessageElement.textContent = data.error;
+//                   errorMessageElement.style.display = 'block'; // Show the error message
+//               } else {
+//                   // If no error message, allow the default action (redirecting to list.html)
+//                 //    window.location.href = ''http://127.0.0.1:8000/project/''; 
+//                   window.location.replace('http://127.0.0.1:8000/project/');
 
-              }
-          })
-          .catch(error => console.error('Error:', error));
-  });
+//               }
+//           })
+//           .catch(error => console.error('Error:', error));
+//   });
+// Show the error message if it contains any text
+// var errorMessageElement = document.getElementById('error-message');
+// if (errorMessageElement.textContent.trim().length > 0) {
+//     errorMessageElement.style.display = 'block';
+// }
+
 
 
   document.getElementById('add-comment-btn').addEventListener('click', function() {
@@ -48,7 +54,5 @@ document.addEventListener('DOMContentLoaded', function () {
       }
       }
   });
-
-
 
   });
