@@ -11,7 +11,9 @@ Admin Dashboard
 <div class="container">
   <div class="row">
     <div class="col-md-4 mb-3">
-      <img src="{{ user.photo.url }}" alt="user photo" class="img-fluid rounded-5">
+      {% if user.photo %}
+        <img src="{{ user.photo.url }}" alt="user photo" class="img-fluid rounded-5">
+      {% endif %}
       <p class="text-center fs-3">
         <strong class="fst-italic">{{ user.first_name }} {{user.last_name}}</strong>
       </p>

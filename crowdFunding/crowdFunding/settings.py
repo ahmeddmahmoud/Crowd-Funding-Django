@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'project.apps.ProjectConfig',
     'users.apps.UsersConfig',
     'commentary.apps.CommentaryConfig',
+    'django_cleanup.apps.CleanupConfig',
     'star_ratings',
 ]
 AUTH_USER_MODEL = 'users.User'

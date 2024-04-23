@@ -22,6 +22,18 @@ from django.utils import timezone
 from django.core.exceptions import PermissionDenied
 
 
+def check_superuser(user):
+    if user.is_superuser:
+        return True
+    else:
+        raise PermissionDenied("You do not have permission to access this page.")
+
+def check_user(user):
+    if not user.is_superuser:
+        return True
+    else:
+        raise PermissionDenied("You do not have permission to access this page.")
+
 
 
 
@@ -107,6 +119,7 @@ def register(request):
 
 
 @login_required
+@user_passes_test(check_user)
 def user_details(request, id):
     user_exists = User.objects.filter(id=id).exists()
     if not user_exists:
@@ -127,6 +140,7 @@ def user_delete(request, id):
     logout(request)  
     messages.success(request, "Your account has been successfully deleted.")
     return redirect('home_page')
+
 
 @login_required
 def user_edit(request, id):    
@@ -166,12 +180,6 @@ def add_to_featured(request, id):
     return redirect('featured')
 
 
-def check_superuser(user):
-    if user.is_superuser:
-        return True
-    else:
-        raise PermissionDenied("You do not have permission to access this page.")
-
 @login_required
 @user_passes_test(check_superuser)
 def admin_dashboard(request):
@@ -189,6 +197,7 @@ def add_category(request):
             return redirect('category.index')
 
     return render(request, 'admin/add_category.html', {'form': form})
+
 
 @user_passes_test(check_superuser)
 def category_index(request):
@@ -220,6 +229,7 @@ def tag_index(request):
     tags=Tag.objects.all()
     return render(request,'admin/tag_index.html', context={"tags":tags})
 
+
 @user_passes_test(check_superuser)
 def add_tag(request):
     form = TagModelForm()
@@ -250,6 +260,7 @@ def delete_tag(request, id):
     tag.delete()
     return redirect("tag.index")
 
+
 @user_passes_test(check_superuser)
 def user_index(request):
     users = User.objects.all()
@@ -260,6 +271,7 @@ def delete_user_by_admin(request, id):
     user = get_object_or_404(User, pk=id)
     user.delete()
     return redirect("user.index")
+
 
 @user_passes_test(check_superuser)
 def add_user_by_admin(request):
@@ -272,6 +284,7 @@ def add_user_by_admin(request):
                 activate_email(request, user, form.cleaned_data.get('email'))
             return redirect("user.index")
     return render(request, 'admin/add_user_by_admin.html', {'form': form})
+
 
 @user_passes_test(check_superuser)
 def edit_user_by_admin(request, id):
@@ -300,6 +313,7 @@ def edit_user_by_admin(request, id):
 
 
 @login_required
+@user_passes_test(check_user)
 def user_donations(request,id) :
 
     user_exists = User.objects.filter(id=id).exists()
@@ -355,6 +369,6 @@ def categories_project(request):
 @login_required
 def user_logout(request):
     logout(request)
-    # messages.info(request, "You have been successfully logged out.")
+    messages.info(request, "You have been successfully logged out.")
     url = reverse("home_page")
     return redirect(url)
