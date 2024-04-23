@@ -60,20 +60,25 @@
     <div class="card">
       
         <div class="card-body">
-          
-            <h5 class="card-title">Title: {{ project.title }}</h5>
-            <div class="project-info">
-                <p><span class="label">Details:</span> {{ project.details }}</p>
-                <p><span class="label">Total Target:</span> {{ project.total_target }}</p>
-                <p><span class="label">Start Date:</span> {{ project.start_date }}</p>
-                <p><span class="label">End Date:</span> {{ project.end_date }}</p>
-                <p><span class="label">Created At:</span> {{ project.created_at }}</p>
-                <p><span class="label">Current Donation:</span> {{ project.current_donation }}</p>
-                <p>Tags: </p>
-                {% for tag in project.tag.all %}
-                <p><span class="label"></span> {{  tag.name  }}</p>
-                
-                {% endfor %}
+            <div class="card bg-dark text-white">
+        <h5 class="card-title">Title is {{ project.title }}</h5>
+    <div class="card-body">
+        <div class="project-info">
+            <p><span class="label">Details:</span> {{ project.details }}</p>
+            <p><span class="label">Total Target:</span> {{ project.total_target }}$</p>
+            <p><span class="label">Start Date:</span> {{ project.start_date }}</p>
+            <p><span class="label">End Date:</span> {{ project.end_date }}</p>
+            <p><span class="label">Created At:</span> {{ project.created_at }}</p>
+            <p><span class="label">Current Donation:</span> {{ project.current_donation }}$</p>
+            <p>Tags: </p>
+            {% for tag in project.tag.all %}
+            <p><span class="label"></span> {{  tag.name  }}</p>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+
+            
 
                 <!-- Include Font Awesome CSS -->
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
@@ -102,13 +107,13 @@
     </div>
 </div>
 
-<div class="container my-2">
-    <h3>Delete and Edit project for project Creator only!</h3>
+<div class="container my-2 d-flex justify-content-center align-items-center">
+    
     {% if request.user == project.project_owner %}
     <a href="{{ project.delete_url }}" id="delete-project-btn" class="btn btn-danger"
     data-bs-toggle="modal" data-bs-target="#exampleModal{{project.id}}">Delete Project</a>
-    <a href="{{ project.edit_url }}" class="btn btn-primary">Edit</a>
-    <a href="{{ project.add_image_url }}" class="btn btn-success">Add Images</a>
+    <a href="{{ project.edit_url }}" class="btn btn-primary mx-1">Edit Project</a>
+    <a href="{{ project.add_image_url }}" class="btn btn-success mx-1">Add Images</a>
     <a href="{{ project.clear_url }}" class="btn btn-danger">Clear All Images</a>
 
 
@@ -117,8 +122,10 @@
         {{ request.GET.error_message }}
     </div>
     {% endif %}
-</div>
+{% else %}
+<h3>Actions For Project Creator Only!</h3>
 {% endif %}
+</div>
 
 
 <div class="modal fade" id="exampleModal{{project.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
