@@ -1,6 +1,6 @@
 from project.views import (hello, create_project_model_form,
     list_project, cancel_project,project_show, donate_project, edit_project,
-                            show_category,add_images)
+                            show_category,add_images,clear_images)
 from commentary.views import add_comment
 from django.urls import path
 
@@ -15,6 +15,8 @@ urlpatterns = [
     path('<int:id>/edit', edit_project, name='project.edit'),
     path('category/<int:id>/show', show_category, name='category.show'),
     path('<int:id>/addimage', add_images, name='project.addimage'),
+    path('<int:id>/clearimage', clear_images, name='project.clearimage'),
+    
     
 
 ]

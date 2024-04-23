@@ -235,11 +235,15 @@ def edit_images(request, id):
     return render(request, 'project/forms/edit_image.html', {'form': form})
 
 def clear_images(request, id):
-    project = get_object_or_404(Project, pk=id)
-    if request.method == 'POST':
-        project.pictures.all().delete()
+    try:
+        project = Project.objects.get(pk=id)
+    except Project.DoesNotExist:
 
-        return redirect(project.show_url)
-    else:
-        return redirect(project.show_url)
+        return render(request, 'project/crud/badrequest.html')
+    for picture in project.images.all():
+            picture.image.delete()  # This will delete the image file from the storage
+            picture.delete()  # This will delete the Picture instance from the database
+    return redirect(project.show_url)
+     
+
         
