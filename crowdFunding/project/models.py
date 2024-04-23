@@ -149,7 +149,7 @@ class Project(models.Model):
         return url
 
 class Picture(models.Model):
-    image = models.ImageField(upload_to='project/images/' )
+    image = models.ImageField(upload_to='project/images/', null=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE , related_name='images')
 
     def __str__(self):
