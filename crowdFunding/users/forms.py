@@ -252,6 +252,12 @@ class UserEditFormByAdmin(forms.ModelForm):
         model = User
         fields = ['first_name', 'last_name', 'email', 'password1','password2', 'phone', 'photo', 'is_superuser', 'is_staff', 'is_active']
 
+    def clean_password1(self):
+        password1 = self.cleaned_data.get("password1")
+        if password1 and len(password1) < 8:
+            raise forms.ValidationError("Password must be at least 8 characters long")
+        return password1
+
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
