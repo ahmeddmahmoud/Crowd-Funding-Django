@@ -77,6 +77,12 @@ class UserRegistrationForm(UserCreationForm):
 
 
 class UserEditForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email', 'phone', 'birth_date', 'country', 'facebook', 'photo']
+        widgets = {
+            'facebook': forms.URLInput(attrs={'class': 'form-control'}),
+    }
     # new_password1 = forms.CharField(
     #     label="New Password",
     #     widget=forms.PasswordInput(attrs={'class': 'form-control'}),
@@ -139,11 +145,18 @@ class UserEditForm(forms.ModelForm):
     
     def clean_country(self):
         country = self.cleaned_data['country']
-        if not country.isalpha():
-            raise forms.ValidationError('country name must be alphabetic')
-        if len(country) < 3:
-            raise forms.ValidationError('country name must be at least 3 characters long')
+        if country:
+            if not country.isalpha():
+                raise forms.ValidationError('Country name must be alphabetic')
+            if len(country) < 3:
+                raise forms.ValidationError('Country name must be at least 3 characters long')
         return country
+    
+    def clean_photo(self):
+        photo = self.cleaned_data['photo']
+        if not photo:
+            raise forms.ValidationError('Photo is required')
+        return photo
     
     # def clean_new_password2(self):
     #     new_password1 = self.cleaned_data.get("new_password1")
@@ -161,17 +174,7 @@ class UserEditForm(forms.ModelForm):
     #     if commit:
     #         user.save()
     #     return user
-    # def clean_photo(self):
-    #     photo = self.cleaned_data['photo']
-    #     if not photo:
-    #         raise forms.ValidationError('Photo is required')
-    #     return photo
-    class Meta:
-        model = User
-        fields = ['first_name', 'last_name', 'email', 'phone', 'birth_date', 'country', 'facebook', 'photo']
-        widgets = {
-            'facebook': forms.URLInput(attrs={'class': 'form-control'}),
-        }
+
 
 
 class UserAddFormByAdmin(UserCreationForm):
