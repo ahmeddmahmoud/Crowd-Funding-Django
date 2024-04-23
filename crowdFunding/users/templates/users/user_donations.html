@@ -9,9 +9,9 @@
 
 <div class="container">
         <div class="text-center">
-            <h1>Donation Summary for {{ user.first_name }} {{ user.last_name }}</h1>
+            <h1 class="text-center text-success fw-bold fst-italic fs-1 mt-2 mb-3 text-capitalize">Donation Summary for {{ user.first_name }} {{ user.last_name }}</h1>
 
-                <p class="d-inline-block me-5  ">Total donations: ${{ total_donation_user }}</p>
+                <p class="d-inline-block me-5 fw-bold  fs-5">Total Donations: ${{ total_donation_user }}</p>
                 <a class="d-inline-block btn btn-success ms-5" href="{% url 'user.projects' user.id %}">Go to your projects</a>
 
         </div>
