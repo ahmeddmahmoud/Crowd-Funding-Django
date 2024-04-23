@@ -3,13 +3,31 @@
 
 {% block css %}
 <link rel="stylesheet" href="{% static 'project/css/style.css' %}">
+<style>
+    
+</style>
 {% endblock %}
 
 {% block content %}
-<div class="text-center my-3 "> 
-    <a class=" btn btn-primary" href="{% url 'project.createmodel' %}">Start your project!</a>
-</div>
+
 <section class="dark">
+    <div class="container ">
+        <div class="text-end my-3 "> 
+            <a class=" btn btn-primary" href="{% url 'project.createmodel' %}">Start your project!</a>
+        </div>
+        <div class="row mb-3">
+            <div class="col d-flex justify-content-center">
+                <div class="search-container">
+                    <form action="{% url 'projects.search' %}" method="GET" class="d-flex">
+                        <input class="form-control me-2 search-input" type="search" name="search_query"
+                               placeholder="Search projects" aria-label="Search">
+                        <button class="btn btn-primary search-button" type="submit">
+                            <i class="bi bi-search">search</i> <!-- Search icon -->
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
     <div class="container py-4">
         {% for project in projects %}
         <article class="postcard dark blue">
@@ -35,9 +53,13 @@
                     <a href="/tag/project">#{{ tag.name }}</span></a>
                     {% endfor %}
                 </div>
-                <div>
-                    <li class="tag__item play"><a href="{{ project.donate_url }}">Donate</a></li>
+                {% if not project.is_run_project %}
+                <div class="alert alert-danger mt-2" role="alert">
+                    This project is not runnable. Please choose another project to donate.
                 </div>
+                {% else %}
+                    <a href="{{project.donate_url}}" class="btn btn-success">Donate</a>
+                {% endif %}
             </div>
             <a class="postcard__img_link" href="{{ project.show_url }}">
                 {% if project.images.all %}
@@ -52,3 +74,4 @@
     </div>
 </section>
 {% endblock %}
+

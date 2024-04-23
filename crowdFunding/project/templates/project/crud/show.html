@@ -149,7 +149,7 @@
         <div class="comment-list">
             {% for comment in comments %}
             <div class="comment">
-                <div class="comment-user"> {{ comment.user }}</div>
+                {% comment %} <div class="comment-user"> {{ comment.user }}</div> {% endcomment %}
 
                 <div class="comment-user">User: {{ comment.user }}</div>
                 <div class="comment-text">{{ comment.text }}</div>
@@ -204,8 +204,8 @@
         <button id="add-comment-btn">Add Comment</button>
         <!--        <p>Project ID: {{ project.id }}</p>-->
         <form class="add-comment-form" method="post" action="{% url 'project.comment' project.id %}"
-              style="display: none;">
-
+        style="display: none;" >
+            
             {% csrf_token %}
 
 
@@ -265,6 +265,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js" integrity="sha512-Ry4FzxO9+ri4OkYyLgSaxRuWcsM2b9hjNKeJAd6D8/5xtHqjAW90DXv+XHtgr7pZCHZjy9t5A5pt0YKgKx2/7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 
-<script src="{% static 'js/index.js'%}"></script> 
+<script src="{% static 'project/js/index.js'%}"></script> 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const rateInput = document.getElementById('id_rate');
+        rateInput.style.display = 'none'; // Hide the input field
+    });
+</script>
+
 
 {% endblock %}
