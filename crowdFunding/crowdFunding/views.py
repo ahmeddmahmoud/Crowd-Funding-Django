@@ -29,7 +29,7 @@ def products_index(request):
 
     # Get the top five products
     top_five_products = sorted_products[:5]
-    print("Top Five Product Rates:")
+    # print("Top Five Product Rates:")
     for product in top_five_products:
         print(f"Product: {product.title}, Rate: {product.rate}")
     return render(request , 'landing_page.html' ,
