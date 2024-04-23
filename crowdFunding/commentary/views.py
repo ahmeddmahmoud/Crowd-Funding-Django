@@ -2,6 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import CommentForm, ReportForm, ReplyForm
 from .models import Project, Comment, Reply
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+
+
+@login_required
 def add_comment(request, id):
     project = get_object_or_404(Project, pk=id)
     if request.method == 'POST':
@@ -30,7 +34,7 @@ def add_comment(request, id):
 # Create your views here.
 
 
-
+@login_required
 def add_report(request, id, comment_id=None):
     project = get_object_or_404(Project, pk=id)
     comment = None
@@ -60,6 +64,7 @@ def add_report(request, id, comment_id=None):
 
 
 
+@login_required
 def create_reply(request,project_id,comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
     project=get_object_or_404(Project, id=project_id)

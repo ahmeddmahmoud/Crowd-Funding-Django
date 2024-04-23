@@ -1,49 +1,54 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'project/css/style.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="container">
-    <div class="row mb-3">
-        <div class="col">
-            <form action="{% url 'projects.search' %}" method="GET" class="d-flex">
-                <input class="form-control me-2" type="search" name="search_query" placeholder="Search Books"
-                    aria-label="Search">
-                <button class="btn btn-outline-primary" type="submit">Search</button>
-            </form>
-        </div>
-    </div>
-    <div class="text-center my-3 "> 
-        <a class=" btn btn-primary" href="{% url 'project.createmodel' %}">Start your project!</a>
-    </div>
-        <div class="row">
-            {% for project in projects %}
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        {% if project.images.all %}
-                    <img src="{{ project.images.first.image.url }}" class="card-img-top" alt="{{ project.title }}">
+<div class="text-center my-3 "> 
+    <a class=" btn btn-primary" href="{% url 'project.createmodel' %}">Start your project!</a>
+</div>
+<section class="dark">
+    <div class="container py-4">
+        {% for project in projects %}
+        <article class="postcard dark blue">
+            <div class="postcard__text">
+                <h1 class="postcard__title blue"><a href="{{ project.show_url }}">{{ project.title }}</a></h1>
+                <div class="postcard__subtitle small">
+                    <time datetime="{{ project.end_date }}">
+                        <i class="fas fa-calendar-alt mr-2"></i>{{ project.end_date }}
+                    </time>
+                </div>
+                <div class="postcard__bar"></div>
+                <div class="postcard__preview-txt">Current Donation: {{ project.current_donation }}</div>
+                <ul class="postcard__tagbox">
+                    {% if project.category %}
+                    {% comment %} {{project.category}} {% endcomment %}
+                    <li class="tag__item"><a href="{{ project.category }}">Category : {{ project.category }}</a></li>
+                    {% endif %}
+                    {% comment %} <li class="tag__item"><a href="{{ project.duration }}">{{ project.duration }}</a></li> {% endcomment %}
+                    
+                </ul>
+                <div>
+                    {% for tag in project.tag.all %}
+                    <a href="/tag/project">#{{ tag.name }}</span></a>
+                    {% endfor %}
+                </div>
+                <div>
+                    <li class="tag__item play"><a href="{{ project.donate_url }}">Donate</a></li>
+                </div>
+            </div>
+            <a class="postcard__img_link" href="{{ project.show_url }}">
+                {% if project.images.all %}
+                    <img class="postcard__img" src="{{ project.images.first.image.url }}" alt="{{ project.title }}">
                 {% else %}
                     <!-- Placeholder image if project has no images -->
-                    <img src="/media/project/images/3.jpg" class="card-img-top" alt="{{ project.title }}">
+                    <img class="postcard__img" src="/media/project/images/3.jpg" alt="{{ project.title }}">
                 {% endif %}
-                        <div class="card-body">
-                            <h5 class="card-title">Title: {{ project.title }}</h5>
-                            <p class="card-text">End Date: {{ project.end_date }}</p>
-                            <p class="card-text">Total Target: {{ project.total_target }}</p>
-                            <p class="card-text">Current Donation: {{ project.current_donation }}</p>
-                            
-                            <a href="{{ project.show_url }}" class="btn btn-info">Show</a>
-                            
-                            {% if not project.is_run_project %}
-                            <div class="alert alert-danger mt-2" role="alert">
-                                This project is not runnable. Please choose another project to donate.
-                            </div>
-                        {% else %}
-                            <a href="{{project.donate_url}}" class="btn btn-success">Donate</a>
-                        {% endif %}
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
+            </a>
+        </article>
+        {% endfor %}
     </div>
-
+</section>
 {% endblock %}

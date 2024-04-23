@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -71,8 +72,12 @@
                     <a class="btn btn-outline-success me-2" href="{% url 'user.login' %}">Sign In</a>
                     <a class="btn btn-success" href="{% url 'user.register' %}">Get Started</a>
                 {% else %}
-                    <img src="{{ user.photo.url }}" alt="user photo" class="rounded-circle me-2" style="width: 40px; height: 40px;">
-                    <span class="text-white me-3 ">{{ user.first_name }}</span>
+                    {% if user.photo %}
+                        <img src="{{ user.photo.url }}" alt="user photo" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                    {% else %}
+                        <img src="{% static 'users/media/default-user.jpg' %}" alt="default user photo" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                    {% endif %}
+                        <span class="text-white me-3 ">{{ user.first_name }}</span>
                     <a class="btn btn-outline-danger" href="{% url 'logout' %}">Log Out</a>
                 {% endif %}
             </div>
