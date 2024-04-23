@@ -2,7 +2,25 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-  <h2>Donate to Project</h2>
+<style>
+    .badge {
+        margin-right: 10px;
+        margin-bottom: 10px;
+        padding: 8px 12px;
+        font-size: 16px;
+        border-radius: 5px;
+    }
+
+    .bg-info {
+        background-color: #17a2b8 !important;
+    }
+
+    .bg-primary {
+        background-color: #007bff !important;
+    }
+</style>
+
+  <h2 class="text-center text-success fw-bold fst-italic fs-1 my-3 text-capitalize">Donate to Project</h2>
   {% comment %} <form method="post" action="{% url 'project.donate' project.id %}">
     {% csrf_token %}
     <label for="donation_amount">Enter donation amount:</label>
@@ -10,6 +28,18 @@
     <button type="submit">Donate</button>
   </form> {% endcomment %}
   <div class="container">
+    <div class="row">
+    <div class="col-md-6">
+        <span class="badge bg-info">Current Donation</span>
+        <span class="badge bg-primary">{{ project.current_donation }}</span>
+    </div>
+    <div class="col-md-6">
+        <span class="badge bg-info">Total Target</span>
+        <span class="badge bg-primary">{{ project.total_target }}</span>
+    </div>
+</div>
+
+    
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{form}}
