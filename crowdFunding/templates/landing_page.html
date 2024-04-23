@@ -112,7 +112,7 @@
 
                                 <main role="main" style="margin-left: 3.5em;">
                                     {% for tag in project.tag.all %}
-                                    <a href="/tag/project"><span class="tag tag-{{ tag.name|lower }} tag-lg">{{ tag.name }}</span></a>
+                                    <span class="tag tag-{{ tag.name|lower }} tag-lg">{{ tag.name }}</span>
                                     {% endfor %}
                                 </main>
                                 <div class="progress">
