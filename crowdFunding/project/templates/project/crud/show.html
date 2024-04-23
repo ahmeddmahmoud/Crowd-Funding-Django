@@ -134,6 +134,13 @@
     </div>
 
 
+    {% if messages %}
+    <div class="messages alert alert-success text-center list-unstyled w-25 m-auto">
+        {% for message in messages %}
+            <li class="nav-item ">{{ message }}</li>
+        {% endfor %}
+    </div>
+    {% endif %}
 
 <!-- jQuery (Optional) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -181,13 +188,13 @@
                 <!-- Reply form -->
                 <form method="post" action="{% url 'projects.reply' project.id comment.id %}">
                     {% csrf_token %}
-                    {% if messages %}
+                    {% comment %} {% if messages %}
             <ul class="messages alert alert-success text-center list-unstyled">
                 {% for message in messages %}
                     <li class="nav-item ">{{ message }}</li>
                 {% endfor %}
             </ul>
-                  {% endif %}
+                  {% endif %} {% endcomment %}
                     {{ reply_form.as_p }}
                     <button type="submit">Reply</button>
                 </form>

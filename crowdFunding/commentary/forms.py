@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 
 
 class CommentForm(forms.ModelForm):
-    rate = forms.IntegerField(label='Rating', min_value=1, max_value=5, initial=0)  # Add a rating field
+    # rate = forms.IntegerField(label='Rating', min_value=1, max_value=5, initial=0)  # Add a rating field
     class Meta:
         model = Comment
         fields = ['text','rate']
