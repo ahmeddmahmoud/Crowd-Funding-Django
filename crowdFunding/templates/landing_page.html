@@ -62,6 +62,9 @@
                                 <a href="{{ project.show_url }}">
                                     {% if project.image_urls %}
                                     <img src="{{ project.image_urls.0 }}" alt="">
+                                    {% else %}
+                    <!-- Placeholder image if project has no images -->
+                                    <img src="/media/project/images/default.jpg" >
                                     {% endif %}
                                 </a>
                             </div>
@@ -76,8 +79,18 @@
                 <ul class="carousel__thumbnails">
                     {% for project in top_five_products %}
                     <li>
-                        <label for="slide-{{ forloop.counter }}"><img src="{{ project.image_urls.0 }}" alt=""></label>
+                        <label for="slide-{{ forloop.counter }}">
+
+                                    {% if project.image_urls %}
+                                    <img src="{{ project.image_urls.0 }}" class="w-100 h-100" alt="">
+                                    {% else %}
+                    <!-- Placeholder image if project has no images -->
+                                    <img src="/media/project/images/default.jpg" >
+                                    {% endif %}
+                                </a>
+                        </label>
                     </li>
+
                     {% endfor %}
                 </ul>
             </div>
@@ -103,16 +116,22 @@
                                 <div class="project-image-container">
                                     <img src="{{ project.image_urls.0 }}" class="card-img-top img-fluid project-img"
                                          alt="{{ project.title }}">
-                                         {% else %}
-                                         <!-- Placeholder image if project has no images -->
-                                         <img class="card-img-top img-fluid project-img" src="/media/project/images/default.jpg" alt="{{ project.title }}">
-                                     {% endif %}         
+                                                 
                                     <div class="project-details">
                                         <h6>{{ project.title }}</h6>
                                         <p>{{ project.details }}</p>
                                     </div>
                                 </div>
-                                {% comment %} {% endif %} {% endcomment %}
+                                {% else %}
+                                <div class="project-image-container">
+                                    <img class="card-img-top img-fluid project-img" src="/media/project/images/default.jpg" alt="{{ project.title }}">
+                                                 
+                                    <div class="project-details">
+                                        <h6>{{ project.title }}</h6>
+                                        <p>{{ project.details }}</p>
+                                    </div>
+                                </div>
+                                {% endif %}
 
                                 <main role="main" style="margin-left: 3.5em;">
                                     {% for tag in project.tag.all %}
