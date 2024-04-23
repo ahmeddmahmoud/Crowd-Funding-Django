@@ -84,17 +84,12 @@
   font-size: .9em;
   border-radius: 4px;
 }
-body{
-<!--   background-color:grey;-->
-}
-
-
 
   .container{
    width:1150px;
   }
 
-  <!--tag name style-->
+  /* tag name style */
  .tag_name {
   background-color: blue;
   color: white;
@@ -105,14 +100,9 @@ body{
   .btn-view-project{
  margin-top : 5px;
 }
-<!--  search style-->
 
 
-
-
-
-
-<!--card style-->
+/* card style */
 .project-details {
 position: absolute;
 bottom: -100%;
@@ -132,7 +122,6 @@ bottom: 0;
 }
 
 .project-card {
-<!--  position: relative;-->
 height:100px;
 }
 
@@ -155,7 +144,7 @@ padding: 10px;
 transition: bottom 0.3s ease;
 }
 
-// Mixin for aspect ratio
+/* Mixin for aspect ratio */
 @mixin aspect-ratio($width, $height) {
 position: relative;
 
@@ -176,7 +165,7 @@ position: relative;
 }
 }
 
-<!--carousel style  -->
+  /* carousel style   */
 @mixin aspect-ratio($width, $height) {
 position: relative;
 
@@ -198,7 +187,7 @@ position: relative;
 }
 
 
-// Styling
+/* Styling */
 
 section {
   background: #F4F4F4;
@@ -345,3 +334,5 @@ height: auto; /* Let the height adjust proportionally */
 object-fit: cover; /* Maintain aspect ratio and cover the entire container */
 max-height: 400px; /* Limit the maximum height to avoid stretching */
 }
+
+

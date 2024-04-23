@@ -1,0 +1,181 @@
+/* star style */
+.rating input[type="radio"] {
+  display: none;
+}
+
+/* Style star labels */
+.rating label {
+  font-size: 30px;
+  color: #ccc;
+  cursor: pointer;
+}
+
+/* Style star labels when checked */
+.rating input[type="radio"]:checked ~ label {
+  color: #ffcc00;
+}
+
+/* replystyle  */
+.reply {
+  border: 1px solid black;
+  border-radius: 4px;
+
+  background-color: #e5eaf5;
+}
+/* {% comment %} reportstyle {% endcomment %} */
+.report-button {
+  background-color: transparent;
+  color: #dc3545;
+  border: 2px solid #dc3545;
+  padding: 5px 9px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.report-button:hover {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.report-button .fas {
+  margin-right: 5px;
+}
+/* {% comment %} end of report style {% endcomment %}
+ {% comment %} comments style {% endcomment %} */
+.comments-box {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 37%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.comments-container {
+  margin-top: 20px;
+}
+
+.comment-list {
+  margin-bottom: 20px;
+}
+
+.comment {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.comment-user {
+  font-weight: bold;
+  color: blue;
+  margin-bottom: 5px;
+}
+
+.comment-text {
+  font-size: 14px;
+  color: #555;
+}
+
+.add-comment-form {
+  margin-top: 20px;
+}
+
+#add-comment-btn,
+#submit-comment-btn {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#add-comment-btn:hover,
+#submit-comment-btn:hover {
+  background-color: #0056b3;
+}
+
+.comments-box {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 72%; /* Adjust width as needed */
+  margin: auto;
+  padding: 20px;
+  margin-top: 20px;
+  height: auto;
+}
+
+.comments-container {
+  display: flex;
+  justify-content: space-between; /* Distribute space between comments and add comment form */
+}
+
+.comment-list {
+  width: 60%; /* Adjust width as needed */
+}
+
+.comment {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.comment-user {
+  font-weight: bold;
+  color: blue;
+  margin-bottom: 5px;
+}
+
+.comment-text {
+  font-size: 14px;
+  color: #555;
+}
+
+.add-comment-form-container {
+  width: 35%; /* Adjust width as needed */
+}
+
+.add-comment-form {
+  margin-top: 20px;
+}
+
+#add-comment-btn {
+  background-color: #28a745; /* Green color */
+  color: #fff;
+  border: none;
+  padding: 8px 8px; /* Decreased padding */
+  font-size: 14px; /* Decreased font size */
+  border-radius: 3px;
+  cursor: pointer;
+  height: 60px;
+  transition: background-color 0.3s;
+  display: block; /* Make it a block element */
+  margin: 0 10px; /* Center horizontally */
+}
+
+#add-comment-btn:hover {
+  background-color: #218838; /* Darker green color on hover */
+}
+
+textarea[name="text"] {
+  width: calc(100% - 40px); /* Adjust width as needed */
+  height: 100px;
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: vertical; /* Allow vertical resizing */
+}
+
+textarea[name="text"]:focus {
+  border-color: #007bff; /* Change border color on focus */
+  outline: none; /* Remove default focus outline */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add a shadow on focus */
+}
