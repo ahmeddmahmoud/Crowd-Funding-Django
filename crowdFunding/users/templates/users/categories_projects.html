@@ -24,7 +24,7 @@
                             {% for project in category.project_set.all %}
                             <li><a href="{% url 'project.show' project.id %}">{{ project.title }}</a></li>
                             {% empty %}
-                            <li >No projects in this category.</li>
+                            <li class="text-danger">No projects in this category.</li>
                             {% endfor %}
                         </ul>
                     </div>
