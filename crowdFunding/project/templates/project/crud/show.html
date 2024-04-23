@@ -32,7 +32,7 @@
 
         {% else %}
           <!-- Provide the URL of the alternative image -->
-          <img src="/media/project/images/3.jpg" class="d-block w-100" alt="Image {{ forloop.counter }}">
+          <img src="/media/project/images/default.jpg" class="d-block w-100" alt="Image {{ forloop.counter }}">
         {% endif %}
       </div>
     {% endfor %}
@@ -48,7 +48,7 @@
 </div>
 {% else %}
 <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
-    <img src="/media/project/images/3.jpg" class="w-50 h-75" alt="Default Image">
+    <img src="/media/project/images/default.jpg" class="w-50 h-75" alt="Default Image">
 </div>
 
 {% endif %}

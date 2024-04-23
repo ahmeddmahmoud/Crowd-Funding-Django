@@ -172,6 +172,7 @@ def check_superuser(user):
     else:
         raise PermissionDenied("You do not have permission to access this page.")
 
+@login_required
 @user_passes_test(check_superuser)
 def admin_dashboard(request):
     return render(request, 'admin/admin_dashboard.html')
