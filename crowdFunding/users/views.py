@@ -46,6 +46,7 @@ def index(request):
 
 def login_form(request):
     if request.user.is_authenticated:
+        messages.error(request, "You are already logged in.")
         return redirect('index')
     form = AuthenticationForm()
     if request.method == 'POST':
