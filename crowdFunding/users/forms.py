@@ -77,16 +77,22 @@ class UserRegistrationForm(UserCreationForm):
 
 
 class UserEditForm(forms.ModelForm):
-    # new_password1 = forms.CharField(
-    #     label="New Password",
-    #     widget=forms.PasswordInput(attrs={'class': 'form-control'}),
-    #     required=False
-    # )
-    # new_password2 = forms.CharField(
-    #     label="Confirm New Password",
-    #     widget=forms.PasswordInput(attrs={'class': 'form-control'}),
-    #     required=False
-    # )
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email', 'phone', 'birth_date', 'country', 'facebook', 'photo']
+        widgets = {
+            'facebook': forms.URLInput(attrs={'class': 'form-control'}),
+    }
+    password1 = forms.CharField(
+        label="New Password",
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        required=False
+    )
+    password2 = forms.CharField(
+        label="Confirm New Password",
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        required=False
+    )
     def __init__(self, *args, **kwargs):
         super(UserEditForm, self).__init__(*args, **kwargs)
         if self.instance and self.instance.pk:
@@ -139,39 +145,46 @@ class UserEditForm(forms.ModelForm):
     
     def clean_country(self):
         country = self.cleaned_data['country']
-        if not country.isalpha():
-            raise forms.ValidationError('country name must be alphabetic')
-        if len(country) < 3:
-            raise forms.ValidationError('country name must be at least 3 characters long')
+        if country:
+            if not country.isalpha():
+                raise forms.ValidationError('Country name must be alphabetic')
+            if len(country) < 3:
+                raise forms.ValidationError('Country name must be at least 3 characters long')
         return country
     
-    # def clean_new_password2(self):
-    #     new_password1 = self.cleaned_data.get("new_password1")
-    #     new_password2 = self.cleaned_data.get("new_password2")
-    #     if new_password1 and new_password2:
-    #         if new_password1 != new_password2:
-    #             raise forms.ValidationError("Passwords do not match.")
-    #     return new_password2
+    def clean_photo(self):
+        photo = self.cleaned_data['photo']
+        if not photo:
+            raise forms.ValidationError('Photo is required')
+        return photo
+    
+    def clean_password1(self):
+        password1 = self.cleaned_data.get("password1")
+        if password1:
+            if len(password1) < 8:
+                raise forms.ValidationError("Password must be at least 8 characters long.")
+            if not any(c.isupper() for c in password1):
+                raise forms.ValidationError("Password must include at least one uppercase letter.")
+            if not re.search(r"\W", password1):
+                raise forms.ValidationError("Password must include at least one special character.")
+        return password1
 
-    # def save(self, commit=True):
-    #     user = super().save(commit=False)
-    #     new_password = self.cleaned_data.get("new_password1")
-    #     if new_password:
-    #         user.set_password(new_password)
-    #     if commit:
-    #         user.save()
-    #     return user
-    # def clean_photo(self):
-    #     photo = self.cleaned_data['photo']
-    #     if not photo:
-    #         raise forms.ValidationError('Photo is required')
-    #     return photo
-    class Meta:
-        model = User
-        fields = ['first_name', 'last_name', 'email', 'phone', 'birth_date', 'country', 'facebook', 'photo']
-        widgets = {
-            'facebook': forms.URLInput(attrs={'class': 'form-control'}),
-        }
+    def clean_password2(self):
+        password1 = self.cleaned_data.get("password1")
+        password2 = self.cleaned_data.get("password2")
+        if (password1 and password1 != password2) or (password2 and password2 != password1):
+            raise forms.ValidationError("Passwords don't match")
+        return password2
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        password = self.cleaned_data.get("password1")
+        if password:
+            user.set_password(password)
+        if commit:
+            user.save()
+        return user
+
 
 
 class UserAddFormByAdmin(UserCreationForm):
@@ -251,6 +264,12 @@ class UserEditFormByAdmin(forms.ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email', 'password1','password2', 'phone', 'photo', 'is_superuser', 'is_staff', 'is_active']
+
+    def clean_password1(self):
+        password1 = self.cleaned_data.get("password1")
+        if password1 and len(password1) < 8:
+            raise forms.ValidationError("Password must be at least 8 characters long")
+        return password1
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
