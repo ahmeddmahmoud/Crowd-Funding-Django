@@ -101,6 +101,11 @@ class Project(models.Model):
         return url
     
     @property
+    def clear_url(self):
+        url = reverse('project.clearimage', args=[self.id])
+        return url
+    
+    @property
     def rate(self):
         comments = self.comments.all()
         if comments.exists():

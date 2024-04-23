@@ -23,7 +23,7 @@ from django.utils import timezone
 
 
 
-@login_required
+# @login_required
 def index(request):
     projects=Project.objects.all()
     latest_books = projects.order_by('-created_at')[:5]
@@ -44,8 +44,9 @@ def index(request):
                            })
 
 
-
 def login_form(request):
+    if request.user.is_authenticated:
+        return redirect('index')
     form = AuthenticationForm()
     if request.method == 'POST':
         form = AuthenticationForm(request, request.POST)
@@ -129,17 +130,16 @@ def user_details(request, id):
     return render(request, 'users/user_details.html', {'user': user})
 
 
-@login_required
+@login_required 
 def user_delete(request, id):
-    user_exists = User.objects.filter(id=id).exists()
-    if not user_exists:
-        return render(request, 'users/unauthorized.html')
+    if not request.user.id == id:
+        messages.error(request, "Unauthorized attempt to delete user.")
+        return redirect('index')
     user = get_object_or_404(User, pk=id)
-    if request.user != user:
-        return render(request, 'users/unauthorized.html')
     user.delete()
-    url = reverse("user.login")
-    return redirect(url)
+    logout(request)  
+    messages.success(request, "Your account has been successfully deleted.")
+    return redirect('home_page')
 
 @login_required
 def user_edit(request, id):    
