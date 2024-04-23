@@ -77,16 +77,16 @@ class UserRegistrationForm(UserCreationForm):
 
 
 class UserEditForm(forms.ModelForm):
-    new_password1 = forms.CharField(
-        label="New Password",
-        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
-        required=False
-    )
-    new_password2 = forms.CharField(
-        label="Confirm New Password",
-        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
-        required=False
-    )
+    # new_password1 = forms.CharField(
+    #     label="New Password",
+    #     widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+    #     required=False
+    # )
+    # new_password2 = forms.CharField(
+    #     label="Confirm New Password",
+    #     widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+    #     required=False
+    # )
     def __init__(self, *args, **kwargs):
         super(UserEditForm, self).__init__(*args, **kwargs)
         if self.instance and self.instance.pk:
@@ -145,22 +145,22 @@ class UserEditForm(forms.ModelForm):
             raise forms.ValidationError('country name must be at least 3 characters long')
         return country
     
-    def clean_new_password2(self):
-        new_password1 = self.cleaned_data.get("new_password1")
-        new_password2 = self.cleaned_data.get("new_password2")
-        if new_password1 and new_password2:
-            if new_password1 != new_password2:
-                raise forms.ValidationError("Passwords do not match.")
-        return new_password2
+    # def clean_new_password2(self):
+    #     new_password1 = self.cleaned_data.get("new_password1")
+    #     new_password2 = self.cleaned_data.get("new_password2")
+    #     if new_password1 and new_password2:
+    #         if new_password1 != new_password2:
+    #             raise forms.ValidationError("Passwords do not match.")
+    #     return new_password2
 
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        new_password = self.cleaned_data.get("new_password1")
-        if new_password:
-            user.set_password(new_password)
-        if commit:
-            user.save()
-        return user
+    # def save(self, commit=True):
+    #     user = super().save(commit=False)
+    #     new_password = self.cleaned_data.get("new_password1")
+    #     if new_password:
+    #         user.set_password(new_password)
+    #     if commit:
+    #         user.save()
+    #     return user
     
     class Meta:
         model = User
@@ -175,8 +175,8 @@ class UserEditForm(forms.ModelForm):
 
 
 class UserAddFormByAdmin(UserCreationForm):
-    # password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    # password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
 
     class Meta(UserCreationForm.Meta):
         model = User
@@ -226,22 +226,22 @@ class UserAddFormByAdmin(UserCreationForm):
             raise forms.ValidationError('Photo is required')
         return photo
 
-    # def clean_password1(self):
-    #     password1 = self.cleaned_data['password1']
-    #     if not password1:
-    #         raise forms.ValidationError('Password is required')
+    def clean_password1(self):
+        password1 = self.cleaned_data['password1']
+        if not password1:
+            raise forms.ValidationError('Password is required')
 
-    #     return password1
+        return password1
 
-    # def clean_password2(self):
-    #     password1 = self.cleaned_data['password1']
-    #     password2 = self.cleaned_data['password2']
-    #     if not password2:
-    #         raise forms.ValidationError('Password is required')
-    #     if password1 != password2:
-    #         raise forms.ValidationError('Passwords do not match')
+    def clean_password2(self):
+        password1 = self.cleaned_data['password1']
+        password2 = self.cleaned_data['password2']
+        if not password2:
+            raise forms.ValidationError('Password is required')
+        if password1 != password2:
+            raise forms.ValidationError('Passwords do not match')
 
-    #     return password2
+        return password2
 
 
 class UserEditFormByAdmin(forms.ModelForm):
