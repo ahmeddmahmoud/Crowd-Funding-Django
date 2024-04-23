@@ -8,9 +8,13 @@
 {% block content %}
 
 <div class="container">
-        <h1>Donation Summary for {{ user.first_name }} {{ user.last_name }}</h1>
-        <p>Total donations: ${{ total_donation_user }}</p>
-    
+        <div class="text-center">
+            <h1>Donation Summary for {{ user.first_name }} {{ user.last_name }}</h1>
+
+                <p class="d-inline-block me-5  ">Total donations: ${{ total_donation_user }}</p>
+                <a class="d-inline-block btn btn-success ms-5" href="{% url 'user.projects' user.id %}">Go to your projects</a>
+
+        </div>
         <div class="accordion" id="donations">
             {% for donation in project_donations %}
                 <div class="accordion-item">
