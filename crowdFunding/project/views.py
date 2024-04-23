@@ -17,6 +17,7 @@ from django.conf import settings
 import os
 from pathlib import Path
 from django.forms import formset_factory
+from django.contrib.auth.decorators import login_required
 
 
 def hello(request):
@@ -166,6 +167,8 @@ def edit_project(request, id):
             return redirect(project.show_url)
 
     return render (request,'project/crud/edit.html', context={"form":form})
+
+
 @login_required
 def add_images(request, id):
     project = get_object_or_404(Project, pk=id)
@@ -186,6 +189,7 @@ def add_images(request, id):
     else:
         form = PictureModelForm()
     return render(request, 'project/forms/add_image.html', {'form': form})
+
 
 @login_required
 def edit_images(request, id):
