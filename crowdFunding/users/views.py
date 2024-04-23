@@ -59,7 +59,7 @@ def login_form(request):
                 if user.is_superuser:
                     return redirect('admin.dashboard')
                 else:
-                    url = reverse('user.details', args=[user.id])
+                    url = reverse('index')
                     return redirect(url)
 
     return render(request, 'users/login.html', {'form': form})
