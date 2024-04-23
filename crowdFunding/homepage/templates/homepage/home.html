@@ -34,6 +34,7 @@
         </div>
     </div>
 
+
     {% if top_five_products %}
     <section>
         <div class="container">
@@ -71,13 +72,19 @@
             </div>
         </div>
     </section>
-    {% endif %}
-
-
-<div class="col text-center">
-        <h3 class="section-title">Latest Five Projects</h3>
+    {% else %}
+ <div class="text-center my-3 "> 
+    <a class=" btn btn-primary" href="{% url 'project.createmodel' %}">There is no Projects</a>
 </div>
-    {% if latest_books %}
+{% endif %}
+ 
+
+
+
+{% if latest_books %}
+<div class="col text-center">
+    <h3 class="section-title">Latest Five Projects</h3>
+</div>
     <div class="join my-5">
         <div class="row row-cols-1 row-cols-md-3 g-4">
             {% for project in latest_books %}
@@ -117,13 +124,19 @@
         {% endfor %}
     </div>
 </div>
+ {% else %}
+ <div class="text-center my-3 "> 
+    <a class=" btn btn-primary" href="{% url 'project.createmodel' %}">There is no Projects</a>
+</div>
 {% endif %}
+ 
+
+
+{% if latest_featured_projects %}
 
 <div class="col text-center">
     <h3>Latest 5 featured projects</h3>
 </div>
-
-{% if latest_featured_projects %}
 <div class="join my-5">
     <div id="featured" class="carousel carousel-dark slide">
         <div class="carousel-indicators">
@@ -160,7 +173,7 @@
         </button>
     </div>
 </div>
-
 </div>
 {% endif %}
+
 {% endblock %}
