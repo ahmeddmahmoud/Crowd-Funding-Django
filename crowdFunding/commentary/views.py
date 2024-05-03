@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import CommentForm, ReportForm, ReplyForm
-from .models import Project, Comment, Reply
+from .models import Comment, Reply
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from project.models import Project
 
 
 @login_required

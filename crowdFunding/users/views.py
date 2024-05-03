@@ -21,6 +21,8 @@ from django.db.models import Sum
 from django.utils import timezone
 from django.core.exceptions import PermissionDenied
 from django.views.decorators.http import require_POST
+from commentary.models import Comment,Report,Reply
+
 
 
 
@@ -387,3 +389,42 @@ def user_logout(request):
     messages.info(request, "You have been successfully logged out.")
     url = reverse("home_page")
     return redirect(url)
+
+
+@login_required
+@user_passes_test(check_superuser)
+def delete_project_by_admin(request, id):
+    project = Project.objects.get(pk=id)
+    total_target = project.total_target
+    donation = project.current_donation
+    if request.method == 'POST':
+        if donation < total_target * 0.25:
+            project.delete()
+            return redirect("featured")
+        else:
+            messages.error(request, "You can not delete this project because The donation is greater than 25%'.")
+            # return render(request, 'project/crud/show.html', {'error_message': error_message})
+            return redirect("featured")
+
+    return redirect("featured")
+
+
+@login_required
+@user_passes_test(check_superuser)
+def reported_comment_index(request):
+    reports=Report.objects.exclude(comment_id=None).filter(comment_id__isnull=False)
+    return render(request,'admin/reported_comments_index.html', context={"reports":reports})
+
+
+def delete_reported_comment(request, id):
+    report=get_object_or_404(Report, pk=id)
+    comment_id = report.comment.id
+
+    comment = get_object_or_404(Comment, pk=comment_id)
+    replys = Reply.objects.filter(comment=comment)
+    for reply in replys:
+        reply.delete()
+    report.delete()
+    # delete comment and reply
+    comment.delete()
+    return redirect("reported.comment.index")

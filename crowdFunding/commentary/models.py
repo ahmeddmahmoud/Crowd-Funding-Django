@@ -1,6 +1,7 @@
 from django.db import models
 from project.models import Project
 from users.models import User
+from django.shortcuts import reverse
 
 
 class Comment(models.Model):
@@ -12,6 +13,8 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'{self.id}'
+
+
 
 
 

@@ -99,6 +99,7 @@ class Project(models.Model):
     def delete_url(self):
         url = reverse('project.cancel', args=[self.id])
         return url
+
     
     @property
     def clear_url(self):

@@ -1,6 +1,6 @@
 {% extends 'users/layouts/header.html' %}
 {% block title%}
-Featured Projects
+Projects
 {% endblock %}
 {% block content %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
@@ -18,13 +18,16 @@ Featured Projects
 </style>
 <div class="container">
      <div class="d-flex mx-2 mt-3">
-    <h1 class="fs-3 fw-bold text-success fst-italic text-capitalize">Featured Projects</h1>
+    <h1 class="fs-3 fw-bold text-success fst-italic text-capitalize">Projects</h1>
      </div>
 <table class="mt-4 table table-striped">
     <tr class="table-info">
          <th class="text-center"> ID</th>
          <th class="text-center"> Title </th>
          <th class="text-center"> Add to Featured Projects</th>
+        <th class="text-center">Reports</th>
+         <th class="text-center"> Show</th>
+         <th class="text-center"> Delete</th>
     </tr>
     <!-- Table header and other rows -->
     {% for proj in projects %}
@@ -42,6 +45,18 @@ Featured Projects
                         Add
                     {% endif %}
                 </button>
+            </form>
+        </td>
+        <td class="text-center">
+            <a class="btn btn-primary rounded-5 px-4">View</a>
+        </td>
+        <td class="text-center">
+            <a class="btn btn-success rounded-5 px-4">Show</a>
+        </td>
+        <td class="text-center">
+            <form action="{% url 'delete.project.by.admin' proj.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger rounded-5 px-4">Delete</button>
             </form>
         </td>
     </tr>

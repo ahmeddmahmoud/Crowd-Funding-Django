@@ -1,5 +1,11 @@
 from django.urls import path,include
-from users.views import user_details,login_form,register, user_delete,activate,featured_projects,add_to_featured,user_edit,admin_dashboard,category_index,delete_category,edit_category,add_category,tag_index,add_tag,edit_tag,delete_tag,user_index,delete_user_by_admin,add_user_by_admin,edit_user_by_admin,user_donations,user_projects,categories_project,user_logout
+from users.views import (user_details,login_form,register, user_delete,activate,featured_projects,
+                         add_to_featured,user_edit,admin_dashboard,category_index,delete_category,
+                         edit_category,add_category,tag_index,add_tag,edit_tag,delete_tag,
+                         user_index,delete_user_by_admin,add_user_by_admin,
+                         edit_user_by_admin,user_donations,user_projects,
+                         categories_project,user_logout,delete_project_by_admin,
+                         reported_comment_index,delete_reported_comment)
 
 urlpatterns = [
     path('register/', register, name="user.register"),
@@ -22,11 +28,14 @@ urlpatterns = [
     path('admin/user/<int:id>/delete', delete_user_by_admin, name='user.delete.by.admin'),
     path('admin/user/add/', add_user_by_admin, name='add.user.by.admin'),
     path('admin/user/<int:id>/edit', edit_user_by_admin, name='edit.user.by.admin'),
-    path('featured/', featured_projects , name="featured"),
+    # path('featured/', featured_projects , name="featured"),
     path('add_to_featured/<int:id>', add_to_featured, name="add.to.featured"),
     path('donations/<int:id>', user_donations , name="user.donations"),
     path('projects/<int:id>', user_projects , name="user.projects"),
     path('categories', categories_project , name="categories.projects"),
     path('logout/', user_logout, name='logout'),
+    path('admin/featured/<int:id>/delete', delete_project_by_admin, name='delete.project.by.admin'),
+    path('admin/reported-comments/', reported_comment_index, name="reported.comment.index"),
+    path('admin/reported-comments/<int:id>/delete', delete_reported_comment, name="delete.reported.comment"),
 
 ]
